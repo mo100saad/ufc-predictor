@@ -22,7 +22,7 @@ UFC Predictor is a **web-based machine learning application** designed to predic
   - Stores fighter statistics, fight history, and model outputs for future reference.
   - Enables efficient querying and retrieval of past fights.
 
-- **Web Interface with Node.js**  
+- **Web Interface with React.js**  
   - Implements a **frontend UI** using **Node.js** for users to interact with the model.
   - Allows users to input fighter details and visualize predictions.
 
