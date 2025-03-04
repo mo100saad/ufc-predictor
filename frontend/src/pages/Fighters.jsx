@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { fighterService } from '../services/api';
-import FighterCard from '../components/fighters/fightercard';
+import FighterCard from '../components/fighters/FighterCard';
 import LoadingSpinner from '../components/common/LoadingSpinner';
 import ErrorAlert from '../components/common/ErrorAlert';
 

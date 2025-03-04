@@ -30,6 +30,7 @@ export const fightService = {
 
 export const predictionService = {
   predictFight: async (fighter1, fighter2) => {
+    console.log("Sending prediction request with data:", { fighter1, fighter2 });
     const response = await api.post('/predict', {
       fighter1,
       fighter2

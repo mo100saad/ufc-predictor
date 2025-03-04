@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Formik, Form, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import { fighterService, predictionService } from '../services/api';
-import PredictionResult from '../components/prediction/PredictionResult';
+import PredictionResult from '../components/prediction/PredictionResults';
 import FighterSelector from '../components/fighters/FighterSelector';
 import LoadingSpinner from '../components/common/LoadingSpinner';
 import ErrorAlert from '../components/common/ErrorAlert';
