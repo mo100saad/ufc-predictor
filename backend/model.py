@@ -11,30 +11,89 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import os
 import joblib
-from config import MODEL_PATH, BATCH_SIZE, LEARNING_RATE, EPOCHS, TEST_SIZE, VALIDATION_SIZE, CSV_FILE_PATH, MODEL_PATH, DATABASE_PATH, SCALER_PATH
+from config import MODEL_PATH, BATCH_SIZE, LEARNING_RATE, EPOCHS, TEST_SIZE, VALIDATION_SIZE, CSV_FILE_PATH, DATABASE_PATH, SCALER_PATH
 import logging
-
-# Ensure required files exist before training
-if not os.path.exists(CSV_FILE_PATH):
-    print(f"❌ Error: Dataset {CSV_FILE_PATH} not found! Run `python data_loader.py` first.")
-    exit(1)
-
-if not os.path.exists(DATABASE_PATH):
-    print(f"❌ Error: Database {DATABASE_PATH} not found! Run `python database.py` first.")
-    exit(1)
-
-print("✅ All required files exist. Proceeding with training...")
 
 # Set up logging
 logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
     handlers=[
-        logging.FileHandler(os.path.join(os.path.dirname(MODEL_PATH), 'training.log')),
+        logging.FileHandler(os.path.join(os.path.dirname(MODEL_PATH), 'training.log'), mode='a'),
         logging.StreamHandler()
     ]
 )
 logger = logging.getLogger('ufc_model')
+
+def preprocess_data(raw_data):
+    """
+    Preprocess the data for model training with consistent feature naming
+    
+    Args:
+        raw_data (pd.DataFrame): Raw input data
+        
+    Returns:
+        pd.DataFrame: Processed dataset for modeling
+    """
+    # Setup logging
+    logger = logging.getLogger('ufc_model')
+    logger.info("Starting data preprocessing")
+
+    try:
+        # Create a copy of the dataframe to avoid modifying the original
+        data_df = raw_data.copy()
+
+        # Ensure directory for model artifacts exists
+        os.makedirs(os.path.dirname(MODEL_PATH), exist_ok=True)
+        
+        # Feature names path
+        feature_names_path = os.path.join(os.path.dirname(MODEL_PATH), 'feature_names.json')
+
+        # Rename columns to use consistent fighter1_ and fighter2_ prefixes if needed
+        if any(col.startswith('R_') or col.startswith('B_') for col in data_df.columns):
+            rename_mapping = {
+                col: col.replace('R_', 'fighter1_').replace('B_', 'fighter2_') 
+                for col in data_df.columns
+            }
+            data_df = data_df.rename(columns=rename_mapping)
+
+        # Rename Winner column to match model expectations if needed
+        if 'Winner' in data_df.columns:
+            # Map Red/Blue to 1/0 for fighter1_won
+            data_df['fighter1_won'] = (data_df['Winner'] == 'Red').astype(int)
+        elif 'winner_id' in data_df.columns and 'fighter1_id' in data_df.columns:
+            # If we have IDs instead, use those to determine winner
+            data_df['fighter1_won'] = (data_df['winner_id'] == data_df['fighter1_id']).astype(int)
+        elif 'fighter1_won' not in data_df.columns:
+            # If we don't have a winner column at all, raise an error
+            raise ValueError("Dataset must have either 'Winner', 'winner_id', or 'fighter1_won' column")
+
+        # Save original feature columns
+        feature_columns = [col for col in data_df.columns if col != 'fighter1_won']
+        pd.Series(feature_columns).to_json(feature_names_path)
+        
+        # Drop non-numeric columns for modeling
+        numeric_data = data_df.select_dtypes(include=[np.number])
+        
+        # Handle missing values
+        for col in numeric_data.columns:
+            if numeric_data[col].isna().any():
+                if col == 'fighter1_won':
+                    # Drop rows with missing target variable
+                    numeric_data = numeric_data.dropna(subset=[col])
+                else:
+                    # Use median imputation for most columns
+                    if col.endswith('_height') or col.endswith('_weight'):
+                        numeric_data[col] = numeric_data[col].fillna(numeric_data[col].mean())
+                    else:
+                        numeric_data[col] = numeric_data[col].fillna(numeric_data[col].median())
+        
+        logger.info(f"Preprocessed data shape: {numeric_data.shape}")
+        return numeric_data
+
+    except Exception as e:
+        logger.error(f"Error in data preprocessing: {e}")
+        raise
 
 class UFCDataset(Dataset):
     def __init__(self, features, labels):
@@ -46,8 +105,6 @@ class UFCDataset(Dataset):
     
     def __getitem__(self, idx):
         return self.features[idx], self.labels[idx]
-
-
 
 class FightPredictor(nn.Module):
     def __init__(self, input_size):
@@ -92,40 +149,39 @@ class ModelTrainer:
         self.best_model_path = os.path.join(self.model_dir, 'best_model.pth')
         self.feature_importance_path = os.path.join(self.model_dir, 'feature_importance.png')
     
-    def preprocess_data(self):
-        logger.info("Starting data preprocessing")
-
-        # Save original column names for later validation
-        feature_columns = self.data_df.drop('fighter1_won', axis=1).columns.tolist()
-        pd.Series(feature_columns).to_json(self.feature_names_path)
+    def prepare_data_for_training(self):
+        """
+        Prepare data for training - split into train/val/test and create dataloaders
         
-        # Drop non-numeric columns if any
-        self.data_df = self.data_df.select_dtypes(include=[np.number])
+        Returns:
+            dict: Dictionary with dataloaders and related data
+        """
+        logger.info("Preparing data for training")
         
-        # Handle missing values with more sophisticated approach
-        num_columns = self.data_df.columns
-        for col in num_columns:
-            if self.data_df[col].isna().any():
-                if col == 'fighter1_won':
-                    # Don't impute target variable
-                    self.data_df = self.data_df.dropna(subset=[col])
-                else:
-                    # Impute with median instead of 0 for better representation
-                    self.data_df[col] = self.data_df[col].fillna(self.data_df[col].median())
+        # Make a copy to avoid modifying the original data
+        processed_data = self.data_df.copy()
         
-        # Separate features and labels
-        X = self.data_df.drop('fighter1_won', axis=1)
-        y = self.data_df['fighter1_won']
+        # Separate features and target
+        X = processed_data.drop('fighter1_won', axis=1)
+        y = processed_data['fighter1_won']
         
-        # Split data into train and test sets
+        # Save feature columns for later reference
+        self.X_train = X
+        self.feature_columns = X.columns
+        
+        # Store input size for model initialization
+        input_size = X.shape[1]
+        joblib.dump(input_size, os.path.join(self.model_dir, "input_size.pkl"))
+        joblib.dump(list(X.columns), os.path.join(self.model_dir, "feature_columns.pkl"))
+        
+        # Split into train, validation, and test sets
         X_train_val, X_test, y_train_val, y_test = train_test_split(
             X, y, test_size=TEST_SIZE, random_state=42, stratify=y
         )
         
-        # Further split training data into training and validation
         X_train, X_val, y_train, y_val = train_test_split(
             X_train_val, y_train_val, 
-            test_size=VALIDATION_SIZE/(1-TEST_SIZE),  # Adjust for previous split
+            test_size=VALIDATION_SIZE/(1-TEST_SIZE),
             random_state=42, 
             stratify=y_train_val
         )
@@ -137,7 +193,7 @@ class ModelTrainer:
         X_val_scaled = self.scaler.transform(X_val)
         X_test_scaled = self.scaler.transform(X_test)
         
-        # Save the scaler
+        # Save the scaler for later use in predictions
         joblib.dump(self.scaler, self.scaler_path)
         
         # Convert to PyTorch tensors
@@ -158,29 +214,31 @@ class ModelTrainer:
         val_loader = DataLoader(val_dataset, batch_size=BATCH_SIZE)
         test_loader = DataLoader(test_dataset, batch_size=BATCH_SIZE)
         
-        # Store original feature dataframes for feature importance later
-        self.X_train = X_train
-        
-        return train_loader, val_loader, test_loader, X.shape[1]
+        return {
+            'train_loader': train_loader,
+            'val_loader': val_loader,
+            'test_loader': test_loader,
+            'feature_count': input_size
+        }
     
     def train_model(self):
-        # Preprocess data
-        train_loader, val_loader, test_loader, input_size = self.preprocess_data()
+        """
+        Train the UFC fight prediction model
+        
+        Returns:
+            tuple: (metrics_history, test_metrics)
+        """
+        # Prepare data
+        data_dict = self.prepare_data_for_training()
+        train_loader = data_dict['train_loader']
+        val_loader = data_dict['val_loader']
+        test_loader = data_dict['test_loader']
+        input_size = data_dict['feature_count']
     
         # Initialize model
         self.model = FightPredictor(input_size).to(self.device)
         logger.info(f"Model initialized with input size: {input_size}")
         logger.info(f"Model architecture:\n{self.model}")
-        
-        # Save the input size for future reference
-        import joblib
-        import os
-        from config import MODEL_PATH
-        joblib.dump(input_size, os.path.join(os.path.dirname(MODEL_PATH), "input_size.pkl"))
-        
-        # Save feature columns from dataloader
-        if hasattr(self, 'feature_columns'):
-            joblib.dump(self.feature_columns, os.path.join(os.path.dirname(MODEL_PATH), "feature_columns.pkl"))
         
         # Define loss function and optimizer
         criterion = nn.BCELoss()
@@ -322,6 +380,15 @@ class ModelTrainer:
         return metrics_history, test_metrics
     
     def evaluate_model(self, data_loader):
+        """
+        Evaluate model performance on a dataset
+        
+        Args:
+            data_loader: PyTorch DataLoader with test data
+            
+        Returns:
+            dict: Dictionary with evaluation metrics
+        """
         self.model.eval()
         all_preds = []
         all_targets = []
@@ -351,7 +418,9 @@ class ModelTrainer:
         return metrics
     
     def compute_feature_importance(self):
-        """Compute feature importance using a permutation-based approach"""
+        """
+        Compute feature importance using a permutation-based approach
+        """
         if self.model is None or not hasattr(self, 'X_train'):
             logger.error("Model not trained or training data not available")
             return
@@ -412,31 +481,109 @@ class ModelTrainer:
         
         importance_df.to_csv(os.path.join(self.model_dir, 'feature_importance.csv'), index=False)
     
+    def predict_fight(self, fighter1_features, fighter2_features):
+        """
+        Predict the outcome of a fight
+        
+        Args:
+            fighter1_features (dict): Dictionary with fighter1 features
+            fighter2_features (dict): Dictionary with fighter2 features
+            
+        Returns:
+            float: Probability of fighter1 winning
+        """
+        # Load the model if not already loaded
+        if self.model is None:
+            self.load_model()
+        
+        # Combine features into a single dataframe
+        fight_df = pd.DataFrame({**fighter1_features, **fighter2_features}, index=[0])
+        
+        # Load feature columns to ensure correct order
+        try:
+            feature_columns = joblib.load(os.path.join(self.model_dir, "feature_columns.pkl"))
+            
+            # Create a dataframe with all expected features initialized to 0
+            input_df = pd.DataFrame(0, index=[0], columns=feature_columns)
+            
+            # Fill in the features we have
+            for col in fight_df.columns:
+                if col in input_df.columns:
+                    input_df[col] = fight_df[col]
+            
+            # Scale the features
+            if not os.path.exists(self.scaler_path):
+                raise FileNotFoundError(f"Scaler not found at {self.scaler_path}")
+            
+            scaler = joblib.load(self.scaler_path)
+            input_scaled = scaler.transform(input_df)
+            
+            # Convert to tensor and predict
+            input_tensor = torch.FloatTensor(input_scaled).to(self.device)
+            
+            # Make prediction
+            self.model.eval()
+            with torch.no_grad():
+                prediction = self.model(input_tensor).item()
+                
+            return prediction
+            
+        except Exception as e:
+            logger.error(f"Error in prediction: {e}")
+            raise
+    
     def load_model(self, use_best=True):
-        """Load the trained model"""
-        # Load the scaler
-        self.scaler = joblib.load(self.scaler_path)
+        """
+        Load a trained model
         
-        # Load training feature names for validation
-        training_features_path = os.path.join(self.model_dir, 'training_features.pkl')
-        training_features = joblib.load(training_features_path)
-        
-        # Get input size from training features
-        input_size = len(training_features)
-        
-        # Initialize model with the correct input size
-        self.model = FightPredictor(input_size)
-        
-        # Load model weights from the best model (if available) or fallback to MODEL_PATH
-        model_path = self.best_model_path if use_best and os.path.exists(self.best_model_path) else MODEL_PATH
-        self.model.load_state_dict(torch.load(model_path))
-        self.model.to(self.device)
-        self.model.eval()
-        
-        logger.info(f"Model loaded from {model_path} with input size {input_size}")
-        
-        return self.model, training_features
-
+        Args:
+            use_best (bool): Whether to load the best model from validation or the final model
+            
+        Returns:
+            tuple: (model, feature_columns)
+        """
+        try:
+            # Load input size
+            input_size_path = os.path.join(self.model_dir, "input_size.pkl")
+            if os.path.exists(input_size_path):
+                input_size = joblib.load(input_size_path)
+            else:
+                # If not found, try to load feature columns
+                feature_columns_path = os.path.join(self.model_dir, "feature_columns.pkl")
+                if os.path.exists(feature_columns_path):
+                    feature_columns = joblib.load(feature_columns_path)
+                    input_size = len(feature_columns)
+                else:
+                    raise FileNotFoundError("Cannot determine input size for model - missing required files")
+            
+            # Initialize model with correct input size
+            self.model = FightPredictor(input_size).to(self.device)
+            
+            # Load model weights
+            model_path = self.best_model_path if use_best and os.path.exists(self.best_model_path) else MODEL_PATH
+            if not os.path.exists(model_path):
+                raise FileNotFoundError(f"Model not found at {model_path}")
+                
+            self.model.load_state_dict(torch.load(model_path))
+            self.model.eval()
+            
+            # Load scaler
+            if os.path.exists(self.scaler_path):
+                self.scaler = joblib.load(self.scaler_path)
+            
+            # Load feature columns
+            feature_columns_path = os.path.join(self.model_dir, "feature_columns.pkl")
+            if os.path.exists(feature_columns_path):
+                feature_columns = joblib.load(feature_columns_path)
+            else:
+                feature_columns = None
+            
+            logger.info(f"Model loaded successfully from {model_path}")
+            return self.model, feature_columns
+            
+        except Exception as e:
+            logger.error(f"Error loading model: {e}")
+            raise
     
     def predict_fight_with_corners(self, red_fighter_data, blue_fighter_data):
         """
@@ -449,19 +596,23 @@ class ModelTrainer:
         Returns:
         dict: Prediction results including probabilities and predicted winner
         """
-        import pandas as pd
-        import torch
-        import joblib
-        import os
-        from config import MODEL_PATH
-        import logging
-        
-        logger = logging.getLogger('ufc_prediction')
-        
         try:
+            # Load the model if not already loaded
+            if self.model is None:
+                self.load_model()
+            
+            # Rename input data to match training data conventions
+            renamed_red_data = {f'R_{k}': v for k, v in red_fighter_data.items()}
+            renamed_blue_data = {f'B_{k}': v for k, v in blue_fighter_data.items()}
+            
             # Combine the fighter data
-            combined_data = {**red_fighter_data, **blue_fighter_data}
+            combined_data = {**renamed_red_data, **renamed_blue_data}
             df = pd.DataFrame([combined_data])
+            
+            # Rename R_ and B_ to fighter1_ and fighter2_
+            rename_dict = {col: col.replace('R_', 'fighter1_').replace('B_', 'fighter2_') 
+                        for col in df.columns}
+            df = df.rename(columns=rename_dict)
             
             # Load feature columns
             model_dir = os.path.dirname(MODEL_PATH)
@@ -471,57 +622,23 @@ class ModelTrainer:
                 feature_columns = joblib.load(feature_columns_file)
                 logger.info(f"Loaded {len(feature_columns)} feature columns")
             else:
-                # Fall back to a heuristic method if file doesn't exist
-                logger.warning("Feature columns file not found, using model's input_size")
-                # Get all possible numeric features from the dataframe
+                logger.warning("Feature columns file not found")
                 feature_columns = df.select_dtypes(include=['number']).columns.tolist()
-                
-                # Check if we have more features than model expects
-                input_size_file = os.path.join(model_dir, "input_size.pkl")
-                if os.path.exists(input_size_file):
-                    input_size = joblib.load(input_size_file)
-                    if len(feature_columns) > input_size:
-                        logger.warning(f"Found {len(feature_columns)} features but model expects {input_size}")
-                        # This is a fallback but not ideal
-                        feature_columns = feature_columns[:input_size]
-            
-            # Rename R_ and B_ to fighter1_ and fighter2_
-            rename_dict = {col: col.replace('R_', 'fighter1_').replace('B_', 'fighter2_') 
-                        for col in df.columns}
-            df = df.rename(columns=rename_dict)
-            
-            # Handle one-hot encoding for stance (if present)
-            for prefix in ['fighter1_Stance', 'fighter2_Stance']:
-                stance_cols = [col for col in df.columns if col.startswith(prefix)]
-                if stance_cols:
-                    stance_dummies = pd.get_dummies(df[stance_cols[0]], prefix=prefix)
-                    df = pd.concat([df, stance_dummies], axis=1)
-                    df = df.drop(columns=stance_cols)
-            
-            # Convert all columns to numeric
-            for col in df.columns:
-                if df[col].dtype == 'object':
-                    try:
-                        df[col] = pd.to_numeric(df[col])
-                    except:
-                        logger.warning(f"Dropping non-numeric column: {col}")
-                        df = df.drop(columns=[col])
             
             # Ensure all expected feature columns exist
-            # Create missing columns with zeros
             input_df = pd.DataFrame(0, index=df.index, columns=feature_columns)
             for col in feature_columns:
                 if col in df.columns:
                     input_df[col] = df[col]
             
-            # If a scaler was used during training, apply it
+            # Load and apply scaler
             scaler_path = os.path.join(model_dir, "scaler.save")
             if os.path.exists(scaler_path):
                 scaler = joblib.load(scaler_path)
                 input_df = pd.DataFrame(scaler.transform(input_df), 
                                     columns=input_df.columns,
                                     index=input_df.index)
-                
+            
             # Convert to tensor
             input_tensor = torch.FloatTensor(input_df.values)
             
@@ -557,40 +674,6 @@ class ModelTrainer:
             import traceback
             traceback.print_exc()
             raise
-
-    def _validate_fighter_features(self, features, fighter_label):
-        """Validate fighter features against expected format"""
-        # Load expected feature names
-        expected_features = pd.read_json(self.feature_names_path, typ='series').tolist()
-        
-        # Extract prefix from first feature to determine expected prefix
-        expected_prefix = expected_features[0].split('_')[0]
-        
-        # Filter expected features for this fighter
-        if fighter_label == "fighter1":
-            expected_fighter_features = [f for f in expected_features if f.startswith("fighter1_")]
-        else:  # fighter2
-            # Need to map fighter2 features to corresponding fighter1 features in the model
-            expected_fighter_features = [f for f in expected_features if f.startswith("fighter2_")]
-        
-        # Check if all required features are present
-        for feature in expected_fighter_features:
-            # Get the feature name without the fighter prefix
-            feature_name = '_'.join(feature.split('_')[1:])
-            if feature_name not in features:
-                raise ValueError(f"Missing required feature '{feature_name}' for {fighter_label}")
-        
-        # Check if there are any unexpected features
-        for feature in features:
-            feature_with_prefix = f"{fighter_label}_{feature}"
-            if fighter_label == "fighter1":
-                if f"fighter1_{feature}" not in expected_features:
-                    logger.warning(f"Unexpected feature '{feature}' for {fighter_label}")
-            else:
-                # For fighter2, check if corresponding fighter1 feature exists
-                fighter1_feature = f"fighter1_{feature}"
-                if fighter1_feature not in expected_features:
-                    logger.warning(f"Unexpected feature '{feature}' for {fighter_label}")
 
     def plot_training_history(self):
         """Plot training history metrics"""
@@ -638,7 +721,60 @@ class ModelTrainer:
         plt.tight_layout()
         plt.savefig(os.path.join(self.model_dir, 'training_history.png'))
         logger.info(f"Training history plot saved to {os.path.join(self.model_dir, 'training_history.png')}")
-#Testing method 
+
+def validate_fighter_data(fighter_data, label):
+    """
+    Validates fighter data for completeness and formats values if needed.
+    
+    Parameters:
+    fighter_data (dict): Dictionary of fighter stats
+    label (str): Label for the fighter (e.g., "Red corner")
+    
+    Returns:
+    bool: True if validation passes
+    """
+    # Essential features that should be present
+    essential_features = [
+        'avg_KD', 'avg_SIG_STR_pct', 'avg_TD_pct', 
+        'wins', 'losses'
+    ]
+    
+    # Check for prefix - either use it consistently or not at all
+    has_prefix = any(key.startswith('R_') or key.startswith('B_') for key in fighter_data.keys())
+    prefix = label[0] if has_prefix else ''
+    
+    # Validate essential features
+    missing_features = []
+    for feature in essential_features:
+        # Check with and without prefix
+        feature_with_prefix = f"{prefix}_{feature}" if prefix else feature
+        if feature_with_prefix not in fighter_data and feature not in fighter_data:
+            missing_features.append(feature)
+    
+    if missing_features:
+        print(f"Warning: {label} data is missing essential features: {missing_features}")
+        print("Predictions may be less accurate without these features.")
+    
+    # Automatically convert percentage values if they're in 0-100 range instead of 0-1
+    percentage_features = ['avg_SIG_STR_pct', 'avg_TD_pct']
+    for feature in percentage_features:
+        # Check with prefix
+        feature_with_prefix = f"{prefix}_{feature}" if prefix else feature
+        if feature_with_prefix in fighter_data:
+            value = fighter_data[feature_with_prefix]
+            if isinstance(value, (int, float)) and value > 1.0:
+                fighter_data[feature_with_prefix] = value / 100.0
+                print(f"Converted {feature_with_prefix} from {value} to {value/100.0} (percentage to decimal)")
+        
+        # Check without prefix
+        elif feature in fighter_data:
+            value = fighter_data[feature]
+            if isinstance(value, (int, float)) and value > 1.0:
+                fighter_data[feature] = value / 100.0
+                print(f"Converted {feature} from {value} to {value/100.0} (percentage to decimal)")
+    
+    return True
+
 def test_prediction(red_fighter_data=None, blue_fighter_data=None, model_path=None, verbose=True):
     """
     Test UFC fight prediction with given fighter data or sample data.
@@ -652,21 +788,13 @@ def test_prediction(red_fighter_data=None, blue_fighter_data=None, model_path=No
     Returns:
     dict: Prediction results
     """
-    import pandas as pd
-    import os
     import logging
-    import joblib
-    import torch
-    from config import MODEL_PATH
     
     # Set up logging
     logging.basicConfig(level=logging.INFO if verbose else logging.WARNING)
     logger = logging.getLogger('ufc_prediction_test')
     
     try:
-        # Import required classes
-        from model import ModelTrainer, FightPredictor
-        
         # Create or use sample data if not provided
         if red_fighter_data is None:
             logger.info("Using sample data for red fighter")
@@ -728,13 +856,13 @@ def test_prediction(red_fighter_data=None, blue_fighter_data=None, model_path=No
                 'B_win_by_DEC': 1
             }
         
-        # Validate feature completeness
-        logger.info("Validating fighter data")
+        # Validate fighter data
         validate_fighter_data(red_fighter_data, "Red corner")
         validate_fighter_data(blue_fighter_data, "Blue corner")
         
         # Get the model directory path
-        model_dir = os.path.dirname(model_path) if model_path else os.path.dirname(MODEL_PATH)
+        model_path_to_use = model_path if model_path else MODEL_PATH
+        model_dir = os.path.dirname(model_path_to_use)
         
         # Load the input size parameter saved during training
         input_size_file = os.path.join(model_dir, "input_size.pkl")
@@ -742,22 +870,31 @@ def test_prediction(red_fighter_data=None, blue_fighter_data=None, model_path=No
             input_size = joblib.load(input_size_file)
             logger.info(f"Loaded input size from file: {input_size}")
         else:
-            # Default to the value from error message if file doesn't exist
-            input_size = 134
+            # Default to a reasonable value if file doesn't exist
+            feature_columns_file = os.path.join(model_dir, "feature_columns.pkl")
+            if os.path.exists(feature_columns_file):
+                feature_columns = joblib.load(feature_columns_file)
+                input_size = len(feature_columns)
+            else:
+                # Reasonable fallback
+                input_size = 134
             logger.warning(f"Input size file not found. Using default: {input_size}")
             
         # Initialize model with correct input size
         model = FightPredictor(input_size=input_size)
+        device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
         
         # Load the model weights
-        model_file = model_path if model_path else MODEL_PATH
+        model_file = model_path_to_use
         logger.info(f"Loading model from: {model_file}")
         model.load_state_dict(torch.load(model_file))
+        model.to(device)
         model.eval()  # Set to evaluation mode
         
-        # Initialize the trainer but set the model directly
-        trainer = ModelTrainer(None)  # No data needed for prediction
+        # Initialize the trainer with the model
+        trainer = ModelTrainer(None)  # No data needed just for prediction
         trainer.model = model
+        trainer.device = device
         
         # Make prediction
         logger.info("Making prediction")
@@ -775,8 +912,6 @@ def test_prediction(red_fighter_data=None, blue_fighter_data=None, model_path=No
             
             # Add visualization if matplotlib is available
             try:
-                import matplotlib.pyplot as plt
-                
                 plt.figure(figsize=(8, 4))
                 probabilities = [result['probability_red_wins'], result['probability_blue_wins']]
                 labels = ['Red Fighter', 'Blue Fighter']
@@ -798,8 +933,8 @@ def test_prediction(red_fighter_data=None, blue_fighter_data=None, model_path=No
                 plt.savefig(os.path.join(output_dir, 'prediction_result.png'))
                 print(f"\nPrediction visualization saved to {os.path.join(output_dir, 'prediction_result.png')}")
                 plt.close()
-            except:
-                logger.warning("Matplotlib not available, skipping visualization")
+            except Exception as e:
+                logger.warning(f"Visualization error: {e}")
         
         return result
         
@@ -808,59 +943,6 @@ def test_prediction(red_fighter_data=None, blue_fighter_data=None, model_path=No
         import traceback
         traceback.print_exc()
         return {"error": str(e)}
-
-def validate_fighter_data(fighter_data, label):
-    """
-    Validates fighter data for completeness and formats values if needed.
-    
-    Parameters:
-    fighter_data (dict): Dictionary of fighter stats
-    label (str): Label for the fighter (e.g., "Red corner")
-    
-    Returns:
-    bool: True if validation passes
-    """
-    # Essential features that should be present
-    essential_features = [
-        'avg_KD', 'avg_SIG_STR_pct', 'avg_TD_pct', 
-        'wins', 'losses'
-    ]
-    
-    # Check for prefix - either use it consistently or not at all
-    has_prefix = any(key.startswith('R_') or key.startswith('B_') for key in fighter_data.keys())
-    prefix = label[0] if has_prefix else ''
-    
-    # Validate essential features
-    missing_features = []
-    for feature in essential_features:
-        # Check with and without prefix
-        feature_with_prefix = f"{prefix}_{feature}" if prefix else feature
-        if feature_with_prefix not in fighter_data and feature not in fighter_data:
-            missing_features.append(feature)
-    
-    if missing_features:
-        print(f"Warning: {label} data is missing essential features: {missing_features}")
-        print("Predictions may be less accurate without these features.")
-    
-    # Automatically convert percentage values if they're in 0-100 range instead of 0-1
-    percentage_features = ['avg_SIG_STR_pct', 'avg_TD_pct']
-    for feature in percentage_features:
-        # Check with prefix
-        feature_with_prefix = f"{prefix}_{feature}" if prefix else feature
-        if feature_with_prefix in fighter_data:
-            value = fighter_data[feature_with_prefix]
-            if isinstance(value, (int, float)) and value > 1.0:
-                fighter_data[feature_with_prefix] = value / 100.0
-                print(f"Converted {feature_with_prefix} from {value} to {value/100.0} (percentage to decimal)")
-        
-        # Check without prefix
-        elif feature in fighter_data:
-            value = fighter_data[feature]
-            if isinstance(value, (int, float)) and value > 1.0:
-                fighter_data[feature] = value / 100.0
-                print(f"Converted {feature} from {value} to {value/100.0} (percentage to decimal)")
-    
-    return True
 
 def compare_fighters(fighter1, fighter2, model_path=None):
     """
@@ -874,9 +956,6 @@ def compare_fighters(fighter1, fighter2, model_path=None):
     Returns:
     dict: Prediction results
     """
-    import pandas as pd
-    import os
-    
     # Format fighter data with proper prefixes
     red_fighter = {}
     for key, value in fighter1.items():
@@ -944,15 +1023,10 @@ def compare_fighters(fighter1, fighter2, model_path=None):
         output_dir = os.path.dirname(MODEL_PATH)
         comparison_df.to_csv(os.path.join(output_dir, 'fighter_comparison.csv'), index=False)
         print(f"Fighter comparison saved to {os.path.join(output_dir, 'fighter_comparison.csv')}")
-    except:
-        print("Could not save fighter comparison to CSV")
+    except Exception as e:
+        print(f"Could not save fighter comparison to CSV: {e}")
     
     return result
-
-import pandas as pd
-import os
-import traceback
-from config import MODEL_PATH  # Ensure correct model path is used
 
 def batch_test_predictions(test_cases=None, model_path=None):
     """
@@ -970,7 +1044,7 @@ def batch_test_predictions(test_cases=None, model_path=None):
     if model_path is None:
         model_path = MODEL_PATH
 
-    # ✅ Use sample test cases if none provided
+    # Use sample test cases if none provided
     if test_cases is None:
         print("🧪 Using sample test cases...")
         test_cases = [
@@ -994,7 +1068,7 @@ def batch_test_predictions(test_cases=None, model_path=None):
             }
         ]
     
-    # ✅ Run batch tests
+    # Run batch tests
     results = []
     for i, case in enumerate(test_cases):
         print(f"\n📝 Running test case {i+1}/{len(test_cases)}: {case.get('description', 'Unnamed test')}")
@@ -1008,10 +1082,11 @@ def batch_test_predictions(test_cases=None, model_path=None):
             )
         except Exception as e:
             print(f"⚠️ Error in prediction: {e}")
+            import traceback
             traceback.print_exc()
             continue  # Move to the next test case
         
-        # ✅ Prepare result record
+        # Prepare result record
         result_record = {
             'test_id': i+1,
             'description': case.get('description', 'Unnamed test'),
@@ -1021,47 +1096,47 @@ def batch_test_predictions(test_cases=None, model_path=None):
             'confidence': prediction.get('confidence_level', 'Unknown')
         }
         
-        # ✅ Add actual winner if provided
+        # Add actual winner if provided
         if 'actual_winner' in case:
             result_record['actual_winner'] = case['actual_winner']
             result_record['prediction_correct'] = (case['actual_winner'] == prediction['predicted_winner'])
         
         results.append(result_record)
         
-        # ✅ Print individual result
+        # Print individual result
         print(f"📊 Prediction: {prediction['predicted_winner']} (Confidence: {prediction['confidence_level']})")
         if 'actual_winner' in case:
             correct = case['actual_winner'] == prediction['predicted_winner']
             print(f"✅ Actual: {case['actual_winner']} ({'✔️ CORRECT' if correct else '❌ INCORRECT'})")
     
-    # ✅ Create results dataframe
+    # Create results dataframe
     results_df = pd.DataFrame(results)
     
-    # ✅ Generate summary statistics
+    # Generate summary statistics
     summary = {'total_tests': len(results)}
     
     if 'prediction_correct' in results_df.columns:
         summary['correct_predictions'] = results_df['prediction_correct'].sum()
         summary['accuracy'] = summary['correct_predictions'] / summary['total_tests']
         
-        # ✅ Handle cases where confidence levels might not exist
+        # Handle cases where confidence levels might not exist
         high_conf = results_df[results_df['confidence'] == 'High'] if 'confidence' in results_df.columns else pd.DataFrame()
         med_conf = results_df[results_df['confidence'] == 'Medium'] if 'confidence' in results_df.columns else pd.DataFrame()
         low_conf = results_df[results_df['confidence'] == 'Low'] if 'confidence' in results_df.columns else pd.DataFrame()
         
-        if not high_conf.empty:
-            summary['high_conf_accuracy'] = high_conf['prediction_correct'].mean() if 'prediction_correct' in high_conf else 'N/A'
+        if not high_conf.empty and 'prediction_correct' in high_conf:
+            summary['high_conf_accuracy'] = high_conf['prediction_correct'].mean()
             summary['high_conf_count'] = len(high_conf)
         
-        if not med_conf.empty:
-            summary['med_conf_accuracy'] = med_conf['prediction_correct'].mean() if 'prediction_correct' in med_conf else 'N/A'
+        if not med_conf.empty and 'prediction_correct' in med_conf:
+            summary['med_conf_accuracy'] = med_conf['prediction_correct'].mean()
             summary['med_conf_count'] = len(med_conf)
             
-        if not low_conf.empty:
-            summary['low_conf_accuracy'] = low_conf['prediction_correct'].mean() if 'prediction_correct' in low_conf else 'N/A'
+        if not low_conf.empty and 'prediction_correct' in low_conf:
+            summary['low_conf_accuracy'] = low_conf['prediction_correct'].mean()
             summary['low_conf_count'] = len(low_conf)
     
-    # ✅ Print summary
+    # Print summary
     print("\n" + "="*50)
     print("📊 BATCH TEST SUMMARY:")
     print("="*50)
@@ -1079,7 +1154,7 @@ def batch_test_predictions(test_cases=None, model_path=None):
         if 'low_conf_accuracy' in summary:
             print(f"🟡 Low confidence: {summary['low_conf_accuracy']*100:.1f}% ({summary['low_conf_count']} predictions)")
 
-    # ✅ Save results to CSV
+    # Save results to CSV
     try:
         output_dir = os.path.dirname(MODEL_PATH)
         results_df.to_csv(os.path.join(output_dir, 'batch_test_results.csv'), index=False)
@@ -1088,17 +1163,26 @@ def batch_test_predictions(test_cases=None, model_path=None):
         print(f"⚠️ Could not save test results to CSV: {e}")
     
     return summary
+
 def main():
+    """Main entry point for UFC fight prediction model training and testing"""
     import os
     import pandas as pd
     import joblib
     import traceback
-    from config import MODEL_PATH, CSV_FILE_PATH, SCALER_PATH
-    # Import ModelTrainer and FightPredictor from model.py (which also contains test_prediction)
-    from utils import preprocess_data
+    from config import MODEL_PATH, CSV_FILE_PATH, SCALER_PATH   
+    
+    # Check if required files exist
+    if not os.path.exists(CSV_FILE_PATH):
+        print(f"❌ Error: Dataset {CSV_FILE_PATH} not found! Run `python data_loader.py` first.")
+        exit(1)
 
-    print("🚀 Starting UFC fight prediction model training...")
+    if not os.path.exists(DATABASE_PATH):
+        print(f"❌ Warning: Database {DATABASE_PATH} not found! You may need to run `python database.py` first.")
+        # Continue anyway for now
 
+    print("✅ All required files exist. Proceeding with training...")
+    
     try:
         # Load raw data from CSV
         print(f"📂 Loading data from {CSV_FILE_PATH}")
@@ -1107,22 +1191,12 @@ def main():
 
         # Preprocess data to match the model's expected format
         print("⚙ Preprocessing data to match model format...")
-        processed_data, scaler = preprocess_data(raw_data)
+        processed_data = preprocess_data(raw_data)
         print(f"✅ Preprocessed data shape: {processed_data.shape}")
-        print(f"🔍 Columns after preprocessing: {list(processed_data.columns[:5])}...")
-
+        
         # Ensure target column exists
         if 'fighter1_won' not in processed_data.columns:
             raise ValueError("❌ Error: Dataset must contain 'fighter1_won' column after preprocessing!")
-
-        # Save the scaler for later use during inference
-        joblib.dump(scaler, SCALER_PATH)
-        print(f"📊 Scaler saved to {SCALER_PATH}")
-
-        # Save training feature columns for consistent inference
-        training_features = list(processed_data.columns)
-        joblib.dump(training_features, os.path.join(os.path.dirname(MODEL_PATH), "training_features.pkl"))
-        print("📊 Training feature columns saved.")
 
         # Initialize the model trainer with processed data
         print("🧑‍🏫 Initializing model trainer...")
@@ -1152,7 +1226,7 @@ def main():
 
     try:
         if choice == '1':
-            # Call test_prediction directly from model.py
+            # Call test_prediction
             test_prediction()
         elif choice == '2':
             fighter1 = {

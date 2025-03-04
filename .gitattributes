@@ -1,0 +1,10 @@
+# Set default behavior to automatically normalize line endings
+* text=auto
+
+# Force CSV files to use LF
+*.csv text eol=lf
+
+# Binary files that shouldn't be modified
+*.png binary
+*.jpg binary
+*.db binary

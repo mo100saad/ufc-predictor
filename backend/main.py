@@ -1,5 +1,6 @@
 # main.py - Main application entry point
-
+import argparse
+import sys
 import os
 from flask import Flask, request, jsonify, render_template, redirect, url_for, flash
 from flask_cors import CORS
@@ -7,11 +8,12 @@ import pandas as pd
 import traceback
 from werkzeug.utils import secure_filename
 
-from config import DATABASE_PATH, CSV_FILE_PATH, MODEL_PATH
+from config import DATABASE_PATH, CSV_FILE_PATH, MODEL_PATH, TRAINING_CSV_PATH, CSV_SYNC_ON_STARTUP
 from database import get_db_connection, init_db, import_csv_to_db, get_fight_data_for_training
-from model import ModelTrainer
+from model import ModelTrainer, preprocess_data
 from data_loader import preprocess_dataset, create_sample_dataset
 from utils import feature_engineering, get_fighter_stats, calculate_elo_ratings
+from csv_sync import verify_csv_consistency, sync_csv_files
 
 # Initialize Flask app
 app = Flask(__name__, 
@@ -28,6 +30,17 @@ CORS(app)  # Enable Cross-Origin Resource Sharing
 os.makedirs(os.path.dirname(DATABASE_PATH), exist_ok=True)
 os.makedirs(os.path.dirname(MODEL_PATH), exist_ok=True)
 os.makedirs(os.path.dirname(CSV_FILE_PATH), exist_ok=True)
+
+# Initialize CSV files if configured
+if CSV_SYNC_ON_STARTUP:
+    try:
+        # Verify that CSV files are consistent on startup
+        if not verify_csv_consistency():
+            print("CSV files are inconsistent or missing. Attempting to synchronize...")
+            sync_csv_files()
+    except Exception as e:
+        print(f"Error checking CSV consistency on startup: {e}")
+        traceback.print_exc()
 
 #------------------------
 # API Routes
@@ -53,6 +66,10 @@ def initialize_database():
         # Import data from CSV
         import_csv_to_db()
         
+        # Also generate training data if it doesn't exist
+        if not os.path.exists(TRAINING_CSV_PATH):
+            sync_csv_files()
+        
         return jsonify({"message": "Database initialized successfully"})
     except Exception as e:
         print(traceback.format_exc())
@@ -67,7 +84,7 @@ def train_model():
             # Initialize database if it doesn't exist
             initialize_database()
         
-        # Get fight data for training
+        # Get fight data for training - will use training CSV if available
         fight_data = get_fight_data_for_training()
         
         if fight_data.empty:
@@ -76,13 +93,17 @@ def train_model():
         # Apply feature engineering
         fight_data = feature_engineering(fight_data)
         
+        # Preprocess data for model
+        processed_data = preprocess_data(fight_data)
+        
         # Train the model
-        trainer = ModelTrainer(fight_data)
-        trainer.train_model()
+        trainer = ModelTrainer(processed_data)
+        history, metrics = trainer.train_model()
         
         return jsonify({
             "message": "Model trained successfully",
-            "model_path": MODEL_PATH
+            "model_path": MODEL_PATH,
+            "metrics": metrics
         })
     except Exception as e:
         print(traceback.format_exc())
@@ -95,7 +116,7 @@ def predict_fight():
         # Check if model exists
         if not os.path.exists(MODEL_PATH):
             # Train model if it doesn't exist
-            train_model()
+            return jsonify({"error": "Model not trained. Please train the model first."}), 400
         
         # Get fighters data from request
         data = request.get_json()
@@ -103,49 +124,41 @@ def predict_fight():
         if not data or 'fighter1' not in data or 'fighter2' not in data:
             return jsonify({"error": "Invalid request. fighter1 and fighter2 data required."}), 400
         
-        # Format fighter data
+        # Format fighter data for the model - convert to R_ and B_ format
         fighter1 = data['fighter1']
         fighter2 = data['fighter2']
         
-        # Prepare feature dictionaries
-        fighter1_features = {
-            'fighter1_height': fighter1.get('height', 0),
-            'fighter1_weight': fighter1.get('weight', 0),
-            'fighter1_reach': fighter1.get('reach', 0),
-            'fighter1_sig_strikes_per_min': fighter1.get('sig_strikes_per_min', 0),
-            'fighter1_takedown_avg': fighter1.get('takedown_avg', 0),
-            'fighter1_sub_avg': fighter1.get('sub_avg', 0),
-            'fighter1_win_streak': fighter1.get('win_streak', 0)
-        }
+        # Prepare feature dictionaries with R_ and B_ prefixes
+        red_fighter_data = {}
+        for key, value in fighter1.items():
+            red_fighter_data[f'R_{key}'] = value
+            
+        blue_fighter_data = {}
+        for key, value in fighter2.items():
+            blue_fighter_data[f'B_{key}'] = value
         
-        fighter2_features = {
-            'fighter2_height': fighter2.get('height', 0),
-            'fighter2_weight': fighter2.get('weight', 0),
-            'fighter2_reach': fighter2.get('reach', 0),
-            'fighter2_sig_strikes_per_min': fighter2.get('sig_strikes_per_min', 0),
-            'fighter2_takedown_avg': fighter2.get('takedown_avg', 0),
-            'fighter2_sub_avg': fighter2.get('sub_avg', 0),
-            'fighter2_win_streak': fighter2.get('win_streak', 0)
-        }
+        # Initialize the trainer (without data since we're just predicting)
+        trainer = ModelTrainer(None)
         
-        # Get fight data for training (needed to initialize the model with correct input size)
-        fight_data = get_fight_data_for_training()
+        # Load the trained model
+        trainer.load_model()
         
-        # Apply feature engineering to ensure consistency with training data
-        fight_data = feature_engineering(fight_data)
+        # Make prediction using the new predict_fight_with_corners method
+        prediction = trainer.predict_fight_with_corners(red_fighter_data, blue_fighter_data)
         
-        # Make prediction
-        trainer = ModelTrainer(fight_data)
-        probability = trainer.predict_fight(fighter1_features, fighter2_features)
-        
-        return jsonify({
+        # Format the response
+        response = {
             "prediction": {
                 "fighter1_name": fighter1.get('name', 'Fighter 1'),
                 "fighter2_name": fighter2.get('name', 'Fighter 2'),
-                "fighter1_win_probability": probability,
-                "fighter2_win_probability": 1 - probability
+                "fighter1_win_probability": prediction['probability_red_wins'],
+                "fighter2_win_probability": prediction['probability_blue_wins'],
+                "predicted_winner": "fighter1" if prediction['predicted_winner'] == "Red" else "fighter2",
+                "confidence_level": prediction['confidence_level']
             }
-        })
+        }
+        
+        return jsonify(response)
     except Exception as e:
         print(traceback.format_exc())
         return jsonify({"error": str(e)}), 500
@@ -248,6 +261,46 @@ def get_fighter_by_name(name):
         print(traceback.format_exc())
         return jsonify({"error": str(e)}), 500
 
+@app.route('/api/manage-csv', methods=['GET', 'POST'])
+def manage_csv_files():
+    """API endpoint to manage CSV files (verify, sync, etc.)"""
+    try:
+        if request.method == 'GET':
+            # Check CSV consistency and return status
+            is_consistent = verify_csv_consistency()
+            main_exists = os.path.exists(CSV_FILE_PATH)
+            training_exists = os.path.exists(TRAINING_CSV_PATH)
+            
+            return jsonify({
+                "status": "ok",
+                "is_consistent": is_consistent,
+                "main_csv_exists": main_exists,
+                "training_csv_exists": training_exists,
+                "main_csv_path": CSV_FILE_PATH,
+                "training_csv_path": TRAINING_CSV_PATH
+            })
+        
+        elif request.method == 'POST':
+            # Process action from request
+            data = request.get_json()
+            action = data.get('action')
+            
+            if action == 'sync':
+                # Synchronize CSV files
+                sync_csv_files()
+                return jsonify({
+                    "status": "ok",
+                    "message": "CSV files synchronized successfully"
+                })
+            else:
+                return jsonify({
+                    "error": f"Unknown action: {action}"
+                }), 400
+                
+    except Exception as e:
+        print(traceback.format_exc())
+        return jsonify({"error": str(e)}), 500
+
 @app.route('/api/upload-csv', methods=['POST'])
 def upload_csv():
     """Upload and process a new CSV file"""
@@ -260,20 +313,34 @@ def upload_csv():
         if file.filename == '':
             return jsonify({"error": "No selected file"}), 400
         
+        # Check if this is specifically for training data
+        is_training = request.form.get('is_training', 'false').lower() == 'true'
+        
         if file and file.filename.endswith('.csv'):
-            # Save the file
+            # Save the file to the appropriate location
             filename = secure_filename(file.filename)
-            filepath = os.path.join(app.config['UPLOAD_FOLDER'], 'ufc_data.csv')
-            file.save(filepath)
             
-            # Clear and reinitialize the database
-            if os.path.exists(DATABASE_PATH):
-                os.remove(DATABASE_PATH)
+            if is_training:
+                filepath = TRAINING_CSV_PATH
+                file.save(filepath)
+                message = "Training CSV file uploaded successfully"
+            else:
+                filepath = CSV_FILE_PATH
+                file.save(filepath)
+                
+                # Clear and reinitialize the database if this is the main data
+                if os.path.exists(DATABASE_PATH):
+                    os.remove(DATABASE_PATH)
+                
+                init_db()
+                import_csv_to_db()
+                
+                # Also update the training data
+                sync_csv_files()
+                
+                message = "Main CSV file uploaded and processed successfully"
             
-            init_db()
-            import_csv_to_db()
-            
-            return jsonify({"message": "CSV file uploaded and processed successfully"})
+            return jsonify({"message": message})
         else:
             return jsonify({"error": "File must be a CSV"}), 400
     except Exception as e:
@@ -303,7 +370,68 @@ def predict_page():
 def admin_page():
     """Admin page for data management"""
     return render_template('admin.html')
+def parse_args():
+    """Parse command line arguments for UFC Predictor"""
+    parser = argparse.ArgumentParser(description="UFC Fight Predictor Backend")
+    parser.add_argument('--init-and-train', action='store_true', 
+                      help='Initialize database and train model before starting the server')
+    parser.add_argument('--init-db', action='store_true',
+                      help='Initialize the database only')
+    parser.add_argument('--train', action='store_true',
+                      help='Train the model only')
+    parser.add_argument('--sync-csv', action='store_true',
+                      help='Synchronize CSV files')
+    parser.add_argument('--no-server', action='store_true',
+                      help='Do not start the Flask server after other operations')
+    return parser.parse_args()
 
+# Replace the "if __name__ == '__main__':" section with this:
+if __name__ == '__main__':
+    args = parse_args()
+    
+    # Process CLI arguments
+    if args.sync_csv:
+        print("Synchronizing CSV files...")
+        sync_csv_files()
+    
+    if args.init_db or args.init_and_train:
+        print("Initializing database...")
+        if not os.path.exists(CSV_FILE_PATH):
+            print(f"Main CSV file not found at {CSV_FILE_PATH}. Creating sample dataset...")
+            create_sample_dataset()
+        
+        init_db()
+        import_csv_to_db()
+        print("Database initialized successfully")
+    
+    if args.train or args.init_and_train:
+        print("Training model...")
+        # Get fight data for training
+        fight_data = get_fight_data_for_training()
+        
+        if fight_data.empty:
+            print("No fight data available for training.")
+            sys.exit(1)
+        
+        # Apply feature engineering
+        fight_data = feature_engineering(fight_data)
+        
+        # Preprocess data for model
+        processed_data = preprocess_data(fight_data)
+        
+        # Train the model
+        trainer = ModelTrainer(processed_data)
+        history, metrics = trainer.train_model()
+        
+        print(f"Model trained successfully and saved to {MODEL_PATH}")
+        print(f"Test metrics: {metrics}")
+    
+    # Start the server unless --no-server was specified
+    if not args.no_server:
+        print("Starting UFC Predictor API server...")
+        app.run(debug=False)
+    else:
+        print("Server start skipped due to --no-server flag")
 # Run the app
 if __name__ == '__main__':
     app.run(debug=False)

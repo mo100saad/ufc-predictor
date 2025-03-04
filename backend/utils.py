@@ -5,71 +5,7 @@ from sklearn.preprocessing import StandardScaler
 import sqlite3
 from config import DATABASE_PATH
 
-def preprocess_data(self):
-    """
-    Preprocess the data for model training.
     
-    Returns:
-    DataLoader: Training data loader
-    DataLoader: Validation data loader
-    DataLoader: Test data loader
-    int: Size of input features
-    """
-    from torch.utils.data import DataLoader, TensorDataset
-    import numpy as np
-    import joblib
-    import os
-    from config import MODEL_PATH
-    
-    # Split target and features
-    X = self.data.drop('fighter1_won', axis=1)
-    y = self.data['fighter1_won']
-    
-    # Save the feature columns for later use during prediction
-    self.feature_columns = list(X.columns)
-    feature_columns_file = os.path.join(os.path.dirname(MODEL_PATH), "feature_columns.pkl")
-    joblib.dump(self.feature_columns, feature_columns_file)
-    logger.info(f"Saved {len(self.feature_columns)} feature columns to {feature_columns_file}")
-    
-    # Split data into train, validation, and test sets
-    X_train, X_temp, y_train, y_temp = train_test_split(X, y, test_size=0.3, random_state=42)
-    X_val, X_test, y_val, y_test = train_test_split(X_temp, y_temp, test_size=0.67, random_state=42)
-    
-    logger.info(f"Data split: Train: {len(X_train)}, Validation: {len(X_val)}, Test: {len(X_test)}")
-    
-    # Convert to PyTorch tensors
-    X_train_tensor = torch.FloatTensor(X_train.values)
-    y_train_tensor = torch.FloatTensor(y_train.values).view(-1, 1)
-    
-    X_val_tensor = torch.FloatTensor(X_val.values)
-    y_val_tensor = torch.FloatTensor(y_val.values).view(-1, 1)
-    
-    X_test_tensor = torch.FloatTensor(X_test.values)
-    y_test_tensor = torch.FloatTensor(y_test.values).view(-1, 1)
-    
-    # Get the input size from the data
-    input_size = X_train.shape[1]
-    
-    # Save the input size for prediction
-    input_size_file = os.path.join(os.path.dirname(MODEL_PATH), "input_size.pkl")
-    joblib.dump(input_size, input_size_file)
-    logger.info(f"Saved input size ({input_size}) to {input_size_file}")
-    
-    # Create DataLoader objects
-    train_dataset = TensorDataset(X_train_tensor, y_train_tensor)
-    val_dataset = TensorDataset(X_val_tensor, y_val_tensor)
-    test_dataset = TensorDataset(X_test_tensor, y_test_tensor)
-    
-    train_loader = DataLoader(train_dataset, batch_size=BATCH_SIZE, shuffle=True)
-    val_loader = DataLoader(val_dataset, batch_size=BATCH_SIZE)
-    test_loader = DataLoader(test_dataset, batch_size=BATCH_SIZE)
-    
-    # Store test data for later feature importance analysis
-    self.X_test = X_test
-    self.y_test = y_test
-    
-    return train_loader, val_loader, test_loader, input_size
-
 def validate_dataset(df):
     essential_columns = ['R_fighter', 'B_fighter', 'Winner']
     missing_columns = [col for col in essential_columns if col not in df.columns]
