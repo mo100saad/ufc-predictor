@@ -17,7 +17,7 @@ def load_dataset(save_path=CSV_FILE_PATH):
     
     # If local file not found, try downloading from GitHub
     print(f"Dataset not found locally. Attempting to download from GitHub...")
-    github_url = "https://raw.githubusercontent.com/mo100saad/ufc-predictor/main/backend/data/fighter_stats.csv"
+    github_url = "https://raw.githubusercontent.com/mo100saad/ufc-predictor/main/backend/data/ufc_data.csv"
     try:
         response = requests.get(github_url)
         response.raise_for_status()  # Raise an error for bad status codes

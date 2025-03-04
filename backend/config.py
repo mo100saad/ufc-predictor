@@ -7,7 +7,7 @@ SECRET_KEY = os.environ.get('SECRET_KEY', 'dev_key_for_development')
 # Database settings
 DATABASE_PATH = os.path.join(os.path.dirname(__file__), 'data', 'ufc_fights.db')
 CSV_FILE_PATH = os.path.join(os.path.dirname(__file__), 'data', 'ufc_data.csv')
-
+SCALER_PATH = os.path.join(os.path.dirname(__file__), 'data', 'scaler.save')
 # Model settings
 MODEL_PATH = os.path.join(os.path.dirname(__file__), 'data', 'fight_predictor_model.pth')
 BATCH_SIZE = 64
