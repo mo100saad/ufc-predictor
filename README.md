@@ -219,7 +219,7 @@ If you wish to reference certain aspects of the design, functionality, or method
 
 
 ## 📜 License
-This project is **MIT Licensed**. See the [LICENSE](LICENSE) file for details.
+This project is **Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International** license. See the [LICENSE](LICENSE) file for details.
 
 ---
 
