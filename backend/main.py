@@ -10,7 +10,8 @@ from werkzeug.utils import secure_filename
 
 from config import DATABASE_PATH, CSV_FILE_PATH, MODEL_PATH, TRAINING_CSV_PATH, CSV_SYNC_ON_STARTUP
 from database import get_db_connection, init_db, import_csv_to_db, get_fight_data_for_training
-from model import ModelTrainer, preprocess_data
+from model import UFCPredictor, predict_fight
+from data_processor import preprocess_data, create_advantage_features, select_features
 from data_loader import preprocess_dataset, create_sample_dataset
 from utils import feature_engineering, get_fighter_stats, calculate_elo_ratings
 from csv_sync import verify_csv_consistency, sync_csv_files
@@ -95,10 +96,35 @@ def train_model():
         
         # Preprocess data for model
         processed_data = preprocess_data(fight_data)
+        processed_data = create_advantage_features(processed_data)
+        processed_data = select_features(processed_data)
         
-        # Train the model
-        trainer = ModelTrainer(processed_data)
-        history, metrics = trainer.train_model()
+        # Prepare data for training
+        from data_processor import prepare_training_data, create_dataloaders
+        X_train, X_val, X_test, y_train, y_val, y_test = prepare_training_data(processed_data)
+        train_loader, val_loader, test_loader, scaler, feature_columns = create_dataloaders(
+            X_train, X_val, X_test, y_train, y_val, y_test
+        )
+        
+        # Save feature columns and scaler for later use
+        import joblib
+        os.makedirs(os.path.dirname(MODEL_PATH), exist_ok=True)
+        joblib.dump(feature_columns, os.path.join(os.path.dirname(MODEL_PATH), 'feature_columns.pkl'))
+        joblib.dump(scaler, os.path.join(os.path.dirname(MODEL_PATH), 'scaler.pkl'))
+        
+        # Create and train model
+        from data_processor import train_model as train_model_function
+        model = UFCPredictor(input_size=len(feature_columns))
+        model, history = train_model_function(
+            model=model,
+            train_loader=train_loader,
+            val_loader=val_loader,
+            model_path=MODEL_PATH
+        )
+        
+        # Evaluate model
+        from data_processor import evaluate_model
+        metrics = evaluate_model(model, test_loader)
         
         return jsonify({
             "message": "Model trained successfully",
@@ -124,27 +150,21 @@ def predict_fight():
         if not data or 'fighter1' not in data or 'fighter2' not in data:
             return jsonify({"error": "Invalid request. fighter1 and fighter2 data required."}), 400
         
-        # Format fighter data for the model - convert to R_ and B_ format
+        # Format fighter data for the model
         fighter1 = data['fighter1']
         fighter2 = data['fighter2']
         
-        # Prepare feature dictionaries with R_ and B_ prefixes
-        red_fighter_data = {}
-        for key, value in fighter1.items():
-            red_fighter_data[f'R_{key}'] = value
-            
-        blue_fighter_data = {}
-        for key, value in fighter2.items():
-            blue_fighter_data[f'B_{key}'] = value
+        # Load the model and required files
+        import torch
+        import joblib
         
-        # Initialize the trainer (without data since we're just predicting)
-        trainer = ModelTrainer(None)
+        model = UFCPredictor(input_size=len(joblib.load(os.path.join(os.path.dirname(MODEL_PATH), 'feature_columns.pkl'))))
+        model.load_state_dict(torch.load(MODEL_PATH, map_location=torch.device('cpu')))
+        scaler = joblib.load(os.path.join(os.path.dirname(MODEL_PATH), 'scaler.pkl'))
+        feature_columns = joblib.load(os.path.join(os.path.dirname(MODEL_PATH), 'feature_columns.pkl'))
         
-        # Load the trained model
-        trainer.load_model()
-        
-        # Make prediction using the new predict_fight_with_corners method
-        prediction = trainer.predict_fight_with_corners(red_fighter_data, blue_fighter_data)
+        # Make prediction
+        prediction = predict_fight(model, fighter1, fighter2, scaler, feature_columns)
         
         # Format the response
         response = {
@@ -153,7 +173,7 @@ def predict_fight():
                 "fighter2_name": fighter2.get('name', 'Fighter 2'),
                 "fighter1_win_probability": prediction['probability_red_wins'],
                 "fighter2_win_probability": prediction['probability_blue_wins'],
-                "predicted_winner": "fighter1" if prediction['predicted_winner'] == "Red" else "fighter2",
+                "predicted_winner": "fighter1" if prediction['predicted_winner'] == 'Red' else "fighter2",
                 "confidence_level": prediction['confidence_level']
             }
         }
