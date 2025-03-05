@@ -438,20 +438,43 @@ if __name__ == '__main__':
         
         # Preprocess data for model
         processed_data = preprocess_data(fight_data)
+        processed_data = create_advantage_features(processed_data)
+        processed_data = select_features(processed_data)
         
-        # Train the model
-        trainer = ModelTrainer(processed_data)
-        history, metrics = trainer.train_model()
+        # Prepare data for training
+        from data_processor import prepare_training_data, create_dataloaders, train_model as train_model_function, evaluate_model
+        X_train, X_val, X_test, y_train, y_val, y_test = prepare_training_data(processed_data)
+        train_loader, val_loader, test_loader, scaler, feature_columns = create_dataloaders(
+            X_train, X_val, X_test, y_train, y_val, y_test
+        )
+        
+        # Save feature columns and scaler for later use
+        import joblib
+        os.makedirs(os.path.dirname(MODEL_PATH), exist_ok=True)
+        joblib.dump(feature_columns, os.path.join(os.path.dirname(MODEL_PATH), 'feature_columns.pkl'))
+        joblib.dump(scaler, os.path.join(os.path.dirname(MODEL_PATH), 'scaler.pkl'))
+        
+        # Create and train model
+        model = UFCPredictor(input_size=len(feature_columns))
+        model, history = train_model_function(
+            model=model,
+            train_loader=train_loader,
+            val_loader=val_loader,
+            model_path=MODEL_PATH
+        )
+        
+        # Evaluate model
+        metrics = evaluate_model(model, test_loader)
         
         print(f"Model trained successfully and saved to {MODEL_PATH}")
         print(f"Test metrics: {metrics}")
-    
-    # Start the server unless --no-server was specified
-    if not args.no_server:
-        print("Starting UFC Predictor API server...")
-        app.run(debug=False)
-    else:
-        print("Server start skipped due to --no-server flag")
+        
+        # Start the server unless --no-server was specified
+        if not args.no_server:
+            print("Starting UFC Predictor API server...")
+            app.run(debug=False)
+        else:
+            print("Server start skipped due to --no-server flag")
 # Run the app
 if __name__ == '__main__':
     app.run(debug=False)
