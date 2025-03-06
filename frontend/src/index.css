@@ -1,21 +1,108 @@
+/* Add these custom styles to your index.css or tailwind.css file */
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-@layer components {
-  .btn-primary {
-    @apply bg-ufc-red text-white font-bold py-2 px-4 rounded hover:bg-red-700 transition duration-200;
+@layer base {
+  body {
+    @apply bg-gray-900 text-white;
+    font-family: 'Poppins', sans-serif;
+    overflow-x: hidden;
   }
   
-  .btn-secondary {
-    @apply bg-ufc-blue text-white font-bold py-2 px-4 rounded hover:bg-blue-700 transition duration-200;
-  }
-  
-  .card {
-    @apply bg-card-bg rounded-lg shadow-md p-6;
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-bold;
   }
 }
 
-body {
-  @apply bg-dark-bg text-white;
+@layer components {
+  .card {
+    @apply bg-gray-900/60 backdrop-blur-sm border border-gray-800 rounded-lg p-6 shadow-xl transition-all duration-300;
+  }
+  
+  .btn-primary {
+    @apply px-6 py-3 bg-gradient-to-r from-red-600 to-red-700 hover:from-red-500 hover:to-red-600 text-white font-bold rounded-lg shadow-lg transition-all duration-300;
+  }
+  
+  .btn-secondary {
+    @apply px-6 py-3 bg-gray-800 hover:bg-gray-700 text-white font-bold rounded-lg shadow-lg border border-gray-700 transition-all duration-300;
+  }
+  
+  /* Custom color classes for UFC themed colors */
+  .text-ufc-red {
+    @apply text-red-500;
+  }
+  
+  .text-ufc-blue {
+    @apply text-blue-500;
+  }
+  
+  .text-ufc-gold {
+    @apply text-yellow-500;
+  }
+  
+  /* Add this for better styling on inputs and selects */
+  input, select {
+    @apply bg-gray-800 border border-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-300;
+  }
+}
+
+/* Custom scrollbar styling */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-gray-900;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-gray-700 rounded-full;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-gray-600;
+}
+
+/* Loading animation */
+@keyframes pulse-ring {
+  0% {
+    transform: scale(0.8);
+    opacity: 0.8;
+  }
+  50% {
+    transform: scale(1);
+    opacity: 0.5;
+  }
+  100% {
+    transform: scale(0.8);
+    opacity: 0.8;
+  }
+}
+
+.loading-ring {
+  animation: pulse-ring 1.5s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+}
+
+/* Gradient text animation for special headings */
+@keyframes gradient-shift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.animated-gradient-text {
+  @apply bg-clip-text text-transparent;
+  background-image: linear-gradient(90deg, #ff0000, #3b82f6, #ff0000);
+  background-size: 200% auto;
+  animation: gradient-shift 5s linear infinite;
 }

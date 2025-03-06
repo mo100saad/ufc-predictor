@@ -1,0 +1,1501 @@
+2025-03-05 13:57:01,322 - ufc_model - INFO - CSV files are inconsistent or missing. Attempting to synchronize...
+2025-03-05 13:57:01,322 - ufc_model - INFO - Processing data from C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\fighter_stats.csv for training
+2025-03-05 13:57:01,325 - ufc_model - INFO - Starting data preprocessing
+2025-03-05 13:57:01,333 - ufc_model - INFO - Preprocessed data shape: (2479, 16)
+2025-03-05 13:57:01,336 - ufc_model - INFO - Creating advantage features
+2025-03-05 13:57:01,338 - ufc_model - INFO - Added advantage features. New shape: (2479, 16)
+2025-03-05 13:57:01,361 - ufc_model - INFO - Processed data saved to C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\ufc_dataset.csv: (2479, 16)
+2025-03-05 13:57:01,367 - ufc_model - INFO - Initializing database...
+2025-03-05 13:58:12,755 - ufc_model - INFO - Database initialized successfully
+2025-03-05 13:58:12,756 - ufc_model - INFO - Starting Flask server on port 5000...
+2025-03-05 13:58:12,784 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.2.200:5000
+2025-03-05 13:58:12,784 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-03-05 14:00:00,845 - ufc_model - INFO - CSV files are inconsistent or missing. Attempting to synchronize...
+2025-03-05 14:00:00,845 - ufc_model - INFO - Processing data from C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\fighter_stats.csv for training
+2025-03-05 14:00:00,851 - ufc_model - INFO - Starting data preprocessing
+2025-03-05 14:00:00,858 - ufc_model - INFO - Preprocessed data shape: (2479, 16)
+2025-03-05 14:00:00,858 - ufc_model - INFO - Creating advantage features
+2025-03-05 14:00:00,860 - ufc_model - INFO - Added advantage features. New shape: (2479, 16)
+2025-03-05 14:00:00,885 - ufc_model - INFO - Processed data saved to C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\ufc_dataset.csv: (2479, 16)
+2025-03-05 14:00:00,891 - ufc_model - INFO - Training model...
+2025-03-05 14:00:02,672 - ufc_model - INFO - Starting data preprocessing
+2025-03-05 14:10:34,230 - ufc_model - INFO - CSV files are inconsistent or missing. Attempting to synchronize...
+2025-03-05 14:10:34,230 - ufc_model - INFO - Synchronizing CSV files
+2025-03-05 14:10:34,230 - ufc_model - INFO - CSV files successfully synchronized:
+2025-03-05 14:10:34,230 - ufc_model - INFO - Fighter stats: C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\fighter_stats.csv
+2025-03-05 14:10:34,230 - ufc_model - INFO - Training data: C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\ufc_dataset.csv
+2025-03-05 14:11:34,418 - ufc_model - INFO - CSV files are inconsistent or missing. Attempting to synchronize...
+2025-03-05 14:11:34,418 - ufc_model - INFO - Synchronizing CSV files
+2025-03-05 14:11:34,418 - ufc_model - INFO - CSV files successfully synchronized:
+2025-03-05 14:11:34,418 - ufc_model - INFO - Fighter stats: C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\fighter_stats.csv
+2025-03-05 14:11:34,418 - ufc_model - INFO - Training data: C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\ufc_dataset.csv
+2025-03-05 14:11:34,421 - ufc_model - INFO - Training model...
+2025-03-05 14:26:04,934 - ufc_model - INFO - CSV files are inconsistent or missing. Attempting to synchronize...
+2025-03-05 14:26:04,935 - ufc_model - INFO - Synchronizing CSV files
+2025-03-05 14:26:04,935 - ufc_model - INFO - CSV files successfully synchronized:
+2025-03-05 14:26:04,935 - ufc_model - INFO - Fighter stats: C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\fighter_stats.csv
+2025-03-05 14:26:04,935 - ufc_model - INFO - Training data: C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\ufc_dataset.csv
+2025-03-05 14:26:15,751 - ufc_model - INFO - CSV files are inconsistent or missing. Attempting to synchronize...
+2025-03-05 14:26:15,752 - ufc_model - INFO - Synchronizing CSV files
+2025-03-05 14:26:15,752 - ufc_model - INFO - CSV files successfully synchronized:
+2025-03-05 14:26:15,752 - ufc_model - INFO - Fighter stats: C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\fighter_stats.csv
+2025-03-05 14:26:15,752 - ufc_model - INFO - Training data: C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\ufc_dataset.csv
+2025-03-05 14:26:15,755 - ufc_model - INFO - Training model...
+2025-03-05 14:26:15,760 - ufc_model - INFO - Loaded training data from C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\ufc_dataset.csv: 2479 rows, 16 columns
+2025-03-05 14:26:15,760 - ufc_model - ERROR - Training data does not contain 'fighter1_won' or 'Winner' column
+2025-03-05 14:26:15,761 - ufc_model - ERROR - Error loading training data: Training data does not contain 'fighter1_won' or 'Winner' column
+2025-03-05 14:26:15,761 - ufc_model - ERROR - No fight data available for training.
+2025-03-05 14:31:30,204 - ufc_model - INFO - Training model...
+2025-03-05 14:31:30,263 - ufc_model - INFO - Loaded training data from C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\ufc_dataset.csv: 7439 rows, 95 columns
+2025-03-05 14:31:30,264 - ufc_model - INFO - Created fighter1_won column from 'winner' column
+2025-03-05 14:31:30,265 - ufc_model - INFO - Found 27 difference columns: ['kd_diff', 'sig_str_diff', 'sig_str_att_diff', 'sig_str_acc_diff', 'str_diff']...
+2025-03-05 14:31:30,265 - ufc_model - INFO - Selecting features (reduced set: True)
+2025-03-05 14:31:30,267 - ufc_model - INFO - Selected 28 features
+2025-03-05 14:31:30,271 - ufc_model - INFO - Starting position swap augmentation on dataset with 7439 rows
+2025-03-05 14:31:30,273 - ufc_model - INFO - Completed position swap augmentation. New dataset size: 14878 rows
+2025-03-05 14:31:30,273 - ufc_model - INFO - Applied position swap augmentation, new size: 14878
+2025-03-05 14:31:30,274 - ufc_model - INFO - Preparing training data
+2025-03-05 14:31:30,286 - ufc_model - INFO - Data split - Train: 9670, Val: 2232, Test: 2976
+2025-03-05 14:31:30,312 - ufc_model - INFO - Training model for 300 epochs (lr=0.0003, weight_decay=0.005)
+2025-03-05 14:31:30,312 - ufc_model - INFO - Using device: cpu
+2025-03-05 14:36:21,359 - ufc_model - INFO - Training model...
+2025-03-05 14:36:21,419 - ufc_model - INFO - Loaded training data from C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\ufc_dataset.csv: 7439 rows, 95 columns
+2025-03-05 14:36:21,420 - ufc_model - INFO - Created fighter1_won column from 'winner' column
+2025-03-05 14:36:21,421 - ufc_model - INFO - Found 27 difference columns: ['kd_diff', 'sig_str_diff', 'sig_str_att_diff', 'sig_str_acc_diff', 'str_diff']...
+2025-03-05 14:36:21,421 - ufc_model - INFO - Selecting features (reduced set: True)
+2025-03-05 14:36:21,423 - ufc_model - INFO - Selected 28 features
+2025-03-05 14:36:21,427 - ufc_model - INFO - Starting position swap augmentation on dataset with 7439 rows
+2025-03-05 14:36:21,430 - ufc_model - INFO - Completed position swap augmentation. New dataset size: 14878 rows
+2025-03-05 14:36:21,430 - ufc_model - INFO - Applied position swap augmentation, new size: 14878
+2025-03-05 14:36:21,430 - ufc_model - INFO - Preparing training data
+2025-03-05 14:36:21,442 - ufc_model - INFO - Data split - Train: 9670, Val: 2232, Test: 2976
+2025-03-05 14:36:21,473 - ufc_model - INFO - Created dataloaders with 9670 training, 2232 validation, and 2976 test samples
+2025-03-05 14:36:21,480 - ufc_model - INFO - Training model for 300 epochs (lr=0.0003, weight_decay=0.005)
+2025-03-05 14:36:21,480 - ufc_model - INFO - Using device: cpu
+2025-03-05 14:36:22,188 - ufc_model - INFO - Epoch 1/300, Train Loss: 0.7930, Val Loss: 0.7120, Val Accuracy: 0.5121, LR: 0.000300
+2025-03-05 14:36:22,191 - ufc_model - INFO - Saved improved model to C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\fight_predictor_model.pth
+2025-03-05 14:36:22,850 - ufc_model - INFO - Epoch 2/300, Train Loss: 0.7595, Val Loss: 0.7039, Val Accuracy: 0.5054, LR: 0.000300
+2025-03-05 14:36:22,852 - ufc_model - INFO - Saved improved model to C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\fight_predictor_model.pth
+2025-03-05 14:36:23,510 - ufc_model - INFO - Epoch 3/300, Train Loss: 0.7393, Val Loss: 0.7017, Val Accuracy: 0.5004, LR: 0.000300
+2025-03-05 14:36:23,512 - ufc_model - INFO - Saved improved model to C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\fight_predictor_model.pth
+2025-03-05 14:36:24,149 - ufc_model - INFO - Epoch 4/300, Train Loss: 0.7245, Val Loss: 0.6978, Val Accuracy: 0.4969, LR: 0.000300
+2025-03-05 14:36:24,150 - ufc_model - INFO - Saved improved model to C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\fight_predictor_model.pth
+2025-03-05 14:36:24,805 - ufc_model - INFO - Epoch 5/300, Train Loss: 0.7150, Val Loss: 0.6971, Val Accuracy: 0.4928, LR: 0.000300
+2025-03-05 14:36:24,806 - ufc_model - INFO - Saved improved model to C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\fight_predictor_model.pth
+2025-03-05 14:36:25,474 - ufc_model - INFO - Epoch 6/300, Train Loss: 0.7103, Val Loss: 0.6962, Val Accuracy: 0.4897, LR: 0.000300
+2025-03-05 14:36:25,475 - ufc_model - INFO - Saved improved model to C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\fight_predictor_model.pth
+2025-03-05 14:36:26,128 - ufc_model - INFO - Epoch 7/300, Train Loss: 0.7081, Val Loss: 0.6950, Val Accuracy: 0.4996, LR: 0.000300
+2025-03-05 14:36:26,130 - ufc_model - INFO - Saved improved model to C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\fight_predictor_model.pth
+2025-03-05 14:36:26,780 - ufc_model - INFO - Epoch 8/300, Train Loss: 0.7016, Val Loss: 0.6945, Val Accuracy: 0.4982, LR: 0.000300
+2025-03-05 14:36:26,781 - ufc_model - INFO - Saved improved model to C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\fight_predictor_model.pth
+2025-03-05 14:36:27,430 - ufc_model - INFO - Epoch 9/300, Train Loss: 0.7018, Val Loss: 0.6947, Val Accuracy: 0.5018, LR: 0.000300
+2025-03-05 14:36:28,074 - ufc_model - INFO - Epoch 10/300, Train Loss: 0.6999, Val Loss: 0.6941, Val Accuracy: 0.4969, LR: 0.000300
+2025-03-05 14:36:28,076 - ufc_model - INFO - Saved improved model to C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\fight_predictor_model.pth
+2025-03-05 14:36:28,702 - ufc_model - INFO - Epoch 11/300, Train Loss: 0.6981, Val Loss: 0.6941, Val Accuracy: 0.4982, LR: 0.000300
+2025-03-05 14:36:29,344 - ufc_model - INFO - Epoch 12/300, Train Loss: 0.6978, Val Loss: 0.6945, Val Accuracy: 0.4919, LR: 0.000300
+2025-03-05 14:36:29,990 - ufc_model - INFO - Epoch 13/300, Train Loss: 0.6961, Val Loss: 0.6942, Val Accuracy: 0.4960, LR: 0.000300
+2025-03-05 14:36:30,636 - ufc_model - INFO - Epoch 14/300, Train Loss: 0.6952, Val Loss: 0.6938, Val Accuracy: 0.4987, LR: 0.000300
+2025-03-05 14:36:30,637 - ufc_model - INFO - Saved improved model to C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\fight_predictor_model.pth
+2025-03-05 14:36:31,285 - ufc_model - INFO - Epoch 15/300, Train Loss: 0.6957, Val Loss: 0.6939, Val Accuracy: 0.4951, LR: 0.000300
+2025-03-05 14:36:31,947 - ufc_model - INFO - Epoch 16/300, Train Loss: 0.6950, Val Loss: 0.6937, Val Accuracy: 0.4946, LR: 0.000300
+2025-03-05 14:36:31,949 - ufc_model - INFO - Saved improved model to C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\fight_predictor_model.pth
+2025-03-05 14:36:32,623 - ufc_model - INFO - Epoch 17/300, Train Loss: 0.6949, Val Loss: 0.6938, Val Accuracy: 0.4915, LR: 0.000300
+2025-03-05 14:36:33,302 - ufc_model - INFO - Epoch 18/300, Train Loss: 0.6948, Val Loss: 0.6937, Val Accuracy: 0.4933, LR: 0.000300
+2025-03-05 14:36:33,957 - ufc_model - INFO - Epoch 19/300, Train Loss: 0.6942, Val Loss: 0.6937, Val Accuracy: 0.5027, LR: 0.000300
+2025-03-05 14:36:33,959 - ufc_model - INFO - Saved improved model to C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\fight_predictor_model.pth
+2025-03-05 14:36:34,589 - ufc_model - INFO - Epoch 20/300, Train Loss: 0.6935, Val Loss: 0.6939, Val Accuracy: 0.4910, LR: 0.000300
+2025-03-05 14:36:35,245 - ufc_model - INFO - Epoch 21/300, Train Loss: 0.6936, Val Loss: 0.6935, Val Accuracy: 0.4964, LR: 0.000300
+2025-03-05 14:36:35,246 - ufc_model - INFO - Saved improved model to C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\fight_predictor_model.pth
+2025-03-05 14:36:35,882 - ufc_model - INFO - Epoch 22/300, Train Loss: 0.6937, Val Loss: 0.6937, Val Accuracy: 0.4910, LR: 0.000300
+2025-03-05 14:36:36,540 - ufc_model - INFO - Epoch 23/300, Train Loss: 0.6936, Val Loss: 0.6937, Val Accuracy: 0.4928, LR: 0.000300
+2025-03-05 14:36:37,183 - ufc_model - INFO - Epoch 24/300, Train Loss: 0.6931, Val Loss: 0.6937, Val Accuracy: 0.4897, LR: 0.000300
+2025-03-05 14:36:37,828 - ufc_model - INFO - Epoch 25/300, Train Loss: 0.6936, Val Loss: 0.6936, Val Accuracy: 0.4861, LR: 0.000300
+2025-03-05 14:36:38,480 - ufc_model - INFO - Epoch 26/300, Train Loss: 0.6938, Val Loss: 0.6935, Val Accuracy: 0.4987, LR: 0.000300
+2025-03-05 14:36:38,482 - ufc_model - INFO - Saved improved model to C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\fight_predictor_model.pth
+2025-03-05 14:36:39,121 - ufc_model - INFO - Epoch 27/300, Train Loss: 0.6930, Val Loss: 0.6936, Val Accuracy: 0.4879, LR: 0.000300
+2025-03-05 14:36:39,765 - ufc_model - INFO - Epoch 28/300, Train Loss: 0.6935, Val Loss: 0.6935, Val Accuracy: 0.4960, LR: 0.000300
+2025-03-05 14:36:40,414 - ufc_model - INFO - Epoch 29/300, Train Loss: 0.6934, Val Loss: 0.6935, Val Accuracy: 0.4848, LR: 0.000300
+2025-03-05 14:36:41,080 - ufc_model - INFO - Epoch 30/300, Train Loss: 0.6932, Val Loss: 0.6935, Val Accuracy: 0.4888, LR: 0.000300
+2025-03-05 14:36:41,743 - ufc_model - INFO - Epoch 31/300, Train Loss: 0.6932, Val Loss: 0.6936, Val Accuracy: 0.4892, LR: 0.000300
+2025-03-05 14:36:42,398 - ufc_model - INFO - Epoch 32/300, Train Loss: 0.6933, Val Loss: 0.6937, Val Accuracy: 0.4843, LR: 0.000150
+2025-03-05 14:36:43,041 - ufc_model - INFO - Epoch 33/300, Train Loss: 0.6931, Val Loss: 0.6938, Val Accuracy: 0.4834, LR: 0.000150
+2025-03-05 14:36:43,688 - ufc_model - INFO - Epoch 34/300, Train Loss: 0.6932, Val Loss: 0.6938, Val Accuracy: 0.4745, LR: 0.000150
+2025-03-05 14:36:44,320 - ufc_model - INFO - Epoch 35/300, Train Loss: 0.6930, Val Loss: 0.6936, Val Accuracy: 0.4664, LR: 0.000150
+2025-03-05 14:36:44,950 - ufc_model - INFO - Epoch 36/300, Train Loss: 0.6929, Val Loss: 0.6938, Val Accuracy: 0.4740, LR: 0.000150
+2025-03-05 14:36:45,586 - ufc_model - INFO - Epoch 37/300, Train Loss: 0.6929, Val Loss: 0.6937, Val Accuracy: 0.4803, LR: 0.000150
+2025-03-05 14:36:46,228 - ufc_model - INFO - Epoch 38/300, Train Loss: 0.6932, Val Loss: 0.6937, Val Accuracy: 0.4767, LR: 0.000075
+2025-03-05 14:36:46,872 - ufc_model - INFO - Epoch 39/300, Train Loss: 0.6932, Val Loss: 0.6937, Val Accuracy: 0.4745, LR: 0.000075
+2025-03-05 14:36:47,503 - ufc_model - INFO - Epoch 40/300, Train Loss: 0.6931, Val Loss: 0.6936, Val Accuracy: 0.4758, LR: 0.000075
+2025-03-05 14:36:48,152 - ufc_model - INFO - Epoch 41/300, Train Loss: 0.6927, Val Loss: 0.6936, Val Accuracy: 0.4776, LR: 0.000075
+2025-03-05 14:36:48,797 - ufc_model - INFO - Epoch 42/300, Train Loss: 0.6929, Val Loss: 0.6937, Val Accuracy: 0.4736, LR: 0.000075
+2025-03-05 14:36:49,438 - ufc_model - INFO - Epoch 43/300, Train Loss: 0.6931, Val Loss: 0.6936, Val Accuracy: 0.4745, LR: 0.000075
+2025-03-05 14:36:50,081 - ufc_model - INFO - Epoch 44/300, Train Loss: 0.6931, Val Loss: 0.6936, Val Accuracy: 0.4749, LR: 0.000037
+2025-03-05 14:36:50,730 - ufc_model - INFO - Epoch 45/300, Train Loss: 0.6930, Val Loss: 0.6935, Val Accuracy: 0.4794, LR: 0.000037
+2025-03-05 14:36:51,361 - ufc_model - INFO - Epoch 46/300, Train Loss: 0.6929, Val Loss: 0.6936, Val Accuracy: 0.4776, LR: 0.000037
+2025-03-05 14:36:51,362 - ufc_model - INFO - Early stopping after 46 epochs
+2025-03-05 14:36:51,376 - ufc_model - INFO - Saved training history to C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\training_history.csv
+2025-03-05 14:36:51,376 - ufc_model - INFO - Evaluating model on test set
+2025-03-05 14:36:51,439 - ufc_model - INFO - Test Metrics:
+2025-03-05 14:36:51,439 - ufc_model - INFO - Accuracy: 0.4772
+2025-03-05 14:36:51,439 - ufc_model - INFO - Precision: 0.4555
+2025-03-05 14:36:51,439 - ufc_model - INFO - Recall: 0.2339
+2025-03-05 14:36:51,440 - ufc_model - INFO - F1 Score: 0.3091
+2025-03-05 14:36:51,440 - ufc_model - INFO - ROC AUC: 0.4702
+2025-03-05 14:36:51,961 - ufc_model - INFO - Saved confusion matrix to C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\confusion_matrix.png
+2025-03-05 14:36:51,962 - ufc_model - INFO - Model trained successfully and saved to C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\fight_predictor_model.pth
+2025-03-05 14:36:51,962 - ufc_model - INFO - Test metrics: {'accuracy': 0.4771505376344086, 'precision': 0.45549738219895286, 'recall': 0.23387096774193547, 'f1': 0.30905861456483125, 'auc': 0.4702313851312291}
+2025-03-05 14:38:40,830 - ufc_model - INFO - Training model...
+2025-03-05 14:38:40,884 - ufc_model - INFO - Loaded training data from C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\ufc_dataset.csv: 7439 rows, 95 columns
+2025-03-05 14:38:40,885 - ufc_model - INFO - Created fighter1_won column from 'winner' column
+2025-03-05 14:38:40,885 - ufc_model - INFO - Found 27 difference columns: ['kd_diff', 'sig_str_diff', 'sig_str_att_diff', 'sig_str_acc_diff', 'str_diff']...
+2025-03-05 14:38:40,885 - ufc_model - INFO - Selecting features (reduced set: True)
+2025-03-05 14:38:40,887 - ufc_model - INFO - Selected 28 features
+2025-03-05 14:38:40,889 - ufc_model - INFO - Starting position swap augmentation on dataset with 7439 rows
+2025-03-05 14:38:40,892 - ufc_model - INFO - Completed position swap augmentation. New dataset size: 14878 rows
+2025-03-05 14:38:40,892 - ufc_model - INFO - Applied position swap augmentation, new size: 14878
+2025-03-05 14:38:40,892 - ufc_model - INFO - Preparing training data
+2025-03-05 14:38:40,902 - ufc_model - INFO - Data split - Train: 9670, Val: 2232, Test: 2976
+2025-03-05 14:38:40,915 - ufc_model - INFO - Created dataloaders with 9670 training, 2232 validation, and 2976 test samples
+2025-03-05 14:38:40,917 - ufc_model - INFO - Training model for 300 epochs (lr=0.0003, weight_decay=0.005)
+2025-03-05 14:38:40,918 - ufc_model - INFO - Using device: cpu
+2025-03-05 14:38:41,546 - ufc_model - INFO - Epoch 1/300, Train Loss: 0.8157, Val Loss: 0.7240, Val Accuracy: 0.4942, LR: 0.000300
+2025-03-05 14:38:41,548 - ufc_model - INFO - Saved improved model to C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\fight_predictor_model.pth
+2025-03-05 14:38:42,184 - ufc_model - INFO - Epoch 2/300, Train Loss: 0.7702, Val Loss: 0.7093, Val Accuracy: 0.4861, LR: 0.000300
+2025-03-05 14:38:42,184 - ufc_model - INFO - Saved improved model to C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\fight_predictor_model.pth
+2025-03-05 14:38:42,785 - ufc_model - INFO - Epoch 3/300, Train Loss: 0.7450, Val Loss: 0.7048, Val Accuracy: 0.4879, LR: 0.000300
+2025-03-05 14:38:42,786 - ufc_model - INFO - Saved improved model to C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\fight_predictor_model.pth
+2025-03-05 14:38:43,411 - ufc_model - INFO - Epoch 4/300, Train Loss: 0.7320, Val Loss: 0.7022, Val Accuracy: 0.4852, LR: 0.000300
+2025-03-05 14:38:43,412 - ufc_model - INFO - Saved improved model to C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\fight_predictor_model.pth
+2025-03-05 14:38:44,041 - ufc_model - INFO - Epoch 5/300, Train Loss: 0.7179, Val Loss: 0.6996, Val Accuracy: 0.4807, LR: 0.000300
+2025-03-05 14:38:44,043 - ufc_model - INFO - Saved improved model to C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\fight_predictor_model.pth
+2025-03-05 14:38:44,668 - ufc_model - INFO - Epoch 6/300, Train Loss: 0.7143, Val Loss: 0.6985, Val Accuracy: 0.4852, LR: 0.000300
+2025-03-05 14:38:44,670 - ufc_model - INFO - Saved improved model to C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\fight_predictor_model.pth
+2025-03-05 14:38:45,300 - ufc_model - INFO - Epoch 7/300, Train Loss: 0.7073, Val Loss: 0.6975, Val Accuracy: 0.4897, LR: 0.000300
+2025-03-05 14:38:45,302 - ufc_model - INFO - Saved improved model to C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\fight_predictor_model.pth
+2025-03-05 14:38:45,951 - ufc_model - INFO - Epoch 8/300, Train Loss: 0.7075, Val Loss: 0.6969, Val Accuracy: 0.4825, LR: 0.000300
+2025-03-05 14:38:45,953 - ufc_model - INFO - Saved improved model to C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\fight_predictor_model.pth
+2025-03-05 14:38:46,570 - ufc_model - INFO - Epoch 9/300, Train Loss: 0.7012, Val Loss: 0.6966, Val Accuracy: 0.4888, LR: 0.000300
+2025-03-05 14:38:46,571 - ufc_model - INFO - Saved improved model to C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\fight_predictor_model.pth
+2025-03-05 14:38:47,215 - ufc_model - INFO - Epoch 10/300, Train Loss: 0.7020, Val Loss: 0.6960, Val Accuracy: 0.4942, LR: 0.000300
+2025-03-05 14:38:47,217 - ufc_model - INFO - Saved improved model to C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\fight_predictor_model.pth
+2025-03-05 14:38:47,877 - ufc_model - INFO - Epoch 11/300, Train Loss: 0.6980, Val Loss: 0.6957, Val Accuracy: 0.4879, LR: 0.000300
+2025-03-05 14:38:47,878 - ufc_model - INFO - Saved improved model to C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\fight_predictor_model.pth
+2025-03-05 14:38:48,542 - ufc_model - INFO - Epoch 12/300, Train Loss: 0.6981, Val Loss: 0.6958, Val Accuracy: 0.4892, LR: 0.000300
+2025-03-05 14:38:49,217 - ufc_model - INFO - Epoch 13/300, Train Loss: 0.6961, Val Loss: 0.6951, Val Accuracy: 0.4875, LR: 0.000300
+2025-03-05 14:38:49,218 - ufc_model - INFO - Saved improved model to C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\fight_predictor_model.pth
+2025-03-05 14:38:49,838 - ufc_model - INFO - Epoch 14/300, Train Loss: 0.6963, Val Loss: 0.6953, Val Accuracy: 0.4834, LR: 0.000300
+2025-03-05 14:38:50,438 - ufc_model - INFO - Epoch 15/300, Train Loss: 0.6948, Val Loss: 0.6951, Val Accuracy: 0.4884, LR: 0.000300
+2025-03-05 14:38:50,439 - ufc_model - INFO - Saved improved model to C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\fight_predictor_model.pth
+2025-03-05 14:38:51,035 - ufc_model - INFO - Epoch 16/300, Train Loss: 0.6955, Val Loss: 0.6949, Val Accuracy: 0.4812, LR: 0.000300
+2025-03-05 14:38:51,036 - ufc_model - INFO - Saved improved model to C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\fight_predictor_model.pth
+2025-03-05 14:38:51,628 - ufc_model - INFO - Epoch 17/300, Train Loss: 0.6937, Val Loss: 0.6949, Val Accuracy: 0.4812, LR: 0.000300
+2025-03-05 14:38:51,629 - ufc_model - INFO - Saved improved model to C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\fight_predictor_model.pth
+2025-03-05 14:38:52,261 - ufc_model - INFO - Epoch 18/300, Train Loss: 0.6949, Val Loss: 0.6946, Val Accuracy: 0.4848, LR: 0.000300
+2025-03-05 14:38:52,262 - ufc_model - INFO - Saved improved model to C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\fight_predictor_model.pth
+2025-03-05 14:38:52,884 - ufc_model - INFO - Epoch 19/300, Train Loss: 0.6941, Val Loss: 0.6946, Val Accuracy: 0.4848, LR: 0.000300
+2025-03-05 14:38:52,885 - ufc_model - INFO - Saved improved model to C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\fight_predictor_model.pth
+2025-03-05 14:38:53,511 - ufc_model - INFO - Epoch 20/300, Train Loss: 0.6939, Val Loss: 0.6944, Val Accuracy: 0.4879, LR: 0.000300
+2025-03-05 14:38:53,512 - ufc_model - INFO - Saved improved model to C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\fight_predictor_model.pth
+2025-03-05 14:38:54,158 - ufc_model - INFO - Epoch 21/300, Train Loss: 0.6940, Val Loss: 0.6943, Val Accuracy: 0.4915, LR: 0.000300
+2025-03-05 14:38:54,160 - ufc_model - INFO - Saved improved model to C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\fight_predictor_model.pth
+2025-03-05 14:38:54,766 - ufc_model - INFO - Epoch 22/300, Train Loss: 0.6939, Val Loss: 0.6943, Val Accuracy: 0.4866, LR: 0.000300
+2025-03-05 14:38:55,365 - ufc_model - INFO - Epoch 23/300, Train Loss: 0.6940, Val Loss: 0.6942, Val Accuracy: 0.4892, LR: 0.000300
+2025-03-05 14:38:55,366 - ufc_model - INFO - Saved improved model to C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\fight_predictor_model.pth
+2025-03-05 14:38:55,991 - ufc_model - INFO - Epoch 24/300, Train Loss: 0.6932, Val Loss: 0.6941, Val Accuracy: 0.4879, LR: 0.000300
+2025-03-05 14:38:55,992 - ufc_model - INFO - Saved improved model to C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\fight_predictor_model.pth
+2025-03-05 14:38:56,624 - ufc_model - INFO - Epoch 25/300, Train Loss: 0.6936, Val Loss: 0.6941, Val Accuracy: 0.4888, LR: 0.000300
+2025-03-05 14:38:56,625 - ufc_model - INFO - Saved improved model to C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\fight_predictor_model.pth
+2025-03-05 14:38:57,249 - ufc_model - INFO - Epoch 26/300, Train Loss: 0.6932, Val Loss: 0.6941, Val Accuracy: 0.4825, LR: 0.000300
+2025-03-05 14:38:57,251 - ufc_model - INFO - Saved improved model to C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\fight_predictor_model.pth
+2025-03-05 14:38:57,872 - ufc_model - INFO - Epoch 27/300, Train Loss: 0.6940, Val Loss: 0.6940, Val Accuracy: 0.4879, LR: 0.000300
+2025-03-05 14:38:57,874 - ufc_model - INFO - Saved improved model to C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\fight_predictor_model.pth
+2025-03-05 14:38:58,518 - ufc_model - INFO - Epoch 28/300, Train Loss: 0.6931, Val Loss: 0.6938, Val Accuracy: 0.4919, LR: 0.000300
+2025-03-05 14:38:58,519 - ufc_model - INFO - Saved improved model to C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\fight_predictor_model.pth
+2025-03-05 14:38:59,110 - ufc_model - INFO - Epoch 29/300, Train Loss: 0.6931, Val Loss: 0.6940, Val Accuracy: 0.4843, LR: 0.000300
+2025-03-05 14:38:59,736 - ufc_model - INFO - Epoch 30/300, Train Loss: 0.6931, Val Loss: 0.6939, Val Accuracy: 0.4888, LR: 0.000300
+2025-03-05 14:39:00,366 - ufc_model - INFO - Epoch 31/300, Train Loss: 0.6933, Val Loss: 0.6941, Val Accuracy: 0.4807, LR: 0.000300
+2025-03-05 14:39:00,962 - ufc_model - INFO - Epoch 32/300, Train Loss: 0.6930, Val Loss: 0.6940, Val Accuracy: 0.4754, LR: 0.000300
+2025-03-05 14:39:01,589 - ufc_model - INFO - Epoch 33/300, Train Loss: 0.6933, Val Loss: 0.6940, Val Accuracy: 0.4754, LR: 0.000300
+2025-03-05 14:39:02,216 - ufc_model - INFO - Epoch 34/300, Train Loss: 0.6928, Val Loss: 0.6940, Val Accuracy: 0.4727, LR: 0.000150
+2025-03-05 14:39:02,846 - ufc_model - INFO - Epoch 35/300, Train Loss: 0.6932, Val Loss: 0.6939, Val Accuracy: 0.4780, LR: 0.000150
+2025-03-05 14:39:03,469 - ufc_model - INFO - Epoch 36/300, Train Loss: 0.6932, Val Loss: 0.6941, Val Accuracy: 0.4682, LR: 0.000150
+2025-03-05 14:39:04,089 - ufc_model - INFO - Epoch 37/300, Train Loss: 0.6931, Val Loss: 0.6941, Val Accuracy: 0.4686, LR: 0.000150
+2025-03-05 14:39:04,719 - ufc_model - INFO - Epoch 38/300, Train Loss: 0.6930, Val Loss: 0.6941, Val Accuracy: 0.4664, LR: 0.000150
+2025-03-05 14:39:05,311 - ufc_model - INFO - Epoch 39/300, Train Loss: 0.6930, Val Loss: 0.6940, Val Accuracy: 0.4727, LR: 0.000150
+2025-03-05 14:39:05,930 - ufc_model - INFO - Epoch 40/300, Train Loss: 0.6929, Val Loss: 0.6941, Val Accuracy: 0.4686, LR: 0.000075
+2025-03-05 14:39:06,555 - ufc_model - INFO - Epoch 41/300, Train Loss: 0.6929, Val Loss: 0.6940, Val Accuracy: 0.4731, LR: 0.000075
+2025-03-05 14:39:07,172 - ufc_model - INFO - Epoch 42/300, Train Loss: 0.6930, Val Loss: 0.6941, Val Accuracy: 0.4655, LR: 0.000075
+2025-03-05 14:39:07,793 - ufc_model - INFO - Epoch 43/300, Train Loss: 0.6932, Val Loss: 0.6940, Val Accuracy: 0.4668, LR: 0.000075
+2025-03-05 14:39:08,419 - ufc_model - INFO - Epoch 44/300, Train Loss: 0.6931, Val Loss: 0.6940, Val Accuracy: 0.4664, LR: 0.000075
+2025-03-05 14:39:09,044 - ufc_model - INFO - Epoch 45/300, Train Loss: 0.6931, Val Loss: 0.6940, Val Accuracy: 0.4646, LR: 0.000075
+2025-03-05 14:39:09,661 - ufc_model - INFO - Epoch 46/300, Train Loss: 0.6930, Val Loss: 0.6940, Val Accuracy: 0.4628, LR: 0.000037
+2025-03-05 14:39:10,289 - ufc_model - INFO - Epoch 47/300, Train Loss: 0.6930, Val Loss: 0.6941, Val Accuracy: 0.4637, LR: 0.000037
+2025-03-05 14:39:10,907 - ufc_model - INFO - Epoch 48/300, Train Loss: 0.6930, Val Loss: 0.6940, Val Accuracy: 0.4651, LR: 0.000037
+2025-03-05 14:39:10,907 - ufc_model - INFO - Early stopping after 48 epochs
+2025-03-05 14:39:10,909 - ufc_model - INFO - Saved training history to C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\training_history.csv
+2025-03-05 14:39:10,909 - ufc_model - INFO - Evaluating model on test set
+2025-03-05 14:39:10,963 - ufc_model - INFO - Test Metrics:
+2025-03-05 14:39:10,964 - ufc_model - INFO - Accuracy: 0.4829
+2025-03-05 14:39:10,964 - ufc_model - INFO - Precision: 0.4892
+2025-03-05 14:39:10,964 - ufc_model - INFO - Recall: 0.7769
+2025-03-05 14:39:10,964 - ufc_model - INFO - F1 Score: 0.6004
+2025-03-05 14:39:10,964 - ufc_model - INFO - ROC AUC: 0.4696
+2025-03-05 14:39:11,136 - ufc_model - INFO - Saved confusion matrix to C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\confusion_matrix.png
+2025-03-05 14:39:11,136 - ufc_model - INFO - Model trained successfully and saved to C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\fight_predictor_model.pth
+2025-03-05 14:39:11,136 - ufc_model - INFO - Test metrics: {'accuracy': 0.48286290322580644, 'precision': 0.4892086330935252, 'recall': 0.7768817204301075, 'f1': 0.6003635419371591, 'auc': 0.46963024988437974}
+2025-03-05 14:39:56,048 - ufc_model - INFO - Training model...
+2025-03-05 14:39:56,102 - ufc_model - INFO - Loaded training data from C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\ufc_dataset.csv: 7439 rows, 95 columns
+2025-03-05 14:39:56,103 - ufc_model - INFO - Created fighter1_won column from 'winner' column
+2025-03-05 14:39:56,103 - ufc_model - INFO - Found 27 difference columns: ['kd_diff', 'sig_str_diff', 'sig_str_att_diff', 'sig_str_acc_diff', 'str_diff']...
+2025-03-05 14:39:56,103 - ufc_model - INFO - Selecting features (reduced set: True)
+2025-03-05 14:39:56,104 - ufc_model - INFO - Selected 28 features
+2025-03-05 14:39:56,106 - ufc_model - INFO - Starting position swap augmentation on dataset with 7439 rows
+2025-03-05 14:39:56,108 - ufc_model - INFO - Completed position swap augmentation. New dataset size: 14878 rows
+2025-03-05 14:39:56,108 - ufc_model - INFO - Applied position swap augmentation, new size: 14878
+2025-03-05 14:39:56,108 - ufc_model - INFO - Preparing training data
+2025-03-05 14:39:56,118 - ufc_model - INFO - Data split - Train: 9670, Val: 2232, Test: 2976
+2025-03-05 14:39:56,132 - ufc_model - INFO - Created dataloaders with 9670 training, 2232 validation, and 2976 test samples
+2025-03-05 14:39:56,135 - ufc_model - INFO - Training model for 300 epochs (lr=0.0003, weight_decay=0.005)
+2025-03-05 14:39:56,135 - ufc_model - INFO - Using device: cpu
+2025-03-05 14:39:56,750 - ufc_model - INFO - Epoch 1/300, Train Loss: 0.7754, Val Loss: 0.6997, Val Accuracy: 0.5220, LR: 0.000300
+2025-03-05 14:39:56,751 - ufc_model - INFO - Saved improved model to C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\fight_predictor_model.pth
+2025-03-05 14:39:57,386 - ufc_model - INFO - Epoch 2/300, Train Loss: 0.7442, Val Loss: 0.6985, Val Accuracy: 0.5018, LR: 0.000300
+2025-03-05 14:39:57,388 - ufc_model - INFO - Saved improved model to C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\fight_predictor_model.pth
+2025-03-05 14:39:58,022 - ufc_model - INFO - Epoch 3/300, Train Loss: 0.7285, Val Loss: 0.6993, Val Accuracy: 0.4987, LR: 0.000300
+2025-03-05 14:39:58,664 - ufc_model - INFO - Epoch 4/300, Train Loss: 0.7234, Val Loss: 0.6982, Val Accuracy: 0.5031, LR: 0.000300
+2025-03-05 14:39:58,665 - ufc_model - INFO - Saved improved model to C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\fight_predictor_model.pth
+2025-03-05 14:39:59,265 - ufc_model - INFO - Epoch 5/300, Train Loss: 0.7133, Val Loss: 0.6980, Val Accuracy: 0.5031, LR: 0.000300
+2025-03-05 14:39:59,266 - ufc_model - INFO - Saved improved model to C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\fight_predictor_model.pth
+2025-03-05 14:39:59,888 - ufc_model - INFO - Epoch 6/300, Train Loss: 0.7123, Val Loss: 0.6978, Val Accuracy: 0.5031, LR: 0.000300
+2025-03-05 14:39:59,890 - ufc_model - INFO - Saved improved model to C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\fight_predictor_model.pth
+2025-03-05 14:40:00,509 - ufc_model - INFO - Epoch 7/300, Train Loss: 0.7076, Val Loss: 0.6971, Val Accuracy: 0.5067, LR: 0.000300
+2025-03-05 14:40:00,510 - ufc_model - INFO - Saved improved model to C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\fight_predictor_model.pth
+2025-03-05 14:40:01,143 - ufc_model - INFO - Epoch 8/300, Train Loss: 0.7038, Val Loss: 0.6970, Val Accuracy: 0.5081, LR: 0.000300
+2025-03-05 14:40:01,144 - ufc_model - INFO - Saved improved model to C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\fight_predictor_model.pth
+2025-03-05 14:40:01,777 - ufc_model - INFO - Epoch 9/300, Train Loss: 0.7042, Val Loss: 0.6968, Val Accuracy: 0.5063, LR: 0.000300
+2025-03-05 14:40:01,779 - ufc_model - INFO - Saved improved model to C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\fight_predictor_model.pth
+2025-03-05 14:40:02,451 - ufc_model - INFO - Epoch 10/300, Train Loss: 0.7009, Val Loss: 0.6956, Val Accuracy: 0.5072, LR: 0.000300
+2025-03-05 14:40:02,452 - ufc_model - INFO - Saved improved model to C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\fight_predictor_model.pth
+2025-03-05 14:40:03,109 - ufc_model - INFO - Epoch 11/300, Train Loss: 0.6997, Val Loss: 0.6955, Val Accuracy: 0.5094, LR: 0.000300
+2025-03-05 14:40:03,110 - ufc_model - INFO - Saved improved model to C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\fight_predictor_model.pth
+2025-03-05 14:40:03,766 - ufc_model - INFO - Epoch 12/300, Train Loss: 0.6991, Val Loss: 0.6952, Val Accuracy: 0.5036, LR: 0.000300
+2025-03-05 14:40:03,767 - ufc_model - INFO - Saved improved model to C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\fight_predictor_model.pth
+2025-03-05 14:40:04,421 - ufc_model - INFO - Epoch 13/300, Train Loss: 0.6996, Val Loss: 0.6951, Val Accuracy: 0.5045, LR: 0.000300
+2025-03-05 14:40:04,423 - ufc_model - INFO - Saved improved model to C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\fight_predictor_model.pth
+2025-03-05 14:40:05,075 - ufc_model - INFO - Epoch 14/300, Train Loss: 0.6967, Val Loss: 0.6948, Val Accuracy: 0.5049, LR: 0.000300
+2025-03-05 14:40:05,077 - ufc_model - INFO - Saved improved model to C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\fight_predictor_model.pth
+2025-03-05 14:40:05,711 - ufc_model - INFO - Epoch 15/300, Train Loss: 0.6973, Val Loss: 0.6947, Val Accuracy: 0.5036, LR: 0.000300
+2025-03-05 14:40:05,712 - ufc_model - INFO - Saved improved model to C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\fight_predictor_model.pth
+2025-03-05 14:40:06,342 - ufc_model - INFO - Epoch 16/300, Train Loss: 0.6962, Val Loss: 0.6945, Val Accuracy: 0.5022, LR: 0.000300
+2025-03-05 14:40:06,344 - ufc_model - INFO - Saved improved model to C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\fight_predictor_model.pth
+2025-03-05 14:40:06,985 - ufc_model - INFO - Epoch 17/300, Train Loss: 0.6954, Val Loss: 0.6943, Val Accuracy: 0.4982, LR: 0.000300
+2025-03-05 14:40:06,986 - ufc_model - INFO - Saved improved model to C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\fight_predictor_model.pth
+2025-03-05 14:40:07,660 - ufc_model - INFO - Epoch 18/300, Train Loss: 0.6951, Val Loss: 0.6943, Val Accuracy: 0.5018, LR: 0.000300
+2025-03-05 14:40:08,362 - ufc_model - INFO - Epoch 19/300, Train Loss: 0.6939, Val Loss: 0.6940, Val Accuracy: 0.5058, LR: 0.000300
+2025-03-05 14:40:08,363 - ufc_model - INFO - Saved improved model to C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\fight_predictor_model.pth
+2025-03-05 14:40:09,034 - ufc_model - INFO - Epoch 20/300, Train Loss: 0.6951, Val Loss: 0.6940, Val Accuracy: 0.5000, LR: 0.000300
+2025-03-05 14:40:09,035 - ufc_model - INFO - Saved improved model to C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\fight_predictor_model.pth
+2025-03-05 14:40:09,679 - ufc_model - INFO - Epoch 21/300, Train Loss: 0.6945, Val Loss: 0.6939, Val Accuracy: 0.4987, LR: 0.000300
+2025-03-05 14:40:09,680 - ufc_model - INFO - Saved improved model to C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\fight_predictor_model.pth
+2025-03-05 14:40:10,338 - ufc_model - INFO - Epoch 22/300, Train Loss: 0.6942, Val Loss: 0.6938, Val Accuracy: 0.5027, LR: 0.000300
+2025-03-05 14:40:10,340 - ufc_model - INFO - Saved improved model to C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\fight_predictor_model.pth
+2025-03-05 14:40:10,980 - ufc_model - INFO - Epoch 23/300, Train Loss: 0.6942, Val Loss: 0.6937, Val Accuracy: 0.5004, LR: 0.000300
+2025-03-05 14:40:10,981 - ufc_model - INFO - Saved improved model to C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\fight_predictor_model.pth
+2025-03-05 14:40:11,649 - ufc_model - INFO - Epoch 24/300, Train Loss: 0.6938, Val Loss: 0.6937, Val Accuracy: 0.4987, LR: 0.000300
+2025-03-05 14:40:11,651 - ufc_model - INFO - Saved improved model to C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\fight_predictor_model.pth
+2025-03-05 14:40:12,296 - ufc_model - INFO - Epoch 25/300, Train Loss: 0.6940, Val Loss: 0.6937, Val Accuracy: 0.4987, LR: 0.000300
+2025-03-05 14:40:12,934 - ufc_model - INFO - Epoch 26/300, Train Loss: 0.6936, Val Loss: 0.6936, Val Accuracy: 0.4982, LR: 0.000300
+2025-03-05 14:40:12,935 - ufc_model - INFO - Saved improved model to C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\fight_predictor_model.pth
+2025-03-05 14:40:13,626 - ufc_model - INFO - Epoch 27/300, Train Loss: 0.6939, Val Loss: 0.6937, Val Accuracy: 0.5009, LR: 0.000300
+2025-03-05 14:40:14,532 - ufc_model - INFO - Epoch 28/300, Train Loss: 0.6930, Val Loss: 0.6936, Val Accuracy: 0.4987, LR: 0.000300
+2025-03-05 14:40:14,534 - ufc_model - INFO - Saved improved model to C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\fight_predictor_model.pth
+2025-03-05 14:40:15,441 - ufc_model - INFO - Epoch 29/300, Train Loss: 0.6934, Val Loss: 0.6936, Val Accuracy: 0.4982, LR: 0.000300
+2025-03-05 14:40:16,401 - ufc_model - INFO - Epoch 30/300, Train Loss: 0.6932, Val Loss: 0.6937, Val Accuracy: 0.4919, LR: 0.000300
+2025-03-05 14:40:17,361 - ufc_model - INFO - Epoch 31/300, Train Loss: 0.6931, Val Loss: 0.6937, Val Accuracy: 0.4946, LR: 0.000300
+2025-03-05 14:40:18,260 - ufc_model - INFO - Epoch 32/300, Train Loss: 0.6928, Val Loss: 0.6935, Val Accuracy: 0.4942, LR: 0.000300
+2025-03-05 14:40:18,261 - ufc_model - INFO - Saved improved model to C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\fight_predictor_model.pth
+2025-03-05 14:40:19,212 - ufc_model - INFO - Epoch 33/300, Train Loss: 0.6935, Val Loss: 0.6935, Val Accuracy: 0.4924, LR: 0.000300
+2025-03-05 14:40:19,213 - ufc_model - INFO - Saved improved model to C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\fight_predictor_model.pth
+2025-03-05 14:40:20,238 - ufc_model - INFO - Epoch 34/300, Train Loss: 0.6932, Val Loss: 0.6935, Val Accuracy: 0.4946, LR: 0.000300
+2025-03-05 14:40:20,241 - ufc_model - INFO - Saved improved model to C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\fight_predictor_model.pth
+2025-03-05 14:40:21,243 - ufc_model - INFO - Epoch 35/300, Train Loss: 0.6932, Val Loss: 0.6935, Val Accuracy: 0.4888, LR: 0.000300
+2025-03-05 14:40:21,244 - ufc_model - INFO - Saved improved model to C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\fight_predictor_model.pth
+2025-03-05 14:40:22,244 - ufc_model - INFO - Epoch 36/300, Train Loss: 0.6928, Val Loss: 0.6935, Val Accuracy: 0.4888, LR: 0.000300
+2025-03-05 14:40:23,325 - ufc_model - INFO - Epoch 37/300, Train Loss: 0.6931, Val Loss: 0.6936, Val Accuracy: 0.4910, LR: 0.000300
+2025-03-05 14:40:24,265 - ufc_model - INFO - Epoch 38/300, Train Loss: 0.6932, Val Loss: 0.6935, Val Accuracy: 0.4924, LR: 0.000300
+2025-03-05 14:40:25,287 - ufc_model - INFO - Epoch 39/300, Train Loss: 0.6932, Val Loss: 0.6935, Val Accuracy: 0.4879, LR: 0.000300
+2025-03-05 14:40:26,301 - ufc_model - INFO - Epoch 40/300, Train Loss: 0.6933, Val Loss: 0.6936, Val Accuracy: 0.4875, LR: 0.000300
+2025-03-05 14:40:27,258 - ufc_model - INFO - Epoch 41/300, Train Loss: 0.6932, Val Loss: 0.6935, Val Accuracy: 0.4848, LR: 0.000150
+2025-03-05 14:40:28,248 - ufc_model - INFO - Epoch 42/300, Train Loss: 0.6931, Val Loss: 0.6935, Val Accuracy: 0.4825, LR: 0.000150
+2025-03-05 14:40:29,306 - ufc_model - INFO - Epoch 43/300, Train Loss: 0.6932, Val Loss: 0.6935, Val Accuracy: 0.4879, LR: 0.000150
+2025-03-05 14:40:29,307 - ufc_model - INFO - Saved improved model to C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\fight_predictor_model.pth
+2025-03-05 14:40:30,277 - ufc_model - INFO - Epoch 44/300, Train Loss: 0.6929, Val Loss: 0.6935, Val Accuracy: 0.4834, LR: 0.000150
+2025-03-05 14:40:31,299 - ufc_model - INFO - Epoch 45/300, Train Loss: 0.6932, Val Loss: 0.6936, Val Accuracy: 0.4848, LR: 0.000150
+2025-03-05 14:40:32,264 - ufc_model - INFO - Epoch 46/300, Train Loss: 0.6930, Val Loss: 0.6936, Val Accuracy: 0.4798, LR: 0.000150
+2025-03-05 14:40:33,210 - ufc_model - INFO - Epoch 47/300, Train Loss: 0.6930, Val Loss: 0.6936, Val Accuracy: 0.4807, LR: 0.000075
+2025-03-05 14:40:34,157 - ufc_model - INFO - Epoch 48/300, Train Loss: 0.6930, Val Loss: 0.6935, Val Accuracy: 0.4803, LR: 0.000075
+2025-03-05 14:40:35,174 - ufc_model - INFO - Epoch 49/300, Train Loss: 0.6931, Val Loss: 0.6936, Val Accuracy: 0.4798, LR: 0.000075
+2025-03-05 14:40:36,135 - ufc_model - INFO - Epoch 50/300, Train Loss: 0.6930, Val Loss: 0.6936, Val Accuracy: 0.4763, LR: 0.000075
+2025-03-05 14:40:37,235 - ufc_model - INFO - Epoch 51/300, Train Loss: 0.6930, Val Loss: 0.6936, Val Accuracy: 0.4772, LR: 0.000075
+2025-03-05 14:40:38,255 - ufc_model - INFO - Epoch 52/300, Train Loss: 0.6930, Val Loss: 0.6937, Val Accuracy: 0.4758, LR: 0.000075
+2025-03-05 14:40:39,222 - ufc_model - INFO - Epoch 53/300, Train Loss: 0.6930, Val Loss: 0.6937, Val Accuracy: 0.4807, LR: 0.000037
+2025-03-05 14:40:40,191 - ufc_model - INFO - Epoch 54/300, Train Loss: 0.6929, Val Loss: 0.6937, Val Accuracy: 0.4772, LR: 0.000037
+2025-03-05 14:40:41,213 - ufc_model - INFO - Epoch 55/300, Train Loss: 0.6929, Val Loss: 0.6938, Val Accuracy: 0.4727, LR: 0.000037
+2025-03-05 14:40:42,035 - ufc_model - INFO - Epoch 56/300, Train Loss: 0.6931, Val Loss: 0.6937, Val Accuracy: 0.4776, LR: 0.000037
+2025-03-05 14:40:42,675 - ufc_model - INFO - Epoch 57/300, Train Loss: 0.6928, Val Loss: 0.6937, Val Accuracy: 0.4794, LR: 0.000037
+2025-03-05 14:40:43,392 - ufc_model - INFO - Epoch 58/300, Train Loss: 0.6931, Val Loss: 0.6938, Val Accuracy: 0.4668, LR: 0.000037
+2025-03-05 14:40:44,093 - ufc_model - INFO - Epoch 59/300, Train Loss: 0.6930, Val Loss: 0.6937, Val Accuracy: 0.4772, LR: 0.000019
+2025-03-05 14:40:44,802 - ufc_model - INFO - Epoch 60/300, Train Loss: 0.6929, Val Loss: 0.6937, Val Accuracy: 0.4727, LR: 0.000019
+2025-03-05 14:40:45,498 - ufc_model - INFO - Epoch 61/300, Train Loss: 0.6928, Val Loss: 0.6938, Val Accuracy: 0.4763, LR: 0.000019
+2025-03-05 14:40:46,188 - ufc_model - INFO - Epoch 62/300, Train Loss: 0.6929, Val Loss: 0.6938, Val Accuracy: 0.4695, LR: 0.000019
+2025-03-05 14:40:46,856 - ufc_model - INFO - Epoch 63/300, Train Loss: 0.6931, Val Loss: 0.6938, Val Accuracy: 0.4637, LR: 0.000019
+2025-03-05 14:40:46,856 - ufc_model - INFO - Early stopping after 63 epochs
+2025-03-05 14:40:46,859 - ufc_model - INFO - Saved training history to C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\training_history.csv
+2025-03-05 14:40:46,860 - ufc_model - INFO - Evaluating model on test set
+2025-03-05 14:40:46,920 - ufc_model - INFO - Test Metrics:
+2025-03-05 14:40:46,921 - ufc_model - INFO - Accuracy: 0.4640
+2025-03-05 14:40:46,921 - ufc_model - INFO - Precision: 0.4210
+2025-03-05 14:40:46,921 - ufc_model - INFO - Recall: 0.1915
+2025-03-05 14:40:46,921 - ufc_model - INFO - F1 Score: 0.2633
+2025-03-05 14:40:46,921 - ufc_model - INFO - ROC AUC: 0.4495
+2025-03-05 14:40:47,093 - ufc_model - INFO - Saved confusion matrix to C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\confusion_matrix.png
+2025-03-05 14:40:47,094 - ufc_model - INFO - Model trained successfully and saved to C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\fight_predictor_model.pth
+2025-03-05 14:40:47,094 - ufc_model - INFO - Test metrics: {'accuracy': 0.4640456989247312, 'precision': 0.42097488921713444, 'recall': 0.19153225806451613, 'f1': 0.2632794457274827, 'auc': 0.4495290279223032}
+2025-03-05 14:47:55,930 - ufc_model - INFO - Starting Flask server on port 5000...
+2025-03-05 14:47:55,986 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.2.200:5000
+2025-03-05 14:47:55,987 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-03-05 14:47:55,988 - werkzeug - INFO -  * Restarting with stat
+2025-03-05 14:47:58,302 - ufc_model - INFO - Starting Flask server on port 5000...
+2025-03-05 14:47:58,309 - werkzeug - WARNING -  * Debugger is active!
+2025-03-05 14:47:58,324 - werkzeug - INFO -  * Debugger PIN: 188-360-779
+2025-03-05 14:48:02,711 - ufc_model - INFO - Training model...
+2025-03-05 14:48:02,771 - ufc_model - INFO - Loaded training data from C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\ufc_dataset.csv: 7439 rows, 95 columns
+2025-03-05 14:48:02,772 - ufc_model - INFO - Created fighter1_won column from 'winner' column
+2025-03-05 14:48:02,773 - ufc_model - INFO - Found 27 difference columns: ['kd_diff', 'sig_str_diff', 'sig_str_att_diff', 'sig_str_acc_diff', 'str_diff']...
+2025-03-05 14:48:02,773 - ufc_model - INFO - Selecting features (reduced set: True)
+2025-03-05 14:48:02,775 - ufc_model - INFO - Selected 28 features
+2025-03-05 14:48:02,778 - ufc_model - INFO - Starting position swap augmentation on dataset with 7439 rows
+2025-03-05 14:48:02,781 - ufc_model - INFO - Completed position swap augmentation. New dataset size: 14878 rows
+2025-03-05 14:48:02,781 - ufc_model - INFO - Applied position swap augmentation, new size: 14878
+2025-03-05 14:48:02,781 - ufc_model - INFO - Preparing training data
+2025-03-05 14:48:02,791 - ufc_model - INFO - Data split - Train: 9670, Val: 2232, Test: 2976
+2025-03-05 14:48:02,809 - ufc_model - INFO - Created dataloaders with 9670 training, 2232 validation, and 2976 test samples
+2025-03-05 14:48:02,812 - ufc_model - INFO - Training model for 300 epochs (lr=0.0003, weight_decay=0.005)
+2025-03-05 14:48:02,812 - ufc_model - INFO - Using device: cpu
+2025-03-05 14:48:03,709 - ufc_model - INFO - Epoch 1/300, Train Loss: 0.7497, Val Loss: 0.6980, Val Accuracy: 0.5081, LR: 0.000300
+2025-03-05 14:48:03,710 - ufc_model - INFO - Saved improved model to C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\fight_predictor_model.pth
+2025-03-05 14:48:04,592 - ufc_model - INFO - Epoch 2/300, Train Loss: 0.7235, Val Loss: 0.6970, Val Accuracy: 0.5018, LR: 0.000300
+2025-03-05 14:48:04,594 - ufc_model - INFO - Saved improved model to C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\fight_predictor_model.pth
+2025-03-05 14:48:05,459 - ufc_model - INFO - Epoch 3/300, Train Loss: 0.7137, Val Loss: 0.6977, Val Accuracy: 0.4987, LR: 0.000300
+2025-03-05 14:48:06,299 - ufc_model - INFO - Epoch 4/300, Train Loss: 0.7082, Val Loss: 0.6968, Val Accuracy: 0.4906, LR: 0.000300
+2025-03-05 14:48:06,300 - ufc_model - INFO - Saved improved model to C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\fight_predictor_model.pth
+2025-03-05 14:48:07,246 - ufc_model - INFO - Epoch 5/300, Train Loss: 0.7051, Val Loss: 0.6963, Val Accuracy: 0.4910, LR: 0.000300
+2025-03-05 14:48:07,247 - ufc_model - INFO - Saved improved model to C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\fight_predictor_model.pth
+2025-03-05 14:48:08,145 - ufc_model - INFO - Epoch 6/300, Train Loss: 0.7017, Val Loss: 0.6967, Val Accuracy: 0.4843, LR: 0.000300
+2025-03-05 14:48:09,128 - ufc_model - INFO - Epoch 7/300, Train Loss: 0.7013, Val Loss: 0.6966, Val Accuracy: 0.4754, LR: 0.000300
+2025-03-05 14:48:10,034 - ufc_model - INFO - Epoch 8/300, Train Loss: 0.7016, Val Loss: 0.6966, Val Accuracy: 0.4713, LR: 0.000300
+2025-03-05 14:48:10,933 - ufc_model - INFO - Epoch 9/300, Train Loss: 0.6975, Val Loss: 0.6962, Val Accuracy: 0.4861, LR: 0.000300
+2025-03-05 14:48:10,934 - ufc_model - INFO - Saved improved model to C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\fight_predictor_model.pth
+2025-03-05 14:48:11,802 - ufc_model - INFO - Epoch 10/300, Train Loss: 0.6988, Val Loss: 0.6967, Val Accuracy: 0.4718, LR: 0.000300
+2025-03-05 14:48:12,630 - ufc_model - INFO - Epoch 11/300, Train Loss: 0.6956, Val Loss: 0.6965, Val Accuracy: 0.4646, LR: 0.000300
+2025-03-05 14:48:13,462 - ufc_model - INFO - Epoch 12/300, Train Loss: 0.6974, Val Loss: 0.6957, Val Accuracy: 0.4776, LR: 0.000300
+2025-03-05 14:48:13,464 - ufc_model - INFO - Saved improved model to C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\fight_predictor_model.pth
+2025-03-05 14:48:14,288 - ufc_model - INFO - Epoch 13/300, Train Loss: 0.6971, Val Loss: 0.6953, Val Accuracy: 0.4731, LR: 0.000300
+2025-03-05 14:48:14,290 - ufc_model - INFO - Saved improved model to C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\fight_predictor_model.pth
+2025-03-05 14:48:15,121 - ufc_model - INFO - Epoch 14/300, Train Loss: 0.6959, Val Loss: 0.6950, Val Accuracy: 0.4776, LR: 0.000300
+2025-03-05 14:48:15,123 - ufc_model - INFO - Saved improved model to C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\fight_predictor_model.pth
+2025-03-05 14:48:15,947 - ufc_model - INFO - Epoch 15/300, Train Loss: 0.6953, Val Loss: 0.6952, Val Accuracy: 0.4718, LR: 0.000300
+2025-03-05 14:48:16,828 - ufc_model - INFO - Epoch 16/300, Train Loss: 0.6948, Val Loss: 0.6955, Val Accuracy: 0.4615, LR: 0.000300
+2025-03-05 14:48:17,656 - ufc_model - INFO - Epoch 17/300, Train Loss: 0.6936, Val Loss: 0.6955, Val Accuracy: 0.4709, LR: 0.000300
+2025-03-05 14:48:18,468 - ufc_model - INFO - Epoch 18/300, Train Loss: 0.6941, Val Loss: 0.6950, Val Accuracy: 0.4633, LR: 0.000300
+2025-03-05 14:48:19,285 - ufc_model - INFO - Epoch 19/300, Train Loss: 0.6945, Val Loss: 0.6952, Val Accuracy: 0.4651, LR: 0.000300
+2025-03-05 14:48:20,145 - ufc_model - INFO - Epoch 20/300, Train Loss: 0.6943, Val Loss: 0.6950, Val Accuracy: 0.4673, LR: 0.000150
+2025-03-05 14:48:20,146 - ufc_model - INFO - Saved improved model to C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\fight_predictor_model.pth
+2025-03-05 14:48:21,002 - ufc_model - INFO - Epoch 21/300, Train Loss: 0.6940, Val Loss: 0.6950, Val Accuracy: 0.4588, LR: 0.000150
+2025-03-05 14:48:21,872 - ufc_model - INFO - Epoch 22/300, Train Loss: 0.6937, Val Loss: 0.6949, Val Accuracy: 0.4718, LR: 0.000150
+2025-03-05 14:48:21,874 - ufc_model - INFO - Saved improved model to C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\fight_predictor_model.pth
+2025-03-05 14:48:22,741 - ufc_model - INFO - Epoch 23/300, Train Loss: 0.6934, Val Loss: 0.6952, Val Accuracy: 0.4659, LR: 0.000150
+2025-03-05 14:48:23,616 - ufc_model - INFO - Epoch 24/300, Train Loss: 0.6930, Val Loss: 0.6950, Val Accuracy: 0.4686, LR: 0.000150
+2025-03-05 14:48:24,477 - ufc_model - INFO - Epoch 25/300, Train Loss: 0.6937, Val Loss: 0.6951, Val Accuracy: 0.4682, LR: 0.000150
+2025-03-05 14:48:25,326 - ufc_model - INFO - Epoch 26/300, Train Loss: 0.6932, Val Loss: 0.6952, Val Accuracy: 0.4709, LR: 0.000150
+2025-03-05 14:48:26,175 - ufc_model - INFO - Epoch 27/300, Train Loss: 0.6931, Val Loss: 0.6951, Val Accuracy: 0.4776, LR: 0.000150
+2025-03-05 14:48:27,049 - ufc_model - INFO - Epoch 28/300, Train Loss: 0.6929, Val Loss: 0.6953, Val Accuracy: 0.4763, LR: 0.000075
+2025-03-05 14:48:27,886 - ufc_model - INFO - Epoch 29/300, Train Loss: 0.6928, Val Loss: 0.6951, Val Accuracy: 0.4727, LR: 0.000075
+2025-03-05 14:48:28,737 - ufc_model - INFO - Epoch 30/300, Train Loss: 0.6925, Val Loss: 0.6953, Val Accuracy: 0.4736, LR: 0.000075
+2025-03-05 14:48:29,589 - ufc_model - INFO - Epoch 31/300, Train Loss: 0.6935, Val Loss: 0.6952, Val Accuracy: 0.4758, LR: 0.000075
+2025-03-05 14:48:30,474 - ufc_model - INFO - Epoch 32/300, Train Loss: 0.6927, Val Loss: 0.6955, Val Accuracy: 0.4745, LR: 0.000075
+2025-03-05 14:48:31,350 - ufc_model - INFO - Epoch 33/300, Train Loss: 0.6933, Val Loss: 0.6956, Val Accuracy: 0.4718, LR: 0.000075
+2025-03-05 14:48:32,239 - ufc_model - INFO - Epoch 34/300, Train Loss: 0.6928, Val Loss: 0.6953, Val Accuracy: 0.4704, LR: 0.000037
+2025-03-05 14:48:33,115 - ufc_model - INFO - Epoch 35/300, Train Loss: 0.6931, Val Loss: 0.6955, Val Accuracy: 0.4709, LR: 0.000037
+2025-03-05 14:48:34,004 - ufc_model - INFO - Epoch 36/300, Train Loss: 0.6930, Val Loss: 0.6957, Val Accuracy: 0.4646, LR: 0.000037
+2025-03-05 14:48:34,894 - ufc_model - INFO - Epoch 37/300, Train Loss: 0.6922, Val Loss: 0.6957, Val Accuracy: 0.4646, LR: 0.000037
+2025-03-05 14:48:35,781 - ufc_model - INFO - Epoch 38/300, Train Loss: 0.6929, Val Loss: 0.6952, Val Accuracy: 0.4740, LR: 0.000037
+2025-03-05 14:48:36,642 - ufc_model - INFO - Epoch 39/300, Train Loss: 0.6927, Val Loss: 0.6955, Val Accuracy: 0.4646, LR: 0.000037
+2025-03-05 14:48:37,489 - ufc_model - INFO - Epoch 40/300, Train Loss: 0.6933, Val Loss: 0.6955, Val Accuracy: 0.4722, LR: 0.000019
+2025-03-05 14:48:38,341 - ufc_model - INFO - Epoch 41/300, Train Loss: 0.6925, Val Loss: 0.6955, Val Accuracy: 0.4664, LR: 0.000019
+2025-03-05 14:48:39,242 - ufc_model - INFO - Epoch 42/300, Train Loss: 0.6930, Val Loss: 0.6956, Val Accuracy: 0.4713, LR: 0.000019
+2025-03-05 14:48:39,243 - ufc_model - INFO - Early stopping after 42 epochs
+2025-03-05 14:48:39,246 - ufc_model - INFO - Saved training history to C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\training_history.csv
+2025-03-05 14:48:39,246 - ufc_model - INFO - Evaluating model on test set
+2025-03-05 14:48:39,308 - ufc_model - INFO - Test Metrics:
+2025-03-05 14:48:39,308 - ufc_model - INFO - Accuracy: 0.4375
+2025-03-05 14:48:39,308 - ufc_model - INFO - Precision: 0.4517
+2025-03-05 14:48:39,308 - ufc_model - INFO - Recall: 0.5840
+2025-03-05 14:48:39,308 - ufc_model - INFO - F1 Score: 0.5094
+2025-03-05 14:48:39,309 - ufc_model - INFO - ROC AUC: 0.4134
+2025-03-05 14:48:39,479 - ufc_model - INFO - Saved confusion matrix to C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\confusion_matrix.png
+2025-03-05 14:48:39,480 - ufc_model - INFO - Model trained successfully and saved to C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\fight_predictor_model.pth
+2025-03-05 14:48:39,480 - ufc_model - INFO - Test metrics: {'accuracy': 0.4375, 'precision': 0.4516632016632017, 'recall': 0.584005376344086, 'f1': 0.5093786635404455, 'auc': 0.4133753269886692}
+2025-03-05 14:48:39,801 - ufc_model - INFO - Training model...
+2025-03-05 14:48:39,857 - ufc_model - INFO - Loaded training data from C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\ufc_dataset.csv: 7439 rows, 95 columns
+2025-03-05 14:48:39,859 - ufc_model - INFO - Created fighter1_won column from 'winner' column
+2025-03-05 14:48:39,859 - ufc_model - INFO - Found 27 difference columns: ['kd_diff', 'sig_str_diff', 'sig_str_att_diff', 'sig_str_acc_diff', 'str_diff']...
+2025-03-05 14:48:39,859 - ufc_model - INFO - Selecting features (reduced set: True)
+2025-03-05 14:48:39,861 - ufc_model - INFO - Selected 28 features
+2025-03-05 14:48:39,862 - ufc_model - INFO - Starting position swap augmentation on dataset with 7439 rows
+2025-03-05 14:48:39,865 - ufc_model - INFO - Completed position swap augmentation. New dataset size: 14878 rows
+2025-03-05 14:48:39,865 - ufc_model - INFO - Applied position swap augmentation, new size: 14878
+2025-03-05 14:48:39,865 - ufc_model - INFO - Preparing training data
+2025-03-05 14:48:39,877 - ufc_model - INFO - Data split - Train: 9670, Val: 2232, Test: 2976
+2025-03-05 14:48:39,891 - ufc_model - INFO - Created dataloaders with 9670 training, 2232 validation, and 2976 test samples
+2025-03-05 14:48:39,894 - ufc_model - INFO - Training model for 300 epochs (lr=0.0003, weight_decay=0.005)
+2025-03-05 14:48:39,894 - ufc_model - INFO - Using device: cpu
+2025-03-05 14:48:40,890 - ufc_model - INFO - Epoch 1/300, Train Loss: 0.7641, Val Loss: 0.7148, Val Accuracy: 0.4901, LR: 0.000300
+2025-03-05 14:48:40,892 - ufc_model - INFO - Saved improved model to C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\fight_predictor_model.pth
+2025-03-05 14:48:41,836 - ufc_model - INFO - Epoch 2/300, Train Loss: 0.7372, Val Loss: 0.7064, Val Accuracy: 0.4780, LR: 0.000300
+2025-03-05 14:48:41,838 - ufc_model - INFO - Saved improved model to C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\fight_predictor_model.pth
+2025-03-05 14:48:42,694 - ufc_model - INFO - Epoch 3/300, Train Loss: 0.7202, Val Loss: 0.7048, Val Accuracy: 0.4763, LR: 0.000300
+2025-03-05 14:48:42,696 - ufc_model - INFO - Saved improved model to C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\fight_predictor_model.pth
+2025-03-05 14:48:43,584 - ufc_model - INFO - Epoch 4/300, Train Loss: 0.7103, Val Loss: 0.7037, Val Accuracy: 0.4686, LR: 0.000300
+2025-03-05 14:48:43,585 - ufc_model - INFO - Saved improved model to C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\fight_predictor_model.pth
+2025-03-05 14:48:44,489 - ufc_model - INFO - Epoch 5/300, Train Loss: 0.7090, Val Loss: 0.7022, Val Accuracy: 0.4628, LR: 0.000300
+2025-03-05 14:48:44,490 - ufc_model - INFO - Saved improved model to C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\fight_predictor_model.pth
+2025-03-05 14:48:45,354 - ufc_model - INFO - Epoch 6/300, Train Loss: 0.7057, Val Loss: 0.7012, Val Accuracy: 0.4588, LR: 0.000300
+2025-03-05 14:48:45,355 - ufc_model - INFO - Saved improved model to C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\fight_predictor_model.pth
+2025-03-05 14:48:46,233 - ufc_model - INFO - Epoch 7/300, Train Loss: 0.7030, Val Loss: 0.7008, Val Accuracy: 0.4480, LR: 0.000300
+2025-03-05 14:48:46,235 - ufc_model - INFO - Saved improved model to C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\fight_predictor_model.pth
+2025-03-05 14:48:47,106 - ufc_model - INFO - Epoch 8/300, Train Loss: 0.6994, Val Loss: 0.6996, Val Accuracy: 0.4601, LR: 0.000300
+2025-03-05 14:48:47,107 - ufc_model - INFO - Saved improved model to C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\fight_predictor_model.pth
+2025-03-05 14:48:47,988 - ufc_model - INFO - Epoch 9/300, Train Loss: 0.6972, Val Loss: 0.6991, Val Accuracy: 0.4682, LR: 0.000300
+2025-03-05 14:48:47,990 - ufc_model - INFO - Saved improved model to C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\fight_predictor_model.pth
+2025-03-05 14:48:48,858 - ufc_model - INFO - Epoch 10/300, Train Loss: 0.6994, Val Loss: 0.6991, Val Accuracy: 0.4516, LR: 0.000300
+2025-03-05 14:48:49,719 - ufc_model - INFO - Epoch 11/300, Train Loss: 0.6955, Val Loss: 0.6987, Val Accuracy: 0.4606, LR: 0.000300
+2025-03-05 14:48:49,720 - ufc_model - INFO - Saved improved model to C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\fight_predictor_model.pth
+2025-03-05 14:48:50,551 - ufc_model - INFO - Epoch 12/300, Train Loss: 0.6959, Val Loss: 0.6991, Val Accuracy: 0.4449, LR: 0.000300
+2025-03-05 14:48:51,395 - ufc_model - INFO - Epoch 13/300, Train Loss: 0.6968, Val Loss: 0.6986, Val Accuracy: 0.4471, LR: 0.000300
+2025-03-05 14:48:51,404 - ufc_model - INFO - Saved improved model to C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\fight_predictor_model.pth
+2025-03-05 14:48:52,300 - ufc_model - INFO - Epoch 14/300, Train Loss: 0.6958, Val Loss: 0.6987, Val Accuracy: 0.4422, LR: 0.000300
+2025-03-05 14:48:53,197 - ufc_model - INFO - Epoch 15/300, Train Loss: 0.6936, Val Loss: 0.6982, Val Accuracy: 0.4498, LR: 0.000300
+2025-03-05 14:48:53,199 - ufc_model - INFO - Saved improved model to C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\fight_predictor_model.pth
+2025-03-05 14:48:54,096 - ufc_model - INFO - Epoch 16/300, Train Loss: 0.6942, Val Loss: 0.6979, Val Accuracy: 0.4615, LR: 0.000300
+2025-03-05 14:48:54,098 - ufc_model - INFO - Saved improved model to C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\fight_predictor_model.pth
+2025-03-05 14:48:54,975 - ufc_model - INFO - Epoch 17/300, Train Loss: 0.6941, Val Loss: 0.6976, Val Accuracy: 0.4556, LR: 0.000300
+2025-03-05 14:48:54,977 - ufc_model - INFO - Saved improved model to C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\fight_predictor_model.pth
+2025-03-05 14:48:55,852 - ufc_model - INFO - Epoch 18/300, Train Loss: 0.6940, Val Loss: 0.6979, Val Accuracy: 0.4579, LR: 0.000300
+2025-03-05 14:48:56,709 - ufc_model - INFO - Epoch 19/300, Train Loss: 0.6935, Val Loss: 0.6972, Val Accuracy: 0.4462, LR: 0.000300
+2025-03-05 14:48:56,711 - ufc_model - INFO - Saved improved model to C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\fight_predictor_model.pth
+2025-03-05 14:48:57,577 - ufc_model - INFO - Epoch 20/300, Train Loss: 0.6936, Val Loss: 0.6972, Val Accuracy: 0.4462, LR: 0.000300
+2025-03-05 14:48:57,579 - ufc_model - INFO - Saved improved model to C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\fight_predictor_model.pth
+2025-03-05 14:48:58,455 - ufc_model - INFO - Epoch 21/300, Train Loss: 0.6939, Val Loss: 0.6959, Val Accuracy: 0.4776, LR: 0.000300
+2025-03-05 14:48:58,456 - ufc_model - INFO - Saved improved model to C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\fight_predictor_model.pth
+2025-03-05 14:48:59,389 - ufc_model - INFO - Epoch 22/300, Train Loss: 0.6936, Val Loss: 0.6969, Val Accuracy: 0.4516, LR: 0.000300
+2025-03-05 14:49:00,291 - ufc_model - INFO - Epoch 23/300, Train Loss: 0.6938, Val Loss: 0.6966, Val Accuracy: 0.4507, LR: 0.000300
+2025-03-05 14:49:01,200 - ufc_model - INFO - Epoch 24/300, Train Loss: 0.6934, Val Loss: 0.6961, Val Accuracy: 0.4619, LR: 0.000300
+2025-03-05 14:49:02,085 - ufc_model - INFO - Epoch 25/300, Train Loss: 0.6935, Val Loss: 0.6955, Val Accuracy: 0.4565, LR: 0.000300
+2025-03-05 14:49:02,086 - ufc_model - INFO - Saved improved model to C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\fight_predictor_model.pth
+2025-03-05 14:49:02,968 - ufc_model - INFO - Epoch 26/300, Train Loss: 0.6938, Val Loss: 0.6958, Val Accuracy: 0.4583, LR: 0.000300
+2025-03-05 14:49:03,832 - ufc_model - INFO - Epoch 27/300, Train Loss: 0.6928, Val Loss: 0.6959, Val Accuracy: 0.4615, LR: 0.000300
+2025-03-05 14:49:04,743 - ufc_model - INFO - Epoch 28/300, Train Loss: 0.6931, Val Loss: 0.6955, Val Accuracy: 0.4556, LR: 0.000300
+2025-03-05 14:49:05,611 - ufc_model - INFO - Epoch 29/300, Train Loss: 0.6928, Val Loss: 0.6967, Val Accuracy: 0.4498, LR: 0.000300
+2025-03-05 14:49:06,477 - ufc_model - INFO - Epoch 30/300, Train Loss: 0.6928, Val Loss: 0.6962, Val Accuracy: 0.4525, LR: 0.000300
+2025-03-05 14:49:07,334 - ufc_model - INFO - Epoch 31/300, Train Loss: 0.6926, Val Loss: 0.6967, Val Accuracy: 0.4444, LR: 0.000150
+2025-03-05 14:49:08,208 - ufc_model - INFO - Epoch 32/300, Train Loss: 0.6929, Val Loss: 0.6964, Val Accuracy: 0.4534, LR: 0.000150
+2025-03-05 14:49:09,064 - ufc_model - INFO - Epoch 33/300, Train Loss: 0.6930, Val Loss: 0.6966, Val Accuracy: 0.4521, LR: 0.000150
+2025-03-05 14:49:09,907 - ufc_model - INFO - Epoch 34/300, Train Loss: 0.6931, Val Loss: 0.6967, Val Accuracy: 0.4503, LR: 0.000150
+2025-03-05 14:49:10,722 - ufc_model - INFO - Epoch 35/300, Train Loss: 0.6929, Val Loss: 0.6969, Val Accuracy: 0.4525, LR: 0.000150
+2025-03-05 14:49:11,560 - ufc_model - INFO - Epoch 36/300, Train Loss: 0.6930, Val Loss: 0.6962, Val Accuracy: 0.4597, LR: 0.000150
+2025-03-05 14:49:12,423 - ufc_model - INFO - Epoch 37/300, Train Loss: 0.6923, Val Loss: 0.6972, Val Accuracy: 0.4413, LR: 0.000075
+2025-03-05 14:49:13,284 - ufc_model - INFO - Epoch 38/300, Train Loss: 0.6922, Val Loss: 0.6969, Val Accuracy: 0.4453, LR: 0.000075
+2025-03-05 14:49:14,141 - ufc_model - INFO - Epoch 39/300, Train Loss: 0.6925, Val Loss: 0.6971, Val Accuracy: 0.4427, LR: 0.000075
+2025-03-05 14:49:15,003 - ufc_model - INFO - Epoch 40/300, Train Loss: 0.6923, Val Loss: 0.6972, Val Accuracy: 0.4400, LR: 0.000075
+2025-03-05 14:49:15,871 - ufc_model - INFO - Epoch 41/300, Train Loss: 0.6923, Val Loss: 0.6973, Val Accuracy: 0.4476, LR: 0.000075
+2025-03-05 14:49:16,736 - ufc_model - INFO - Epoch 42/300, Train Loss: 0.6920, Val Loss: 0.6975, Val Accuracy: 0.4418, LR: 0.000075
+2025-03-05 14:49:17,602 - ufc_model - INFO - Epoch 43/300, Train Loss: 0.6922, Val Loss: 0.6979, Val Accuracy: 0.4332, LR: 0.000037
+2025-03-05 14:49:18,469 - ufc_model - INFO - Epoch 44/300, Train Loss: 0.6923, Val Loss: 0.6980, Val Accuracy: 0.4346, LR: 0.000037
+2025-03-05 14:49:19,333 - ufc_model - INFO - Epoch 45/300, Train Loss: 0.6915, Val Loss: 0.6982, Val Accuracy: 0.4382, LR: 0.000037
+2025-03-05 14:49:19,333 - ufc_model - INFO - Early stopping after 45 epochs
+2025-03-05 14:49:19,336 - ufc_model - INFO - Saved training history to C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\training_history.csv
+2025-03-05 14:49:19,336 - ufc_model - INFO - Evaluating model on test set
+2025-03-05 14:49:19,395 - ufc_model - INFO - Test Metrics:
+2025-03-05 14:49:19,396 - ufc_model - INFO - Accuracy: 0.4452
+2025-03-05 14:49:19,402 - ufc_model - INFO - Precision: 0.4026
+2025-03-05 14:49:19,402 - ufc_model - INFO - Recall: 0.2265
+2025-03-05 14:49:19,402 - ufc_model - INFO - F1 Score: 0.2899
+2025-03-05 14:49:19,403 - ufc_model - INFO - ROC AUC: 0.4095
+2025-03-05 14:49:19,571 - ufc_model - INFO - Saved confusion matrix to C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\confusion_matrix.png
+2025-03-05 14:49:19,572 - ufc_model - INFO - Model trained successfully and saved to C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\fight_predictor_model.pth
+2025-03-05 14:49:19,572 - ufc_model - INFO - Test metrics: {'accuracy': 0.44522849462365593, 'precision': 0.4026284348864994, 'recall': 0.2264784946236559, 'f1': 0.2898924731182796, 'auc': 0.40945462445080355}
+2025-03-05 14:51:23,042 - ufc_model - INFO - Training model...
+2025-03-05 14:51:23,093 - ufc_model - INFO - Loaded training data from C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\ufc_dataset.csv: 7439 rows, 95 columns
+2025-03-05 14:51:23,094 - ufc_model - INFO - Created fighter1_won column from 'winner' column
+2025-03-05 14:51:23,096 - ufc_model - INFO - Found 27 difference columns: ['kd_diff', 'sig_str_diff', 'sig_str_att_diff', 'sig_str_acc_diff', 'str_diff']...
+2025-03-05 14:51:23,096 - ufc_model - INFO - Selecting features (reduced set: True)
+2025-03-05 14:51:23,097 - ufc_model - INFO - Selected 28 features
+2025-03-05 14:51:23,098 - ufc_model - INFO - Starting position swap augmentation on dataset with 7439 rows
+2025-03-05 14:51:23,100 - ufc_model - INFO - Completed position swap augmentation. New dataset size: 14878 rows
+2025-03-05 14:51:23,101 - ufc_model - INFO - Applied position swap augmentation, new size: 14878
+2025-03-05 14:51:23,101 - ufc_model - INFO - Preparing training data
+2025-03-05 14:51:23,111 - ufc_model - INFO - Data split - Train: 9670, Val: 2232, Test: 2976
+2025-03-05 14:51:23,126 - ufc_model - INFO - Created dataloaders with 9670 training, 2232 validation, and 2976 test samples
+2025-03-05 14:51:23,129 - ufc_model - INFO - Training model for 300 epochs (lr=0.0003, weight_decay=0.005)
+2025-03-05 14:51:23,129 - ufc_model - INFO - Using device: cpu
+2025-03-05 14:51:23,948 - ufc_model - INFO - Epoch 1/300, Train Loss: 0.8879, Val Loss: 0.7333, Val Accuracy: 0.5054, LR: 0.000300
+2025-03-05 14:51:23,950 - ufc_model - INFO - Saved improved model to C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\fight_predictor_model.pth
+2025-03-05 14:51:24,785 - ufc_model - INFO - Epoch 2/300, Train Loss: 0.7738, Val Loss: 0.7048, Val Accuracy: 0.5112, LR: 0.000300
+2025-03-05 14:51:24,786 - ufc_model - INFO - Saved improved model to C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\fight_predictor_model.pth
+2025-03-05 14:51:25,663 - ufc_model - INFO - Epoch 3/300, Train Loss: 0.7339, Val Loss: 0.7027, Val Accuracy: 0.4875, LR: 0.000300
+2025-03-05 14:51:25,665 - ufc_model - INFO - Saved improved model to C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\fight_predictor_model.pth
+2025-03-05 14:51:26,509 - ufc_model - INFO - Epoch 4/300, Train Loss: 0.7182, Val Loss: 0.7005, Val Accuracy: 0.4772, LR: 0.000300
+2025-03-05 14:51:26,511 - ufc_model - INFO - Saved improved model to C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\fight_predictor_model.pth
+2025-03-05 14:51:27,389 - ufc_model - INFO - Epoch 5/300, Train Loss: 0.7075, Val Loss: 0.7003, Val Accuracy: 0.4668, LR: 0.000300
+2025-03-05 14:51:27,390 - ufc_model - INFO - Saved improved model to C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\fight_predictor_model.pth
+2025-03-05 14:51:28,271 - ufc_model - INFO - Epoch 6/300, Train Loss: 0.7065, Val Loss: 0.6991, Val Accuracy: 0.4780, LR: 0.000300
+2025-03-05 14:51:28,273 - ufc_model - INFO - Saved improved model to C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\fight_predictor_model.pth
+2025-03-05 14:51:29,147 - ufc_model - INFO - Epoch 7/300, Train Loss: 0.7047, Val Loss: 0.6997, Val Accuracy: 0.4713, LR: 0.000300
+2025-03-05 14:51:30,004 - ufc_model - INFO - Epoch 8/300, Train Loss: 0.7013, Val Loss: 0.6989, Val Accuracy: 0.4682, LR: 0.000300
+2025-03-05 14:51:30,006 - ufc_model - INFO - Saved improved model to C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\fight_predictor_model.pth
+2025-03-05 14:51:30,835 - ufc_model - INFO - Epoch 9/300, Train Loss: 0.6979, Val Loss: 0.6978, Val Accuracy: 0.4704, LR: 0.000300
+2025-03-05 14:51:30,837 - ufc_model - INFO - Saved improved model to C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\fight_predictor_model.pth
+2025-03-05 14:51:31,726 - ufc_model - INFO - Epoch 10/300, Train Loss: 0.7007, Val Loss: 0.6978, Val Accuracy: 0.4776, LR: 0.000300
+2025-03-05 14:51:31,728 - ufc_model - INFO - Saved improved model to C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\fight_predictor_model.pth
+2025-03-05 14:51:32,593 - ufc_model - INFO - Epoch 11/300, Train Loss: 0.6986, Val Loss: 0.6975, Val Accuracy: 0.4731, LR: 0.000300
+2025-03-05 14:51:32,594 - ufc_model - INFO - Saved improved model to C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\fight_predictor_model.pth
+2025-03-05 14:51:33,483 - ufc_model - INFO - Epoch 12/300, Train Loss: 0.6959, Val Loss: 0.6985, Val Accuracy: 0.4530, LR: 0.000300
+2025-03-05 14:51:34,338 - ufc_model - INFO - Epoch 13/300, Train Loss: 0.6964, Val Loss: 0.6978, Val Accuracy: 0.4736, LR: 0.000300
+2025-03-05 14:51:35,192 - ufc_model - INFO - Epoch 14/300, Train Loss: 0.6957, Val Loss: 0.6972, Val Accuracy: 0.4713, LR: 0.000300
+2025-03-05 14:51:35,194 - ufc_model - INFO - Saved improved model to C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\fight_predictor_model.pth
+2025-03-05 14:51:36,030 - ufc_model - INFO - Epoch 15/300, Train Loss: 0.6960, Val Loss: 0.6975, Val Accuracy: 0.4642, LR: 0.000300
+2025-03-05 14:51:36,866 - ufc_model - INFO - Epoch 16/300, Train Loss: 0.6949, Val Loss: 0.6970, Val Accuracy: 0.4543, LR: 0.000300
+2025-03-05 14:51:36,868 - ufc_model - INFO - Saved improved model to C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\fight_predictor_model.pth
+2025-03-05 14:51:37,701 - ufc_model - INFO - Epoch 17/300, Train Loss: 0.6939, Val Loss: 0.6967, Val Accuracy: 0.4507, LR: 0.000300
+2025-03-05 14:51:37,702 - ufc_model - INFO - Saved improved model to C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\fight_predictor_model.pth
+2025-03-05 14:51:38,565 - ufc_model - INFO - Epoch 18/300, Train Loss: 0.6949, Val Loss: 0.6969, Val Accuracy: 0.4651, LR: 0.000300
+2025-03-05 14:51:39,464 - ufc_model - INFO - Epoch 19/300, Train Loss: 0.6935, Val Loss: 0.6965, Val Accuracy: 0.4539, LR: 0.000300
+2025-03-05 14:51:39,467 - ufc_model - INFO - Saved improved model to C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\fight_predictor_model.pth
+2025-03-05 14:51:40,302 - ufc_model - INFO - Epoch 20/300, Train Loss: 0.6937, Val Loss: 0.6965, Val Accuracy: 0.4516, LR: 0.000300
+2025-03-05 14:51:40,304 - ufc_model - INFO - Saved improved model to C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\fight_predictor_model.pth
+2025-03-05 14:51:41,131 - ufc_model - INFO - Epoch 21/300, Train Loss: 0.6950, Val Loss: 0.6969, Val Accuracy: 0.4570, LR: 0.000300
+2025-03-05 14:51:42,008 - ufc_model - INFO - Epoch 22/300, Train Loss: 0.6939, Val Loss: 0.6969, Val Accuracy: 0.4543, LR: 0.000300
+2025-03-05 14:51:42,877 - ufc_model - INFO - Epoch 23/300, Train Loss: 0.6937, Val Loss: 0.6968, Val Accuracy: 0.4337, LR: 0.000300
+2025-03-05 14:51:43,748 - ufc_model - INFO - Epoch 24/300, Train Loss: 0.6931, Val Loss: 0.6960, Val Accuracy: 0.4543, LR: 0.000300
+2025-03-05 14:51:43,749 - ufc_model - INFO - Saved improved model to C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\fight_predictor_model.pth
+2025-03-05 14:51:44,585 - ufc_model - INFO - Epoch 25/300, Train Loss: 0.6934, Val Loss: 0.6962, Val Accuracy: 0.4471, LR: 0.000300
+2025-03-05 14:51:45,435 - ufc_model - INFO - Epoch 26/300, Train Loss: 0.6928, Val Loss: 0.6968, Val Accuracy: 0.4431, LR: 0.000300
+2025-03-05 14:51:46,262 - ufc_model - INFO - Epoch 27/300, Train Loss: 0.6931, Val Loss: 0.6967, Val Accuracy: 0.4485, LR: 0.000300
+2025-03-05 14:51:47,090 - ufc_model - INFO - Epoch 28/300, Train Loss: 0.6932, Val Loss: 0.6967, Val Accuracy: 0.4489, LR: 0.000300
+2025-03-05 14:51:47,972 - ufc_model - INFO - Epoch 29/300, Train Loss: 0.6931, Val Loss: 0.6966, Val Accuracy: 0.4440, LR: 0.000300
+2025-03-05 14:51:48,799 - ufc_model - INFO - Epoch 30/300, Train Loss: 0.6929, Val Loss: 0.6970, Val Accuracy: 0.4368, LR: 0.000150
+2025-03-05 14:51:49,628 - ufc_model - INFO - Epoch 31/300, Train Loss: 0.6927, Val Loss: 0.6966, Val Accuracy: 0.4467, LR: 0.000150
+2025-03-05 14:51:50,478 - ufc_model - INFO - Epoch 32/300, Train Loss: 0.6924, Val Loss: 0.6964, Val Accuracy: 0.4418, LR: 0.000150
+2025-03-05 14:51:51,314 - ufc_model - INFO - Epoch 33/300, Train Loss: 0.6926, Val Loss: 0.6967, Val Accuracy: 0.4418, LR: 0.000150
+2025-03-05 14:51:52,152 - ufc_model - INFO - Epoch 34/300, Train Loss: 0.6924, Val Loss: 0.6972, Val Accuracy: 0.4444, LR: 0.000150
+2025-03-05 14:51:52,988 - ufc_model - INFO - Epoch 35/300, Train Loss: 0.6927, Val Loss: 0.6969, Val Accuracy: 0.4467, LR: 0.000150
+2025-03-05 14:51:53,821 - ufc_model - INFO - Epoch 36/300, Train Loss: 0.6929, Val Loss: 0.6969, Val Accuracy: 0.4346, LR: 0.000075
+2025-03-05 14:51:54,655 - ufc_model - INFO - Epoch 37/300, Train Loss: 0.6925, Val Loss: 0.6968, Val Accuracy: 0.4409, LR: 0.000075
+2025-03-05 14:51:55,535 - ufc_model - INFO - Epoch 38/300, Train Loss: 0.6924, Val Loss: 0.6971, Val Accuracy: 0.4350, LR: 0.000075
+2025-03-05 14:51:56,426 - ufc_model - INFO - Epoch 39/300, Train Loss: 0.6920, Val Loss: 0.6972, Val Accuracy: 0.4458, LR: 0.000075
+2025-03-05 14:51:57,313 - ufc_model - INFO - Epoch 40/300, Train Loss: 0.6919, Val Loss: 0.6978, Val Accuracy: 0.4431, LR: 0.000075
+2025-03-05 14:51:58,197 - ufc_model - INFO - Epoch 41/300, Train Loss: 0.6923, Val Loss: 0.6977, Val Accuracy: 0.4391, LR: 0.000075
+2025-03-05 14:51:59,087 - ufc_model - INFO - Epoch 42/300, Train Loss: 0.6926, Val Loss: 0.6976, Val Accuracy: 0.4292, LR: 0.000037
+2025-03-05 14:51:59,963 - ufc_model - INFO - Epoch 43/300, Train Loss: 0.6922, Val Loss: 0.6979, Val Accuracy: 0.4297, LR: 0.000037
+2025-03-05 14:52:00,799 - ufc_model - INFO - Epoch 44/300, Train Loss: 0.6914, Val Loss: 0.6975, Val Accuracy: 0.4391, LR: 0.000037
+2025-03-05 14:52:00,799 - ufc_model - INFO - Early stopping after 44 epochs
+2025-03-05 14:52:00,802 - ufc_model - INFO - Saved training history to C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\training_history.csv
+2025-03-05 14:52:00,803 - ufc_model - INFO - Evaluating model on test set
+2025-03-05 14:52:00,866 - ufc_model - INFO - Test Metrics:
+2025-03-05 14:52:00,867 - ufc_model - INFO - Accuracy: 0.4375
+2025-03-05 14:52:00,867 - ufc_model - INFO - Precision: 0.4341
+2025-03-05 14:52:00,867 - ufc_model - INFO - Recall: 0.4120
+2025-03-05 14:52:00,867 - ufc_model - INFO - F1 Score: 0.4228
+2025-03-05 14:52:00,867 - ufc_model - INFO - ROC AUC: 0.4071
+2025-03-05 14:52:01,037 - ufc_model - INFO - Saved confusion matrix to C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\confusion_matrix.png
+2025-03-05 14:52:01,038 - ufc_model - INFO - Model trained successfully and saved to C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\fight_predictor_model.pth
+2025-03-05 14:52:01,038 - ufc_model - INFO - Test metrics: {'accuracy': 0.4375, 'precision': 0.43413597733711046, 'recall': 0.41196236559139787, 'f1': 0.4227586206896552, 'auc': 0.40705889047866806}
+2025-03-05 15:24:58,952 - ufc_model - INFO - Training model...
+2025-03-05 15:24:59,012 - ufc_model - INFO - Loaded training data from C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\ufc_dataset.csv: 7439 rows, 95 columns
+2025-03-05 15:24:59,013 - ufc_model - INFO - Created fighter1_won column from 'winner' column
+2025-03-05 15:24:59,013 - ufc_model - INFO - Found 27 difference columns: ['kd_diff', 'sig_str_diff', 'sig_str_att_diff', 'sig_str_acc_diff', 'str_diff']...
+2025-03-05 15:25:51,732 - ufc_model - INFO - Training model...
+2025-03-05 15:25:51,784 - ufc_model - INFO - Loaded training data from C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\ufc_dataset.csv: 7439 rows, 95 columns
+2025-03-05 15:25:51,785 - ufc_model - INFO - Created fighter1_won column from 'winner' column
+2025-03-05 15:25:51,786 - ufc_model - INFO - Found 27 difference columns: ['kd_diff', 'sig_str_diff', 'sig_str_att_diff', 'sig_str_acc_diff', 'str_diff']...
+2025-03-05 15:26:44,191 - ufc_model - INFO - Training model...
+2025-03-05 15:26:44,243 - ufc_model - INFO - Loaded training data from C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\ufc_dataset.csv: 7439 rows, 95 columns
+2025-03-05 15:26:44,244 - ufc_model - INFO - Created fighter1_won column from 'winner' column
+2025-03-05 15:26:44,245 - ufc_model - INFO - Found 27 difference columns: ['kd_diff', 'sig_str_diff', 'sig_str_att_diff', 'sig_str_acc_diff', 'str_diff']...
+2025-03-05 15:46:07,479 - ufc_model - INFO - Training model...
+2025-03-05 15:46:07,537 - ufc_model - INFO - Loaded training data from C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\ufc_dataset.csv: 7439 rows, 95 columns
+2025-03-05 15:46:07,538 - ufc_model - INFO - Created fighter1_won column from 'winner' column
+2025-03-05 15:46:07,538 - ufc_model - INFO - Found 27 difference columns: ['kd_diff', 'sig_str_diff', 'sig_str_att_diff', 'sig_str_acc_diff', 'str_diff']...
+2025-03-05 15:46:07,538 - ufc_model - INFO - Selecting optimal features for UFC prediction
+2025-03-05 15:46:07,538 - ufc_model - INFO - Selected 40 optimal features from 96 total columns
+2025-03-05 15:46:07,541 - ufc_model - INFO - Starting position swap augmentation on dataset with 7439 rows
+2025-03-05 15:46:07,543 - ufc_model - INFO - Completed position swap augmentation. New dataset size: 14878 rows
+2025-03-05 15:46:07,543 - ufc_model - INFO - Applied position swap augmentation, new size: 14878
+2025-03-05 15:46:07,544 - ufc_model - INFO - Preparing training data
+2025-03-05 15:46:07,558 - ufc_model - INFO - Data split - Train: 9670, Val: 2232, Test: 2976
+2025-03-05 15:46:07,595 - ufc_model - INFO - Created dataloaders with 9670 training, 2232 validation, and 2976 test samples
+2025-03-05 15:49:56,160 - ufc_model - INFO - Training model...
+2025-03-05 15:49:56,214 - ufc_model - INFO - Loaded training data from C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\ufc_dataset.csv: 7439 rows, 95 columns
+2025-03-05 15:49:56,215 - ufc_model - INFO - Created fighter1_won column from 'winner' column
+2025-03-05 15:49:56,222 - ufc_model - INFO - Found 27 difference columns: ['kd_diff', 'sig_str_diff', 'sig_str_att_diff', 'sig_str_acc_diff', 'str_diff']...
+2025-03-05 15:49:56,222 - ufc_model - INFO - Selecting optimal features for UFC prediction
+2025-03-05 15:49:56,222 - ufc_model - INFO - Selected 40 optimal features from 96 total columns
+2025-03-05 15:49:56,225 - ufc_model - INFO - Starting position swap augmentation on dataset with 7439 rows
+2025-03-05 15:49:56,228 - ufc_model - INFO - Completed position swap augmentation. New dataset size: 14878 rows
+2025-03-05 15:49:56,229 - ufc_model - INFO - Applied position swap augmentation, new size: 14878
+2025-03-05 15:49:56,229 - ufc_model - INFO - Preparing training data
+2025-03-05 15:49:56,242 - ufc_model - INFO - Data split - Train: 9670, Val: 2232, Test: 2976
+2025-03-05 15:49:56,262 - ufc_model - INFO - Created dataloaders with 9670 training, 2232 validation, and 2976 test samples
+2025-03-05 15:49:56,265 - ufc_model - INFO - Training model for 300 epochs (lr=0.001, weight_decay=0.001)
+2025-03-05 15:49:56,266 - ufc_model - INFO - Using device: cpu
+2025-03-05 15:49:56,267 - ufc_model - INFO - Using Focal Loss for better handling of class imbalance
+2025-03-05 15:49:57,295 - ufc_model - INFO - Epoch 1/300, Train Loss: 0.0561, Val Loss: 0.0449, Val Accuracy: 0.4825, LR: 0.001000
+2025-03-05 15:49:57,298 - ufc_model - INFO - Saved improved model to C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\fight_predictor_model.pth
+2025-03-05 15:49:58,198 - ufc_model - INFO - Epoch 2/300, Train Loss: 0.0466, Val Loss: 0.0443, Val Accuracy: 0.4651, LR: 0.001000
+2025-03-05 15:49:58,200 - ufc_model - INFO - Saved improved model to C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\fight_predictor_model.pth
+2025-03-05 15:49:59,131 - ufc_model - INFO - Epoch 3/300, Train Loss: 0.0446, Val Loss: 0.0438, Val Accuracy: 0.4610, LR: 0.001000
+2025-03-05 15:49:59,133 - ufc_model - INFO - Saved improved model to C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\fight_predictor_model.pth
+2025-03-05 15:50:00,078 - ufc_model - INFO - Epoch 4/300, Train Loss: 0.0439, Val Loss: 0.0437, Val Accuracy: 0.4583, LR: 0.001000
+2025-03-05 15:50:00,080 - ufc_model - INFO - Saved improved model to C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\fight_predictor_model.pth
+2025-03-05 15:50:01,004 - ufc_model - INFO - Epoch 5/300, Train Loss: 0.0436, Val Loss: 0.0436, Val Accuracy: 0.4574, LR: 0.001000
+2025-03-05 15:50:01,005 - ufc_model - INFO - Saved improved model to C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\fight_predictor_model.pth
+2025-03-05 15:50:01,967 - ufc_model - INFO - Epoch 6/300, Train Loss: 0.0435, Val Loss: 0.0435, Val Accuracy: 0.4668, LR: 0.001000
+2025-03-05 15:50:01,969 - ufc_model - INFO - Saved improved model to C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\fight_predictor_model.pth
+2025-03-05 15:50:03,016 - ufc_model - INFO - Epoch 7/300, Train Loss: 0.0434, Val Loss: 0.0434, Val Accuracy: 0.4763, LR: 0.001000
+2025-03-05 15:50:03,017 - ufc_model - INFO - Saved improved model to C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\fight_predictor_model.pth
+2025-03-05 15:50:04,165 - ufc_model - INFO - Epoch 8/300, Train Loss: 0.0434, Val Loss: 0.0435, Val Accuracy: 0.4700, LR: 0.001000
+2025-03-05 15:50:05,137 - ufc_model - INFO - Epoch 9/300, Train Loss: 0.0433, Val Loss: 0.0433, Val Accuracy: 0.5054, LR: 0.001000
+2025-03-05 15:50:05,139 - ufc_model - INFO - Saved improved model to C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\fight_predictor_model.pth
+2025-03-05 15:50:06,139 - ufc_model - INFO - Epoch 10/300, Train Loss: 0.0434, Val Loss: 0.0433, Val Accuracy: 0.4991, LR: 0.001000
+2025-03-05 15:50:07,116 - ufc_model - INFO - Epoch 11/300, Train Loss: 0.0433, Val Loss: 0.0433, Val Accuracy: 0.4763, LR: 0.001000
+2025-03-05 15:50:08,128 - ufc_model - INFO - Epoch 12/300, Train Loss: 0.0433, Val Loss: 0.0433, Val Accuracy: 0.4996, LR: 0.001000
+2025-03-05 15:50:08,129 - ufc_model - INFO - Saved improved model to C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\fight_predictor_model.pth
+2025-03-05 15:50:09,130 - ufc_model - INFO - Epoch 13/300, Train Loss: 0.0433, Val Loss: 0.0433, Val Accuracy: 0.5000, LR: 0.001000
+2025-03-05 15:50:09,132 - ufc_model - INFO - Saved improved model to C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\fight_predictor_model.pth
+2025-03-05 15:50:10,097 - ufc_model - INFO - Epoch 14/300, Train Loss: 0.0433, Val Loss: 0.0433, Val Accuracy: 0.5000, LR: 0.001000
+2025-03-05 15:50:10,099 - ufc_model - INFO - Saved improved model to C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\fight_predictor_model.pth
+2025-03-05 15:50:11,066 - ufc_model - INFO - Epoch 15/300, Train Loss: 0.0433, Val Loss: 0.0433, Val Accuracy: 0.5000, LR: 0.001000
+2025-03-05 15:50:12,016 - ufc_model - INFO - Epoch 16/300, Train Loss: 0.0433, Val Loss: 0.0433, Val Accuracy: 0.5000, LR: 0.001000
+2025-03-05 15:50:12,976 - ufc_model - INFO - Epoch 17/300, Train Loss: 0.0433, Val Loss: 0.0433, Val Accuracy: 0.5000, LR: 0.001000
+2025-03-05 15:50:13,955 - ufc_model - INFO - Epoch 18/300, Train Loss: 0.0433, Val Loss: 0.0433, Val Accuracy: 0.5000, LR: 0.001000
+2025-03-05 15:50:14,868 - ufc_model - INFO - Epoch 19/300, Train Loss: 0.0433, Val Loss: 0.0433, Val Accuracy: 0.5000, LR: 0.000500
+2025-03-05 15:50:15,805 - ufc_model - INFO - Epoch 20/300, Train Loss: 0.0433, Val Loss: 0.0433, Val Accuracy: 0.5000, LR: 0.000500
+2025-03-05 15:50:15,807 - ufc_model - INFO - Saved improved model to C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\fight_predictor_model.pth
+2025-03-05 15:50:16,873 - ufc_model - INFO - Epoch 21/300, Train Loss: 0.0433, Val Loss: 0.0433, Val Accuracy: 0.5000, LR: 0.000500
+2025-03-05 15:50:16,875 - ufc_model - INFO - Saved improved model to C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\fight_predictor_model.pth
+2025-03-05 15:50:17,843 - ufc_model - INFO - Epoch 22/300, Train Loss: 0.0433, Val Loss: 0.0433, Val Accuracy: 0.5000, LR: 0.000500
+2025-03-05 15:50:17,845 - ufc_model - INFO - Saved improved model to C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\fight_predictor_model.pth
+2025-03-05 15:50:18,867 - ufc_model - INFO - Epoch 23/300, Train Loss: 0.0433, Val Loss: 0.0433, Val Accuracy: 0.5000, LR: 0.000500
+2025-03-05 15:50:18,868 - ufc_model - INFO - Saved improved model to C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\fight_predictor_model.pth
+2025-03-05 15:50:19,824 - ufc_model - INFO - Epoch 24/300, Train Loss: 0.0433, Val Loss: 0.0433, Val Accuracy: 0.5000, LR: 0.000500
+2025-03-05 15:50:20,761 - ufc_model - INFO - Epoch 25/300, Train Loss: 0.0433, Val Loss: 0.0433, Val Accuracy: 0.5000, LR: 0.000250
+2025-03-05 15:50:21,699 - ufc_model - INFO - Epoch 26/300, Train Loss: 0.0433, Val Loss: 0.0433, Val Accuracy: 0.5000, LR: 0.000250
+2025-03-05 15:50:22,697 - ufc_model - INFO - Epoch 27/300, Train Loss: 0.0433, Val Loss: 0.0433, Val Accuracy: 0.5000, LR: 0.000250
+2025-03-05 15:50:23,636 - ufc_model - INFO - Epoch 28/300, Train Loss: 0.0433, Val Loss: 0.0433, Val Accuracy: 0.5000, LR: 0.000250
+2025-03-05 15:50:24,621 - ufc_model - INFO - Epoch 29/300, Train Loss: 0.0433, Val Loss: 0.0433, Val Accuracy: 0.5000, LR: 0.000250
+2025-03-05 15:50:25,623 - ufc_model - INFO - Epoch 30/300, Train Loss: 0.0433, Val Loss: 0.0433, Val Accuracy: 0.5000, LR: 0.000250
+2025-03-05 15:50:26,654 - ufc_model - INFO - Epoch 31/300, Train Loss: 0.0433, Val Loss: 0.0433, Val Accuracy: 0.5000, LR: 0.000125
+2025-03-05 15:50:27,618 - ufc_model - INFO - Epoch 32/300, Train Loss: 0.0433, Val Loss: 0.0433, Val Accuracy: 0.5000, LR: 0.000125
+2025-03-05 15:50:27,619 - ufc_model - INFO - Saved improved model to C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\fight_predictor_model.pth
+2025-03-05 15:50:28,598 - ufc_model - INFO - Epoch 33/300, Train Loss: 0.0433, Val Loss: 0.0433, Val Accuracy: 0.5000, LR: 0.000125
+2025-03-05 15:50:28,600 - ufc_model - INFO - Saved improved model to C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\fight_predictor_model.pth
+2025-03-05 15:50:29,695 - ufc_model - INFO - Epoch 34/300, Train Loss: 0.0433, Val Loss: 0.0433, Val Accuracy: 0.5000, LR: 0.000125
+2025-03-05 15:50:30,687 - ufc_model - INFO - Epoch 35/300, Train Loss: 0.0433, Val Loss: 0.0433, Val Accuracy: 0.5000, LR: 0.000125
+2025-03-05 15:50:31,726 - ufc_model - INFO - Epoch 36/300, Train Loss: 0.0433, Val Loss: 0.0433, Val Accuracy: 0.5000, LR: 0.000125
+2025-03-05 15:50:32,926 - ufc_model - INFO - Epoch 37/300, Train Loss: 0.0433, Val Loss: 0.0433, Val Accuracy: 0.5000, LR: 0.000063
+2025-03-05 15:50:32,928 - ufc_model - INFO - Saved improved model to C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\fight_predictor_model.pth
+2025-03-05 15:50:34,159 - ufc_model - INFO - Epoch 38/300, Train Loss: 0.0433, Val Loss: 0.0433, Val Accuracy: 0.5000, LR: 0.000063
+2025-03-05 15:50:35,354 - ufc_model - INFO - Epoch 39/300, Train Loss: 0.0433, Val Loss: 0.0433, Val Accuracy: 0.5000, LR: 0.000063
+2025-03-05 15:50:36,576 - ufc_model - INFO - Epoch 40/300, Train Loss: 0.0433, Val Loss: 0.0433, Val Accuracy: 0.5000, LR: 0.000063
+2025-03-05 15:50:37,953 - ufc_model - INFO - Epoch 41/300, Train Loss: 0.0433, Val Loss: 0.0433, Val Accuracy: 0.5000, LR: 0.000063
+2025-03-05 15:50:39,184 - ufc_model - INFO - Epoch 42/300, Train Loss: 0.0433, Val Loss: 0.0433, Val Accuracy: 0.5000, LR: 0.000063
+2025-03-05 15:50:40,523 - ufc_model - INFO - Epoch 43/300, Train Loss: 0.0433, Val Loss: 0.0433, Val Accuracy: 0.5000, LR: 0.000031
+2025-03-05 15:50:41,811 - ufc_model - INFO - Epoch 44/300, Train Loss: 0.0433, Val Loss: 0.0433, Val Accuracy: 0.5000, LR: 0.000031
+2025-03-05 15:50:43,177 - ufc_model - INFO - Epoch 45/300, Train Loss: 0.0433, Val Loss: 0.0433, Val Accuracy: 0.5000, LR: 0.000031
+2025-03-05 15:50:44,397 - ufc_model - INFO - Epoch 46/300, Train Loss: 0.0433, Val Loss: 0.0433, Val Accuracy: 0.5000, LR: 0.000031
+2025-03-05 15:50:45,799 - ufc_model - INFO - Epoch 47/300, Train Loss: 0.0433, Val Loss: 0.0433, Val Accuracy: 0.5000, LR: 0.000031
+2025-03-05 15:50:47,025 - ufc_model - INFO - Epoch 48/300, Train Loss: 0.0433, Val Loss: 0.0433, Val Accuracy: 0.5000, LR: 0.000031
+2025-03-05 15:50:48,250 - ufc_model - INFO - Epoch 49/300, Train Loss: 0.0433, Val Loss: 0.0433, Val Accuracy: 0.5000, LR: 0.000016
+2025-03-05 15:50:49,472 - ufc_model - INFO - Epoch 50/300, Train Loss: 0.0433, Val Loss: 0.0433, Val Accuracy: 0.5000, LR: 0.000016
+2025-03-05 15:50:50,706 - ufc_model - INFO - Epoch 51/300, Train Loss: 0.0433, Val Loss: 0.0433, Val Accuracy: 0.5000, LR: 0.000016
+2025-03-05 15:50:52,012 - ufc_model - INFO - Epoch 52/300, Train Loss: 0.0433, Val Loss: 0.0433, Val Accuracy: 0.5000, LR: 0.000016
+2025-03-05 15:50:52,012 - ufc_model - INFO - Early stopping after 52 epochs
+2025-03-05 15:50:52,027 - ufc_model - INFO - Saved training history to C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\training_history.csv
+2025-03-05 15:50:52,028 - ufc_model - INFO - Evaluating model on test set
+2025-03-05 15:50:52,148 - ufc_model - INFO - Test Metrics:
+2025-03-05 15:50:52,148 - ufc_model - INFO - Accuracy: 0.5000
+2025-03-05 15:50:52,148 - ufc_model - INFO - Precision: 0.5000
+2025-03-05 15:50:52,149 - ufc_model - INFO - Recall: 1.0000
+2025-03-05 15:50:52,149 - ufc_model - INFO - F1 Score: 0.6667
+2025-03-05 15:50:52,149 - ufc_model - INFO - ROC AUC: 0.5000
+2025-03-05 15:50:52,659 - ufc_model - INFO - Saved confusion matrix to C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\confusion_matrix.png
+2025-03-05 15:50:52,660 - ufc_model - INFO - Model trained successfully and saved to C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\fight_predictor_model.pth
+2025-03-05 15:50:52,660 - ufc_model - INFO - Test metrics: {'accuracy': 0.5, 'precision': 0.5, 'recall': 1.0, 'f1': 0.6666666666666666, 'auc': 0.5}
+2025-03-05 15:51:16,206 - ufc_model - INFO - Training model...
+2025-03-05 15:51:16,256 - ufc_model - INFO - Loaded training data from C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\ufc_dataset.csv: 7439 rows, 95 columns
+2025-03-05 15:51:16,256 - ufc_model - INFO - Created fighter1_won column from 'winner' column
+2025-03-05 15:51:16,257 - ufc_model - INFO - Found 27 difference columns: ['kd_diff', 'sig_str_diff', 'sig_str_att_diff', 'sig_str_acc_diff', 'str_diff']...
+2025-03-05 15:51:16,257 - ufc_model - INFO - Selecting optimal features for UFC prediction
+2025-03-05 15:51:16,257 - ufc_model - INFO - Selected 40 optimal features from 96 total columns
+2025-03-05 15:51:16,258 - ufc_model - INFO - Starting position swap augmentation on dataset with 7439 rows
+2025-03-05 15:51:16,261 - ufc_model - INFO - Completed position swap augmentation. New dataset size: 14878 rows
+2025-03-05 15:51:16,261 - ufc_model - INFO - Applied position swap augmentation, new size: 14878
+2025-03-05 15:51:16,261 - ufc_model - INFO - Preparing training data
+2025-03-05 15:51:16,272 - ufc_model - INFO - Data split - Train: 9670, Val: 2232, Test: 2976
+2025-03-05 15:51:16,288 - ufc_model - INFO - Created dataloaders with 9670 training, 2232 validation, and 2976 test samples
+2025-03-05 15:51:16,292 - ufc_model - INFO - Training model for 300 epochs (lr=0.001, weight_decay=0.001)
+2025-03-05 15:51:16,292 - ufc_model - INFO - Using device: cpu
+2025-03-05 15:51:16,292 - ufc_model - INFO - Using Focal Loss for better handling of class imbalance
+2025-03-05 15:51:17,289 - ufc_model - INFO - Epoch 1/300, Train Loss: 0.0602, Val Loss: 0.0447, Val Accuracy: 0.4928, LR: 0.001000
+2025-03-05 15:51:17,291 - ufc_model - INFO - Saved improved model to C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\fight_predictor_model.pth
+2025-03-05 15:51:18,277 - ufc_model - INFO - Epoch 2/300, Train Loss: 0.0472, Val Loss: 0.0439, Val Accuracy: 0.4843, LR: 0.001000
+2025-03-05 15:51:18,279 - ufc_model - INFO - Saved improved model to C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\fight_predictor_model.pth
+2025-03-05 15:51:19,240 - ufc_model - INFO - Epoch 3/300, Train Loss: 0.0448, Val Loss: 0.0437, Val Accuracy: 0.4803, LR: 0.001000
+2025-03-05 15:51:19,241 - ufc_model - INFO - Saved improved model to C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\fight_predictor_model.pth
+2025-03-05 15:51:20,150 - ufc_model - INFO - Epoch 4/300, Train Loss: 0.0440, Val Loss: 0.0435, Val Accuracy: 0.4803, LR: 0.001000
+2025-03-05 15:51:20,151 - ufc_model - INFO - Saved improved model to C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\fight_predictor_model.pth
+2025-03-05 15:51:21,184 - ufc_model - INFO - Epoch 5/300, Train Loss: 0.0438, Val Loss: 0.0436, Val Accuracy: 0.4718, LR: 0.001000
+2025-03-05 15:51:22,158 - ufc_model - INFO - Epoch 6/300, Train Loss: 0.0435, Val Loss: 0.0435, Val Accuracy: 0.4709, LR: 0.001000
+2025-03-05 15:51:22,159 - ufc_model - INFO - Saved improved model to C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\fight_predictor_model.pth
+2025-03-05 15:51:23,194 - ufc_model - INFO - Epoch 7/300, Train Loss: 0.0434, Val Loss: 0.0435, Val Accuracy: 0.4691, LR: 0.001000
+2025-03-05 15:51:24,155 - ufc_model - INFO - Epoch 8/300, Train Loss: 0.0434, Val Loss: 0.0434, Val Accuracy: 0.4655, LR: 0.001000
+2025-03-05 15:51:24,157 - ufc_model - INFO - Saved improved model to C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\fight_predictor_model.pth
+2025-03-05 15:51:25,083 - ufc_model - INFO - Epoch 9/300, Train Loss: 0.0434, Val Loss: 0.0434, Val Accuracy: 0.4834, LR: 0.001000
+2025-03-05 15:51:25,085 - ufc_model - INFO - Saved improved model to C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\fight_predictor_model.pth
+2025-03-05 15:51:26,078 - ufc_model - INFO - Epoch 10/300, Train Loss: 0.0434, Val Loss: 0.0434, Val Accuracy: 0.4722, LR: 0.001000
+2025-03-05 15:51:27,109 - ufc_model - INFO - Epoch 11/300, Train Loss: 0.0433, Val Loss: 0.0433, Val Accuracy: 0.4812, LR: 0.001000
+2025-03-05 15:51:27,110 - ufc_model - INFO - Saved improved model to C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\fight_predictor_model.pth
+2025-03-05 15:51:28,115 - ufc_model - INFO - Epoch 12/300, Train Loss: 0.0433, Val Loss: 0.0433, Val Accuracy: 0.4924, LR: 0.001000
+2025-03-05 15:51:28,117 - ufc_model - INFO - Saved improved model to C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\fight_predictor_model.pth
+2025-03-05 15:51:29,075 - ufc_model - INFO - Epoch 13/300, Train Loss: 0.0433, Val Loss: 0.0433, Val Accuracy: 0.5004, LR: 0.001000
+2025-03-05 15:51:29,076 - ufc_model - INFO - Saved improved model to C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\fight_predictor_model.pth
+2025-03-05 15:51:29,998 - ufc_model - INFO - Epoch 14/300, Train Loss: 0.0433, Val Loss: 0.0433, Val Accuracy: 0.5000, LR: 0.001000
+2025-03-05 15:51:30,910 - ufc_model - INFO - Epoch 15/300, Train Loss: 0.0433, Val Loss: 0.0433, Val Accuracy: 0.5000, LR: 0.001000
+2025-03-05 15:51:31,813 - ufc_model - INFO - Epoch 16/300, Train Loss: 0.0433, Val Loss: 0.0433, Val Accuracy: 0.5000, LR: 0.001000
+2025-03-05 15:51:32,718 - ufc_model - INFO - Epoch 17/300, Train Loss: 0.0433, Val Loss: 0.0433, Val Accuracy: 0.5000, LR: 0.001000
+2025-03-05 15:51:33,625 - ufc_model - INFO - Epoch 18/300, Train Loss: 0.0433, Val Loss: 0.0433, Val Accuracy: 0.5000, LR: 0.000500
+2025-03-05 15:51:34,548 - ufc_model - INFO - Epoch 19/300, Train Loss: 0.0433, Val Loss: 0.0433, Val Accuracy: 0.5000, LR: 0.000500
+2025-03-05 15:51:35,452 - ufc_model - INFO - Epoch 20/300, Train Loss: 0.0433, Val Loss: 0.0433, Val Accuracy: 0.5000, LR: 0.000500
+2025-03-05 15:51:36,425 - ufc_model - INFO - Epoch 21/300, Train Loss: 0.0433, Val Loss: 0.0433, Val Accuracy: 0.5000, LR: 0.000500
+2025-03-05 15:51:37,397 - ufc_model - INFO - Epoch 22/300, Train Loss: 0.0433, Val Loss: 0.0433, Val Accuracy: 0.5000, LR: 0.000500
+2025-03-05 15:51:38,354 - ufc_model - INFO - Epoch 23/300, Train Loss: 0.0433, Val Loss: 0.0433, Val Accuracy: 0.5000, LR: 0.000500
+2025-03-05 15:51:39,330 - ufc_model - INFO - Epoch 24/300, Train Loss: 0.0433, Val Loss: 0.0433, Val Accuracy: 0.5000, LR: 0.000250
+2025-03-05 15:51:40,301 - ufc_model - INFO - Epoch 25/300, Train Loss: 0.0433, Val Loss: 0.0433, Val Accuracy: 0.5000, LR: 0.000250
+2025-03-05 15:51:41,288 - ufc_model - INFO - Epoch 26/300, Train Loss: 0.0433, Val Loss: 0.0433, Val Accuracy: 0.5000, LR: 0.000250
+2025-03-05 15:51:42,253 - ufc_model - INFO - Epoch 27/300, Train Loss: 0.0433, Val Loss: 0.0433, Val Accuracy: 0.5000, LR: 0.000250
+2025-03-05 15:51:43,244 - ufc_model - INFO - Epoch 28/300, Train Loss: 0.0433, Val Loss: 0.0433, Val Accuracy: 0.5000, LR: 0.000250
+2025-03-05 15:51:43,245 - ufc_model - INFO - Early stopping after 28 epochs
+2025-03-05 15:51:43,248 - ufc_model - INFO - Saved training history to C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\training_history.csv
+2025-03-05 15:51:43,248 - ufc_model - INFO - Evaluating model on test set
+2025-03-05 15:51:43,317 - ufc_model - INFO - Test Metrics:
+2025-03-05 15:51:43,317 - ufc_model - INFO - Accuracy: 0.5000
+2025-03-05 15:51:43,317 - ufc_model - INFO - Precision: 0.0000
+2025-03-05 15:51:43,318 - ufc_model - INFO - Recall: 0.0000
+2025-03-05 15:51:43,319 - ufc_model - INFO - F1 Score: 0.0000
+2025-03-05 15:51:43,319 - ufc_model - INFO - ROC AUC: 0.5000
+2025-03-05 15:51:43,519 - ufc_model - INFO - Saved confusion matrix to C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\confusion_matrix.png
+2025-03-05 15:51:43,519 - ufc_model - INFO - Model trained successfully and saved to C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\fight_predictor_model.pth
+2025-03-05 15:51:43,519 - ufc_model - INFO - Test metrics: {'accuracy': 0.5, 'precision': 0.0, 'recall': 0.0, 'f1': 0.0, 'auc': 0.5}
+2025-03-05 15:56:48,667 - ufc_model - INFO - Starting Flask server on port 5000...
+2025-03-05 15:56:48,701 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.2.200:5000
+2025-03-05 15:56:48,701 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-03-05 15:56:48,703 - werkzeug - INFO -  * Restarting with stat
+2025-03-05 15:56:51,105 - ufc_model - INFO - Starting Flask server on port 5000...
+2025-03-05 15:56:51,114 - werkzeug - WARNING -  * Debugger is active!
+2025-03-05 15:56:51,118 - werkzeug - INFO -  * Debugger PIN: 188-360-779
+2025-03-05 15:56:54,596 - werkzeug - INFO - 127.0.0.1 - - [05/Mar/2025 15:56:54] "GET /api/fighters HTTP/1.1" 200 -
+2025-03-05 15:56:54,836 - werkzeug - INFO - 127.0.0.1 - - [05/Mar/2025 15:56:54] "GET /api/fighters HTTP/1.1" 200 -
+2025-03-05 15:56:55,468 - werkzeug - INFO - 127.0.0.1 - - [05/Mar/2025 15:56:55] "GET /api/fighters HTTP/1.1" 200 -
+2025-03-05 15:56:55,801 - werkzeug - INFO - 127.0.0.1 - - [05/Mar/2025 15:56:55] "GET /api/fighters HTTP/1.1" 200 -
+2025-03-05 15:56:59,593 - werkzeug - INFO - 127.0.0.1 - - [05/Mar/2025 15:56:59] "[33mGET /api/fighter/Aaron%20Phillips HTTP/1.1[0m" 404 -
+2025-03-05 15:57:06,589 - werkzeug - INFO - 127.0.0.1 - - [05/Mar/2025 15:57:06] "GET /api/fighters HTTP/1.1" 200 -
+2025-03-05 15:57:06,928 - werkzeug - INFO - 127.0.0.1 - - [05/Mar/2025 15:57:06] "GET /api/fighters HTTP/1.1" 200 -
+2025-03-05 15:57:09,511 - werkzeug - INFO - 127.0.0.1 - - [05/Mar/2025 15:57:09] "GET /api/fighters HTTP/1.1" 200 -
+2025-03-05 15:57:09,759 - werkzeug - INFO - 127.0.0.1 - - [05/Mar/2025 15:57:09] "GET /api/fighters HTTP/1.1" 200 -
+2025-03-05 15:57:12,803 - werkzeug - INFO - 127.0.0.1 - - [05/Mar/2025 15:57:12] "[33mGET /api/fighter/Abdul%20Razak%20Alhassan HTTP/1.1[0m" 404 -
+2025-03-05 16:12:12,429 - ufc_model - INFO - Training model...
+2025-03-05 16:12:12,484 - ufc_model - INFO - Loaded training data from C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\ufc_dataset.csv: 7439 rows, 95 columns
+2025-03-05 16:12:12,486 - ufc_model - INFO - Created fighter1_won column from 'winner' column
+2025-03-05 16:12:12,487 - ufc_model - INFO - Found 27 difference columns: ['kd_diff', 'sig_str_diff', 'sig_str_att_diff', 'sig_str_acc_diff', 'str_diff']...
+2025-03-05 16:12:12,487 - ufc_model - INFO - Selecting balanced feature set
+2025-03-05 16:12:12,487 - ufc_model - INFO - Selected 42 balanced features
+2025-03-05 16:12:12,488 - ufc_model - INFO - Starting position swap augmentation on dataset with 7439 rows
+2025-03-05 16:12:12,491 - ufc_model - INFO - Completed position swap augmentation. New dataset size: 14878 rows
+2025-03-05 16:12:12,492 - ufc_model - INFO - Applied position swap augmentation, new size: 14878
+2025-03-05 16:12:12,492 - ufc_model - INFO - Preparing training data
+2025-03-05 16:12:12,505 - ufc_model - INFO - Data split - Train: 9670, Val: 2232, Test: 2976
+2025-03-05 16:12:12,523 - ufc_model - INFO - Created dataloaders with 9670 training, 2232 validation, and 2976 test samples
+2025-03-05 16:13:02,686 - ufc_model - INFO - Training model...
+2025-03-05 16:13:02,739 - ufc_model - INFO - Loaded training data from C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\ufc_dataset.csv: 7439 rows, 95 columns
+2025-03-05 16:13:02,740 - ufc_model - INFO - Created fighter1_won column from 'winner' column
+2025-03-05 16:13:02,740 - ufc_model - INFO - Found 27 difference columns: ['kd_diff', 'sig_str_diff', 'sig_str_att_diff', 'sig_str_acc_diff', 'str_diff']...
+2025-03-05 16:13:02,740 - ufc_model - INFO - Selecting balanced feature set
+2025-03-05 16:13:02,741 - ufc_model - INFO - Selected 42 balanced features
+2025-03-05 16:13:02,742 - ufc_model - INFO - Starting position swap augmentation on dataset with 7439 rows
+2025-03-05 16:13:02,745 - ufc_model - INFO - Completed position swap augmentation. New dataset size: 14878 rows
+2025-03-05 16:13:02,745 - ufc_model - INFO - Applied position swap augmentation, new size: 14878
+2025-03-05 16:13:02,745 - ufc_model - INFO - Preparing training data
+2025-03-05 16:13:02,757 - ufc_model - INFO - Data split - Train: 9670, Val: 2232, Test: 2976
+2025-03-05 16:13:02,776 - ufc_model - INFO - Created dataloaders with 9670 training, 2232 validation, and 2976 test samples
+2025-03-05 16:17:37,151 - ufc_model - INFO - Training model...
+2025-03-05 16:17:37,205 - ufc_model - INFO - Loaded training data from C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\ufc_dataset.csv: 7439 rows, 95 columns
+2025-03-05 16:17:37,206 - ufc_model - INFO - Created fighter1_won column from 'winner' column
+2025-03-05 16:17:37,207 - ufc_model - INFO - Found 27 difference columns: ['kd_diff', 'sig_str_diff', 'sig_str_att_diff', 'sig_str_acc_diff', 'str_diff']...
+2025-03-05 16:17:37,207 - ufc_model - INFO - Selecting balanced feature set
+2025-03-05 16:17:37,207 - ufc_model - INFO - Selected 42 balanced features
+2025-03-05 16:17:37,209 - ufc_model - INFO - Starting position swap augmentation on dataset with 7439 rows
+2025-03-05 16:17:37,212 - ufc_model - INFO - Completed position swap augmentation. New dataset size: 14878 rows
+2025-03-05 16:17:37,212 - ufc_model - INFO - Applied position swap augmentation, new size: 14878
+2025-03-05 16:17:37,213 - ufc_model - INFO - Preparing training data
+2025-03-05 16:17:37,225 - ufc_model - INFO - Data split - Train: 9670, Val: 2232, Test: 2976
+2025-03-05 16:17:37,245 - ufc_model - INFO - Created dataloaders with 9670 training, 2232 validation, and 2976 test samples
+2025-03-05 16:17:37,248 - ufc_model - INFO - Training model for 300 epochs (lr=0.001, weight_decay=0.001)
+2025-03-05 16:17:37,249 - ufc_model - INFO - Using device: cpu
+2025-03-05 16:17:37,249 - ufc_model - INFO - Using Focal Loss for better handling of class imbalance
+2025-03-05 16:17:37,616 - ufc_model - INFO - Epoch 1/300, Train Loss: 0.0490, Val Loss: 0.0439, Val Accuracy: 0.4919, LR: 0.001000
+2025-03-05 16:17:37,618 - ufc_model - INFO - Saved improved model to C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\fight_predictor_model.pth
+2025-03-05 16:17:37,975 - ufc_model - INFO - Epoch 2/300, Train Loss: 0.0439, Val Loss: 0.0435, Val Accuracy: 0.4919, LR: 0.001000
+2025-03-05 16:17:37,977 - ufc_model - INFO - Saved improved model to C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\fight_predictor_model.pth
+2025-03-05 16:17:38,334 - ufc_model - INFO - Epoch 3/300, Train Loss: 0.0436, Val Loss: 0.0434, Val Accuracy: 0.4919, LR: 0.001000
+2025-03-05 16:17:38,336 - ufc_model - INFO - Saved improved model to C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\fight_predictor_model.pth
+2025-03-05 16:17:38,685 - ufc_model - INFO - Epoch 4/300, Train Loss: 0.0434, Val Loss: 0.0434, Val Accuracy: 0.4955, LR: 0.001000
+2025-03-05 16:17:38,687 - ufc_model - INFO - Saved improved model to C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\fight_predictor_model.pth
+2025-03-05 16:17:39,039 - ufc_model - INFO - Epoch 5/300, Train Loss: 0.0434, Val Loss: 0.0433, Val Accuracy: 0.4700, LR: 0.001000
+2025-03-05 16:17:39,040 - ufc_model - INFO - Saved improved model to C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\fight_predictor_model.pth
+2025-03-05 16:17:39,400 - ufc_model - INFO - Epoch 6/300, Train Loss: 0.0433, Val Loss: 0.0433, Val Accuracy: 0.5067, LR: 0.001000
+2025-03-05 16:17:39,401 - ufc_model - INFO - Saved improved model to C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\fight_predictor_model.pth
+2025-03-05 16:17:39,764 - ufc_model - INFO - Epoch 7/300, Train Loss: 0.0433, Val Loss: 0.0433, Val Accuracy: 0.4991, LR: 0.001000
+2025-03-05 16:17:40,124 - ufc_model - INFO - Epoch 8/300, Train Loss: 0.0433, Val Loss: 0.0433, Val Accuracy: 0.4991, LR: 0.001000
+2025-03-05 16:17:40,126 - ufc_model - INFO - Saved improved model to C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\fight_predictor_model.pth
+2025-03-05 16:17:40,482 - ufc_model - INFO - Epoch 9/300, Train Loss: 0.0433, Val Loss: 0.0433, Val Accuracy: 0.4996, LR: 0.001000
+2025-03-05 16:17:40,483 - ufc_model - INFO - Saved improved model to C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\fight_predictor_model.pth
+2025-03-05 16:17:40,837 - ufc_model - INFO - Epoch 10/300, Train Loss: 0.0433, Val Loss: 0.0433, Val Accuracy: 0.5000, LR: 0.001000
+2025-03-05 16:17:40,839 - ufc_model - INFO - Saved improved model to C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\fight_predictor_model.pth
+2025-03-05 16:17:41,194 - ufc_model - INFO - Epoch 11/300, Train Loss: 0.0433, Val Loss: 0.0433, Val Accuracy: 0.5000, LR: 0.001000
+2025-03-05 16:17:41,567 - ufc_model - INFO - Epoch 12/300, Train Loss: 0.0433, Val Loss: 0.0433, Val Accuracy: 0.5000, LR: 0.001000
+2025-03-05 16:17:41,923 - ufc_model - INFO - Epoch 13/300, Train Loss: 0.0433, Val Loss: 0.0433, Val Accuracy: 0.5000, LR: 0.001000
+2025-03-05 16:17:42,300 - ufc_model - INFO - Epoch 14/300, Train Loss: 0.0433, Val Loss: 0.0433, Val Accuracy: 0.5000, LR: 0.000500
+2025-03-05 16:17:42,301 - ufc_model - INFO - Saved improved model to C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\fight_predictor_model.pth
+2025-03-05 16:17:42,662 - ufc_model - INFO - Epoch 15/300, Train Loss: 0.0433, Val Loss: 0.0433, Val Accuracy: 0.5000, LR: 0.000500
+2025-03-05 16:17:42,664 - ufc_model - INFO - Saved improved model to C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\fight_predictor_model.pth
+2025-03-05 16:17:43,022 - ufc_model - INFO - Epoch 16/300, Train Loss: 0.0433, Val Loss: 0.0433, Val Accuracy: 0.5000, LR: 0.000500
+2025-03-05 16:17:43,400 - ufc_model - INFO - Epoch 17/300, Train Loss: 0.0433, Val Loss: 0.0433, Val Accuracy: 0.5000, LR: 0.000500
+2025-03-05 16:17:43,772 - ufc_model - INFO - Epoch 18/300, Train Loss: 0.0433, Val Loss: 0.0433, Val Accuracy: 0.5000, LR: 0.000500
+2025-03-05 16:17:43,774 - ufc_model - INFO - Saved improved model to C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\fight_predictor_model.pth
+2025-03-05 16:17:44,149 - ufc_model - INFO - Epoch 19/300, Train Loss: 0.0433, Val Loss: 0.0433, Val Accuracy: 0.5000, LR: 0.000500
+2025-03-05 16:17:44,150 - ufc_model - INFO - Saved improved model to C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\fight_predictor_model.pth
+2025-03-05 16:17:44,528 - ufc_model - INFO - Epoch 20/300, Train Loss: 0.0433, Val Loss: 0.0433, Val Accuracy: 0.5000, LR: 0.000250
+2025-03-05 16:17:44,885 - ufc_model - INFO - Epoch 21/300, Train Loss: 0.0433, Val Loss: 0.0433, Val Accuracy: 0.5000, LR: 0.000250
+2025-03-05 16:17:45,245 - ufc_model - INFO - Epoch 22/300, Train Loss: 0.0433, Val Loss: 0.0433, Val Accuracy: 0.5000, LR: 0.000250
+2025-03-05 16:17:45,612 - ufc_model - INFO - Epoch 23/300, Train Loss: 0.0433, Val Loss: 0.0433, Val Accuracy: 0.5000, LR: 0.000250
+2025-03-05 16:17:45,977 - ufc_model - INFO - Epoch 24/300, Train Loss: 0.0433, Val Loss: 0.0433, Val Accuracy: 0.5000, LR: 0.000250
+2025-03-05 16:17:46,349 - ufc_model - INFO - Epoch 25/300, Train Loss: 0.0433, Val Loss: 0.0433, Val Accuracy: 0.5000, LR: 0.000250
+2025-03-05 16:17:46,717 - ufc_model - INFO - Epoch 26/300, Train Loss: 0.0433, Val Loss: 0.0433, Val Accuracy: 0.5000, LR: 0.000125
+2025-03-05 16:17:47,111 - ufc_model - INFO - Epoch 27/300, Train Loss: 0.0433, Val Loss: 0.0433, Val Accuracy: 0.5000, LR: 0.000125
+2025-03-05 16:17:47,525 - ufc_model - INFO - Epoch 28/300, Train Loss: 0.0433, Val Loss: 0.0433, Val Accuracy: 0.5000, LR: 0.000125
+2025-03-05 16:17:47,937 - ufc_model - INFO - Epoch 29/300, Train Loss: 0.0433, Val Loss: 0.0433, Val Accuracy: 0.5000, LR: 0.000125
+2025-03-05 16:17:48,334 - ufc_model - INFO - Epoch 30/300, Train Loss: 0.0433, Val Loss: 0.0433, Val Accuracy: 0.5000, LR: 0.000125
+2025-03-05 16:17:48,685 - ufc_model - INFO - Epoch 31/300, Train Loss: 0.0433, Val Loss: 0.0433, Val Accuracy: 0.5000, LR: 0.000125
+2025-03-05 16:17:49,049 - ufc_model - INFO - Epoch 32/300, Train Loss: 0.0433, Val Loss: 0.0433, Val Accuracy: 0.5000, LR: 0.000063
+2025-03-05 16:17:49,406 - ufc_model - INFO - Epoch 33/300, Train Loss: 0.0433, Val Loss: 0.0433, Val Accuracy: 0.5000, LR: 0.000063
+2025-03-05 16:17:49,757 - ufc_model - INFO - Epoch 34/300, Train Loss: 0.0433, Val Loss: 0.0433, Val Accuracy: 0.5000, LR: 0.000063
+2025-03-05 16:17:49,757 - ufc_model - INFO - Early stopping after 34 epochs
+2025-03-05 16:17:49,760 - ufc_model - INFO - Saved training history to C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\training_history.csv
+2025-03-05 16:17:49,760 - ufc_model - INFO - Evaluating model on test set
+2025-03-05 16:17:49,787 - ufc_model - INFO - Test Metrics:
+2025-03-05 16:17:49,787 - ufc_model - INFO - Accuracy: 0.5000
+2025-03-05 16:17:49,787 - ufc_model - INFO - Precision: 0.5000
+2025-03-05 16:17:49,788 - ufc_model - INFO - Recall: 1.0000
+2025-03-05 16:17:49,788 - ufc_model - INFO - F1 Score: 0.6667
+2025-03-05 16:17:49,789 - ufc_model - INFO - ROC AUC: 0.5000
+2025-03-05 16:17:50,002 - ufc_model - INFO - Saved confusion matrix to C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\confusion_matrix.png
+2025-03-05 16:17:50,002 - ufc_model - INFO - Model trained successfully and saved to C:\Users\mo100\Desktop\UFC-FIGHTPREDICTOR\backend\data\fight_predictor_model.pth
+2025-03-05 16:17:50,003 - ufc_model - INFO - Test metrics: {'accuracy': 0.5, 'precision': 0.5, 'recall': 1.0, 'f1': 0.6666666666666666, 'auc': 0.5}
+2025-03-05 17:25:41,458 - ufc_main - INFO - Loading data from data\ufc_dataset.csv
+2025-03-05 17:25:41,528 - ufc_main - INFO - Dataset loaded: 7439 rows, 95 columns
+2025-03-05 17:25:41,532 - ufc_main - INFO - Created 'fighter1_won' from 'winner'
+2025-03-05 17:25:41,535 - ufc_main - INFO - Filling missing values in total_rounds
+2025-03-05 17:25:41,538 - ufc_main - INFO - Filling missing values in r_age
+2025-03-05 17:25:41,539 - ufc_main - INFO - Filling missing values in r_reach
+2025-03-05 17:25:41,540 - ufc_main - INFO - Filling missing values in b_age
+2025-03-05 17:25:41,541 - ufc_main - INFO - Filling missing values in b_reach
+2025-03-05 17:25:41,543 - ufc_main - INFO - Filling missing values in age_diff
+2025-03-05 17:25:41,544 - ufc_main - INFO - Filling missing values in reach_diff
+2025-03-05 17:25:41,553 - ufc_main - INFO - Applying enhanced feature engineering
+2025-03-05 17:25:41,553 - ufc_model - INFO - Performing enhanced feature engineering
+2025-03-05 17:25:41,555 - ufc_model - INFO - Using 27 difference columns for bias reduction
+2025-03-05 17:25:41,585 - ufc_model - INFO - Enhanced feature engineering complete. Added 25 new features
+2025-03-05 17:25:41,591 - ufc_main - INFO - Keeping 111 numeric features
+2025-03-05 17:25:41,592 - ufc_main - INFO - Applying position swap augmentation
+2025-03-05 17:25:41,592 - ufc_model - INFO - Starting position swap augmentation on dataset with 7439 rows
+2025-03-05 17:25:41,615 - ufc_model - INFO - Completed position swap augmentation. New dataset size: 14878 rows
+2025-03-05 17:25:41,617 - ufc_main - INFO - Data augmented: 14878 rows
+2025-03-05 17:25:41,617 - ufc_model - INFO - Preparing training data
+2025-03-05 17:25:41,684 - ufc_model - INFO - Data split - Train: 9670, Val: 2232, Test: 2976
+2025-03-05 17:25:41,688 - ufc_main - INFO - Performing feature selection
+2025-03-05 17:25:41,689 - ufc_model - INFO - Selecting optimal features
+2025-03-05 17:26:00,646 - ufc_model - INFO - Selected 108 optimal features out of 110
+2025-03-05 17:26:00,646 - ufc_model - INFO - Top 20 features by importance:
+1. sig_str_diff: 0.1878
+2. str_diff: 0.1082
+3. sub_att_diff: 0.0614
+4. kd_diff: 0.0515
+5. ctrl_sec_diff: 0.0446
+6. b_kd: 0.0315
+7. win_rate_diff: 0.0233
+8. r_kd: 0.0231
+9. str_att_diff: 0.0199
+10. sig_str_acc_diff: 0.0198
+11. time_sec: 0.0185
+12. r_str: 0.0173
+13. td_diff: 0.0145
+14. sig_str_att_diff: 0.0135
+15. str_acc_diff: 0.0113
+16. b_str: 0.0104
+17. wins_total_diff: 0.0104
+18. b_sub_att: 0.0103
+19. finish_round: 0.0101
+20. b_ctrl_sec: 0.0096
+2025-03-05 17:26:00,653 - ufc_main - INFO - Selected 108 features
+2025-03-05 17:26:00,653 - ufc_main - INFO - Training ensemble model
+2025-03-05 17:26:00,653 - ufc_model - INFO - Training ensemble model
+2025-03-05 17:26:00,653 - ufc_model - INFO - Training XGBoost model
+2025-03-05 17:27:35,942 - ufc_main - INFO - Loading data from data\ufc_dataset.csv
+2025-03-05 17:27:35,994 - ufc_main - INFO - Dataset loaded: 7439 rows, 95 columns
+2025-03-05 17:27:35,996 - ufc_main - INFO - Created 'fighter1_won' from 'winner'
+2025-03-05 17:27:35,998 - ufc_main - INFO - Filling missing values in total_rounds
+2025-03-05 17:27:36,000 - ufc_main - INFO - Filling missing values in r_age
+2025-03-05 17:27:36,000 - ufc_main - INFO - Filling missing values in r_reach
+2025-03-05 17:27:36,002 - ufc_main - INFO - Filling missing values in b_age
+2025-03-05 17:27:36,002 - ufc_main - INFO - Filling missing values in b_reach
+2025-03-05 17:27:36,004 - ufc_main - INFO - Filling missing values in age_diff
+2025-03-05 17:27:36,004 - ufc_main - INFO - Filling missing values in reach_diff
+2025-03-05 17:27:36,009 - ufc_main - INFO - Applying enhanced feature engineering
+2025-03-05 17:27:36,009 - ufc_model - INFO - Performing enhanced feature engineering
+2025-03-05 17:27:36,011 - ufc_model - INFO - Using 27 difference columns for bias reduction
+2025-03-05 17:27:36,054 - ufc_model - INFO - Enhanced feature engineering complete. Added 25 new features
+2025-03-05 17:27:36,058 - ufc_main - INFO - Keeping 111 numeric features
+2025-03-05 17:27:36,058 - ufc_main - INFO - Applying position swap augmentation
+2025-03-05 17:27:36,058 - ufc_model - INFO - Starting position swap augmentation on dataset with 7439 rows
+2025-03-05 17:27:36,079 - ufc_model - INFO - Completed position swap augmentation. New dataset size: 14878 rows
+2025-03-05 17:27:36,080 - ufc_main - INFO - Data augmented: 14878 rows
+2025-03-05 17:27:36,080 - ufc_model - INFO - Preparing training data
+2025-03-05 17:27:36,133 - ufc_model - INFO - Data split - Train: 9670, Val: 2232, Test: 2976
+2025-03-05 17:27:36,136 - ufc_main - INFO - Performing feature selection
+2025-03-05 17:27:36,137 - ufc_model - INFO - Selecting optimal features
+2025-03-05 17:27:54,358 - ufc_model - INFO - Selected 108 optimal features out of 110
+2025-03-05 17:27:54,358 - ufc_model - INFO - Top 20 features by importance:
+1. sig_str_diff: 0.1878
+2. str_diff: 0.1082
+3. sub_att_diff: 0.0614
+4. kd_diff: 0.0515
+5. ctrl_sec_diff: 0.0446
+6. b_kd: 0.0315
+7. win_rate_diff: 0.0233
+8. r_kd: 0.0231
+9. str_att_diff: 0.0199
+10. sig_str_acc_diff: 0.0198
+11. time_sec: 0.0185
+12. r_str: 0.0173
+13. td_diff: 0.0145
+14. sig_str_att_diff: 0.0135
+15. str_acc_diff: 0.0113
+16. b_str: 0.0104
+17. wins_total_diff: 0.0104
+18. b_sub_att: 0.0103
+19. finish_round: 0.0101
+20. b_ctrl_sec: 0.0096
+2025-03-05 17:27:54,364 - ufc_main - INFO - Selected 108 features
+2025-03-05 17:27:54,364 - ufc_main - INFO - Training ensemble model
+2025-03-05 17:27:54,364 - ufc_model - INFO - Training ensemble model
+2025-03-05 17:27:54,364 - ufc_model - INFO - Training XGBoost model
+2025-03-05 17:27:54,943 - ufc_model - INFO - XGBoost - Val Accuracy: 0.9046, AUC: 0.9673
+2025-03-05 17:27:54,943 - ufc_model - INFO - Training Random Forest model
+2025-03-05 17:27:56,312 - ufc_model - INFO - Random Forest - Val Accuracy: 0.8920, AUC: 0.9545
+2025-03-05 17:27:56,312 - ufc_model - INFO - Training Gradient Boosting model
+2025-03-05 17:28:33,923 - ufc_model - INFO - Gradient Boosting - Val Accuracy: 0.9041, AUC: 0.9658
+2025-03-05 17:28:33,923 - ufc_model - INFO - Training Logistic Regression model
+2025-03-05 17:28:34,654 - ufc_model - INFO - Logistic Regression - Val Accuracy: 0.8934, AUC: 0.9520
+2025-03-05 17:28:34,752 - ufc_model - INFO - Ensemble - Val Accuracy: 0.8983, AUC: 0.9647
+2025-03-05 17:28:34,752 - ufc_model - INFO - Evaluating model on test data
+2025-03-05 17:28:34,895 - ufc_model - INFO - Test Metrics:
+2025-03-05 17:28:34,895 - ufc_model - INFO - Accuracy: 0.8985
+2025-03-05 17:28:34,895 - ufc_model - INFO - Precision: 0.9012
+2025-03-05 17:28:34,895 - ufc_model - INFO - Recall: 0.8952
+2025-03-05 17:28:34,896 - ufc_model - INFO - F1 Score: 0.8982
+2025-03-05 17:28:34,896 - ufc_model - INFO - ROC AUC: 0.9655
+2025-03-05 17:28:34,896 - ufc_model - INFO - Confusion Matrix:
+[[1342  146]
+ [ 156 1332]]
+2025-03-05 17:28:34,896 - ufc_model - INFO - Saving model to models\ensemble_model.joblib
+2025-03-05 17:28:35,004 - ufc_model - INFO - Model and associated data saved successfully
+2025-03-05 17:28:35,004 - ufc_main - INFO - Ensemble model saved to models\ensemble_model.joblib
+2025-03-05 17:28:35,004 - ufc_main - INFO - Ensemble model accuracy: 0.8985
+2025-03-05 17:28:35,005 - ufc_main - INFO - Training PyTorch model
+2025-03-05 17:28:35,005 - ufc_model - INFO - Training PyTorch neural network model
+2025-03-05 17:28:35,034 - ufc_model - INFO - Using Focal Loss
+2025-03-05 17:28:36,137 - ufc_model - INFO - Epoch 1/100 - Train Loss: 0.0374, Val Loss: 0.0202, Val Acc: 0.8692, Val AUC: 0.9444, LR: 0.001000
+2025-03-05 17:28:37,002 - ufc_model - INFO - Epoch 2/100 - Train Loss: 0.0250, Val Loss: 0.0189, Val Acc: 0.8750, Val AUC: 0.9506, LR: 0.001000
+2025-03-05 17:28:37,616 - ufc_model - INFO - Epoch 3/100 - Train Loss: 0.0216, Val Loss: 0.0181, Val Acc: 0.8858, Val AUC: 0.9552, LR: 0.001000
+2025-03-05 17:28:38,222 - ufc_model - INFO - Epoch 4/100 - Train Loss: 0.0200, Val Loss: 0.0174, Val Acc: 0.8911, Val AUC: 0.9589, LR: 0.001000
+2025-03-05 17:28:38,867 - ufc_model - INFO - Epoch 5/100 - Train Loss: 0.0193, Val Loss: 0.0170, Val Acc: 0.8925, Val AUC: 0.9610, LR: 0.001000
+2025-03-05 17:28:39,492 - ufc_model - INFO - Epoch 6/100 - Train Loss: 0.0185, Val Loss: 0.0174, Val Acc: 0.8907, Val AUC: 0.9582, LR: 0.001000
+2025-03-05 17:28:40,088 - ufc_model - INFO - Epoch 7/100 - Train Loss: 0.0180, Val Loss: 0.0172, Val Acc: 0.8965, Val AUC: 0.9618, LR: 0.001000
+2025-03-05 17:28:40,698 - ufc_model - INFO - Epoch 8/100 - Train Loss: 0.0175, Val Loss: 0.0164, Val Acc: 0.9010, Val AUC: 0.9637, LR: 0.001000
+2025-03-05 17:28:41,337 - ufc_model - INFO - Epoch 9/100 - Train Loss: 0.0178, Val Loss: 0.0168, Val Acc: 0.8956, Val AUC: 0.9609, LR: 0.001000
+2025-03-05 17:28:41,947 - ufc_model - INFO - Epoch 10/100 - Train Loss: 0.0172, Val Loss: 0.0167, Val Acc: 0.8996, Val AUC: 0.9619, LR: 0.001000
+2025-03-05 17:28:42,555 - ufc_model - INFO - Epoch 11/100 - Train Loss: 0.0170, Val Loss: 0.0167, Val Acc: 0.8943, Val AUC: 0.9622, LR: 0.001000
+2025-03-05 17:28:43,157 - ufc_model - INFO - Epoch 12/100 - Train Loss: 0.0168, Val Loss: 0.0166, Val Acc: 0.8952, Val AUC: 0.9626, LR: 0.001000
+2025-03-05 17:28:43,765 - ufc_model - INFO - Epoch 13/100 - Train Loss: 0.0168, Val Loss: 0.0167, Val Acc: 0.8974, Val AUC: 0.9622, LR: 0.001000
+2025-03-05 17:28:44,363 - ufc_model - INFO - Epoch 14/100 - Train Loss: 0.0170, Val Loss: 0.0170, Val Acc: 0.8929, Val AUC: 0.9604, LR: 0.000500
+2025-03-05 17:28:44,949 - ufc_model - INFO - Epoch 15/100 - Train Loss: 0.0155, Val Loss: 0.0160, Val Acc: 0.9010, Val AUC: 0.9647, LR: 0.000500
+2025-03-05 17:28:45,546 - ufc_model - INFO - Epoch 16/100 - Train Loss: 0.0153, Val Loss: 0.0158, Val Acc: 0.9041, Val AUC: 0.9656, LR: 0.000500
+2025-03-05 17:28:46,169 - ufc_model - INFO - Epoch 17/100 - Train Loss: 0.0154, Val Loss: 0.0157, Val Acc: 0.9055, Val AUC: 0.9661, LR: 0.000500
+2025-03-05 17:28:46,775 - ufc_model - INFO - Epoch 18/100 - Train Loss: 0.0151, Val Loss: 0.0165, Val Acc: 0.8996, Val AUC: 0.9622, LR: 0.000500
+2025-03-05 17:28:47,390 - ufc_model - INFO - Epoch 19/100 - Train Loss: 0.0153, Val Loss: 0.0160, Val Acc: 0.9001, Val AUC: 0.9648, LR: 0.000500
+2025-03-05 17:28:47,985 - ufc_model - INFO - Epoch 20/100 - Train Loss: 0.0149, Val Loss: 0.0156, Val Acc: 0.9037, Val AUC: 0.9666, LR: 0.000500
+2025-03-05 17:28:48,579 - ufc_model - INFO - Epoch 21/100 - Train Loss: 0.0153, Val Loss: 0.0156, Val Acc: 0.9041, Val AUC: 0.9664, LR: 0.000500
+2025-03-05 17:28:49,183 - ufc_model - INFO - Epoch 22/100 - Train Loss: 0.0146, Val Loss: 0.0159, Val Acc: 0.9005, Val AUC: 0.9662, LR: 0.000500
+2025-03-05 17:28:49,804 - ufc_model - INFO - Epoch 23/100 - Train Loss: 0.0148, Val Loss: 0.0160, Val Acc: 0.9023, Val AUC: 0.9646, LR: 0.000500
+2025-03-05 17:28:50,399 - ufc_model - INFO - Epoch 24/100 - Train Loss: 0.0143, Val Loss: 0.0164, Val Acc: 0.8992, Val AUC: 0.9630, LR: 0.000500
+2025-03-05 17:28:51,033 - ufc_model - INFO - Epoch 25/100 - Train Loss: 0.0145, Val Loss: 0.0162, Val Acc: 0.9037, Val AUC: 0.9640, LR: 0.000500
+2025-03-05 17:28:51,620 - ufc_model - INFO - Epoch 26/100 - Train Loss: 0.0150, Val Loss: 0.0160, Val Acc: 0.9005, Val AUC: 0.9660, LR: 0.000500
+2025-03-05 17:28:52,201 - ufc_model - INFO - Epoch 27/100 - Train Loss: 0.0145, Val Loss: 0.0158, Val Acc: 0.8974, Val AUC: 0.9659, LR: 0.000250
+2025-03-05 17:28:52,779 - ufc_model - INFO - Epoch 28/100 - Train Loss: 0.0135, Val Loss: 0.0160, Val Acc: 0.9014, Val AUC: 0.9651, LR: 0.000250
+2025-03-05 17:28:53,355 - ufc_model - INFO - Epoch 29/100 - Train Loss: 0.0132, Val Loss: 0.0162, Val Acc: 0.8961, Val AUC: 0.9649, LR: 0.000250
+2025-03-05 17:28:53,925 - ufc_model - INFO - Epoch 30/100 - Train Loss: 0.0129, Val Loss: 0.0173, Val Acc: 0.8920, Val AUC: 0.9644, LR: 0.000250
+2025-03-05 17:28:54,497 - ufc_model - INFO - Epoch 31/100 - Train Loss: 0.0130, Val Loss: 0.0164, Val Acc: 0.9023, Val AUC: 0.9652, LR: 0.000250
+2025-03-05 17:28:55,071 - ufc_model - INFO - Epoch 32/100 - Train Loss: 0.0130, Val Loss: 0.0161, Val Acc: 0.9037, Val AUC: 0.9652, LR: 0.000250
+2025-03-05 17:28:55,636 - ufc_model - INFO - Epoch 33/100 - Train Loss: 0.0128, Val Loss: 0.0159, Val Acc: 0.8970, Val AUC: 0.9665, LR: 0.000125
+2025-03-05 17:28:56,211 - ufc_model - INFO - Epoch 34/100 - Train Loss: 0.0118, Val Loss: 0.0160, Val Acc: 0.9055, Val AUC: 0.9657, LR: 0.000125
+2025-03-05 17:28:56,786 - ufc_model - INFO - Epoch 35/100 - Train Loss: 0.0118, Val Loss: 0.0168, Val Acc: 0.8929, Val AUC: 0.9662, LR: 0.000125
+2025-03-05 17:28:57,362 - ufc_model - INFO - Epoch 36/100 - Train Loss: 0.0118, Val Loss: 0.0162, Val Acc: 0.9059, Val AUC: 0.9662, LR: 0.000125
+2025-03-05 17:28:57,363 - ufc_model - INFO - Early stopping at epoch 36
+2025-03-05 17:28:57,643 - ufc_model - INFO - Evaluating model on test data
+2025-03-05 17:28:57,654 - ufc_model - INFO - Test Metrics:
+2025-03-05 17:28:57,655 - ufc_model - INFO - Accuracy: 0.9103
+2025-03-05 17:28:57,655 - ufc_model - INFO - Precision: 0.9111
+2025-03-05 17:28:57,655 - ufc_model - INFO - Recall: 0.9093
+2025-03-05 17:28:57,655 - ufc_model - INFO - F1 Score: 0.9102
+2025-03-05 17:28:57,655 - ufc_model - INFO - ROC AUC: 0.9680
+2025-03-05 17:28:57,656 - ufc_model - INFO - Confusion Matrix:
+[[1356  132]
+ [ 135 1353]]
+2025-03-05 17:28:57,656 - ufc_model - INFO - Saving model to models\pytorch_model.pth
+2025-03-05 17:28:57,660 - ufc_model - INFO - Model and associated data saved successfully
+2025-03-05 17:28:57,660 - ufc_main - INFO - PyTorch model saved to models\pytorch_model.pth
+2025-03-05 17:28:57,660 - ufc_main - INFO - PyTorch model accuracy: 0.9103
+2025-03-05 17:28:57,660 - ufc_main - INFO - Comparing models:
+2025-03-05 17:28:57,660 - ufc_main - INFO - Ensemble model accuracy: 0.8985
+2025-03-05 17:28:57,660 - ufc_main - INFO - PyTorch model accuracy: 0.9103
+2025-03-05 17:28:57,662 - ufc_main - INFO - PyTorch model performed better
+2025-03-05 17:28:57,667 - ufc_main - INFO - Training complete. Best model: models\pytorch_model.pth
+2025-03-05 17:28:57,667 - ufc_model - INFO - Loading model from models\pytorch_model.pth
+2025-03-05 17:28:57,743 - ufc_model - INFO - Model loaded successfully with 108 features
+2025-03-05 17:28:57,744 - ufc_model - INFO - Predicting fight outcome with bias mitigation
+2025-03-05 17:32:01,050 - ufc_main - INFO - Loading data from data\ufc_dataset.csv
+2025-03-05 17:32:01,105 - ufc_main - INFO - Dataset loaded: 7439 rows, 95 columns
+2025-03-05 17:32:01,106 - ufc_main - INFO - Created 'fighter1_won' from 'winner'
+2025-03-05 17:32:01,107 - ufc_main - INFO - Filling missing values in total_rounds
+2025-03-05 17:32:01,109 - ufc_main - INFO - Filling missing values in r_age
+2025-03-05 17:32:01,110 - ufc_main - INFO - Filling missing values in r_reach
+2025-03-05 17:32:01,112 - ufc_main - INFO - Filling missing values in b_age
+2025-03-05 17:32:01,112 - ufc_main - INFO - Filling missing values in b_reach
+2025-03-05 17:32:01,114 - ufc_main - INFO - Filling missing values in age_diff
+2025-03-05 17:32:01,114 - ufc_main - INFO - Filling missing values in reach_diff
+2025-03-05 17:32:01,119 - ufc_main - INFO - Applying enhanced feature engineering
+2025-03-05 17:32:01,119 - ufc_model - INFO - Performing enhanced feature engineering
+2025-03-05 17:32:01,121 - ufc_model - INFO - Using 27 difference columns for bias reduction
+2025-03-05 17:32:01,149 - ufc_model - INFO - Enhanced feature engineering complete. Added 25 new features
+2025-03-05 17:32:01,154 - ufc_main - INFO - Keeping 111 numeric features
+2025-03-05 17:32:01,154 - ufc_main - INFO - Applying position swap augmentation
+2025-03-05 17:32:01,154 - ufc_model - INFO - Starting position swap augmentation on dataset with 7439 rows
+2025-03-05 17:32:01,176 - ufc_model - INFO - Completed position swap augmentation. New dataset size: 14878 rows
+2025-03-05 17:32:01,177 - ufc_main - INFO - Data augmented: 14878 rows
+2025-03-05 17:32:01,177 - ufc_model - INFO - Preparing training data
+2025-03-05 17:32:01,230 - ufc_model - INFO - Data split - Train: 9670, Val: 2232, Test: 2976
+2025-03-05 17:32:01,233 - ufc_main - INFO - Performing feature selection
+2025-03-05 17:32:01,233 - ufc_model - INFO - Selecting optimal features
+2025-03-05 17:32:19,478 - ufc_model - INFO - Selected 108 optimal features out of 110
+2025-03-05 17:32:19,479 - ufc_model - INFO - Top 20 features by importance:
+1. sig_str_diff: 0.1878
+2. str_diff: 0.1082
+3. sub_att_diff: 0.0614
+4. kd_diff: 0.0515
+5. ctrl_sec_diff: 0.0446
+6. b_kd: 0.0315
+7. win_rate_diff: 0.0233
+8. r_kd: 0.0231
+9. str_att_diff: 0.0199
+10. sig_str_acc_diff: 0.0198
+11. time_sec: 0.0185
+12. r_str: 0.0173
+13. td_diff: 0.0145
+14. sig_str_att_diff: 0.0135
+15. str_acc_diff: 0.0113
+16. b_str: 0.0104
+17. wins_total_diff: 0.0104
+18. b_sub_att: 0.0103
+19. finish_round: 0.0101
+20. b_ctrl_sec: 0.0096
+2025-03-05 17:32:19,484 - ufc_main - INFO - Selected 108 features
+2025-03-05 17:32:19,484 - ufc_main - INFO - Training ensemble model
+2025-03-05 17:32:19,485 - ufc_model - INFO - Training ensemble model
+2025-03-05 17:32:19,485 - ufc_model - INFO - Training XGBoost model
+2025-03-05 17:32:20,050 - ufc_model - INFO - XGBoost - Val Accuracy: 0.9046, AUC: 0.9673
+2025-03-05 17:32:20,050 - ufc_model - INFO - Training Random Forest model
+2025-03-05 17:32:21,398 - ufc_model - INFO - Random Forest - Val Accuracy: 0.8920, AUC: 0.9545
+2025-03-05 17:32:21,398 - ufc_model - INFO - Training Gradient Boosting model
+2025-03-05 17:32:57,210 - ufc_model - INFO - Gradient Boosting - Val Accuracy: 0.9041, AUC: 0.9658
+2025-03-05 17:32:57,211 - ufc_model - INFO - Training Logistic Regression model
+2025-03-05 17:32:57,679 - ufc_model - INFO - Logistic Regression - Val Accuracy: 0.8934, AUC: 0.9520
+2025-03-05 17:32:57,766 - ufc_model - INFO - Ensemble - Val Accuracy: 0.8983, AUC: 0.9647
+2025-03-05 17:32:57,766 - ufc_model - INFO - Evaluating model on test data
+2025-03-05 17:32:57,880 - ufc_model - INFO - Test Metrics:
+2025-03-05 17:32:57,880 - ufc_model - INFO - Accuracy: 0.8985
+2025-03-05 17:32:57,881 - ufc_model - INFO - Precision: 0.9012
+2025-03-05 17:32:57,881 - ufc_model - INFO - Recall: 0.8952
+2025-03-05 17:32:57,881 - ufc_model - INFO - F1 Score: 0.8982
+2025-03-05 17:32:57,881 - ufc_model - INFO - ROC AUC: 0.9655
+2025-03-05 17:32:57,881 - ufc_model - INFO - Confusion Matrix:
+[[1342  146]
+ [ 156 1332]]
+2025-03-05 17:32:57,882 - ufc_model - INFO - Saving model to models\ensemble_model.joblib
+2025-03-05 17:32:57,966 - ufc_model - INFO - Model and associated data saved successfully
+2025-03-05 17:32:57,966 - ufc_main - INFO - Ensemble model saved to models\ensemble_model.joblib
+2025-03-05 17:32:57,967 - ufc_main - INFO - Ensemble model accuracy: 0.8985
+2025-03-05 17:32:57,967 - ufc_main - INFO - Training PyTorch model
+2025-03-05 17:32:57,967 - ufc_model - INFO - Training PyTorch neural network model
+2025-03-05 17:32:57,972 - ufc_model - INFO - Using Focal Loss
+2025-03-05 17:32:58,557 - ufc_model - INFO - Epoch 1/100 - Train Loss: 0.0399, Val Loss: 0.0205, Val Acc: 0.8674, Val AUC: 0.9420, LR: 0.001000
+2025-03-05 17:32:59,149 - ufc_model - INFO - Epoch 2/100 - Train Loss: 0.0248, Val Loss: 0.0191, Val Acc: 0.8759, Val AUC: 0.9496, LR: 0.001000
+2025-03-05 17:32:59,736 - ufc_model - INFO - Epoch 3/100 - Train Loss: 0.0217, Val Loss: 0.0189, Val Acc: 0.8804, Val AUC: 0.9535, LR: 0.001000
+2025-03-05 17:33:00,310 - ufc_model - INFO - Epoch 4/100 - Train Loss: 0.0198, Val Loss: 0.0180, Val Acc: 0.8884, Val AUC: 0.9560, LR: 0.001000
+2025-03-05 17:33:00,873 - ufc_model - INFO - Epoch 5/100 - Train Loss: 0.0190, Val Loss: 0.0175, Val Acc: 0.8934, Val AUC: 0.9593, LR: 0.001000
+2025-03-05 17:33:01,438 - ufc_model - INFO - Epoch 6/100 - Train Loss: 0.0185, Val Loss: 0.0171, Val Acc: 0.8961, Val AUC: 0.9601, LR: 0.001000
+2025-03-05 17:33:02,019 - ufc_model - INFO - Epoch 7/100 - Train Loss: 0.0177, Val Loss: 0.0171, Val Acc: 0.8938, Val AUC: 0.9608, LR: 0.001000
+2025-03-05 17:33:02,600 - ufc_model - INFO - Epoch 8/100 - Train Loss: 0.0175, Val Loss: 0.0170, Val Acc: 0.8907, Val AUC: 0.9600, LR: 0.001000
+2025-03-05 17:33:03,179 - ufc_model - INFO - Epoch 9/100 - Train Loss: 0.0175, Val Loss: 0.0164, Val Acc: 0.8929, Val AUC: 0.9627, LR: 0.001000
+2025-03-05 17:33:03,761 - ufc_model - INFO - Epoch 10/100 - Train Loss: 0.0170, Val Loss: 0.0165, Val Acc: 0.8956, Val AUC: 0.9645, LR: 0.001000
+2025-03-05 17:33:04,346 - ufc_model - INFO - Epoch 11/100 - Train Loss: 0.0171, Val Loss: 0.0165, Val Acc: 0.8983, Val AUC: 0.9640, LR: 0.001000
+2025-03-05 17:33:04,921 - ufc_model - INFO - Epoch 12/100 - Train Loss: 0.0170, Val Loss: 0.0162, Val Acc: 0.8961, Val AUC: 0.9641, LR: 0.001000
+2025-03-05 17:33:05,504 - ufc_model - INFO - Epoch 13/100 - Train Loss: 0.0167, Val Loss: 0.0169, Val Acc: 0.8929, Val AUC: 0.9638, LR: 0.001000
+2025-03-05 17:33:06,081 - ufc_model - INFO - Epoch 14/100 - Train Loss: 0.0166, Val Loss: 0.0169, Val Acc: 0.8952, Val AUC: 0.9605, LR: 0.001000
+2025-03-05 17:33:06,658 - ufc_model - INFO - Epoch 15/100 - Train Loss: 0.0170, Val Loss: 0.0162, Val Acc: 0.9001, Val AUC: 0.9641, LR: 0.001000
+2025-03-05 17:33:07,240 - ufc_model - INFO - Epoch 16/100 - Train Loss: 0.0165, Val Loss: 0.0163, Val Acc: 0.8983, Val AUC: 0.9631, LR: 0.001000
+2025-03-05 17:33:07,795 - ufc_model - INFO - Epoch 17/100 - Train Loss: 0.0161, Val Loss: 0.0164, Val Acc: 0.8992, Val AUC: 0.9629, LR: 0.001000
+2025-03-05 17:33:08,360 - ufc_model - INFO - Epoch 18/100 - Train Loss: 0.0165, Val Loss: 0.0161, Val Acc: 0.8987, Val AUC: 0.9650, LR: 0.001000
+2025-03-05 17:33:08,936 - ufc_model - INFO - Epoch 19/100 - Train Loss: 0.0159, Val Loss: 0.0164, Val Acc: 0.8961, Val AUC: 0.9631, LR: 0.001000
+2025-03-05 17:33:09,539 - ufc_model - INFO - Epoch 20/100 - Train Loss: 0.0161, Val Loss: 0.0165, Val Acc: 0.8947, Val AUC: 0.9618, LR: 0.001000
+2025-03-05 17:33:10,115 - ufc_model - INFO - Epoch 21/100 - Train Loss: 0.0163, Val Loss: 0.0167, Val Acc: 0.8956, Val AUC: 0.9620, LR: 0.001000
+2025-03-05 17:33:10,663 - ufc_model - INFO - Epoch 22/100 - Train Loss: 0.0163, Val Loss: 0.0164, Val Acc: 0.8965, Val AUC: 0.9648, LR: 0.001000
+2025-03-05 17:33:11,212 - ufc_model - INFO - Epoch 23/100 - Train Loss: 0.0160, Val Loss: 0.0162, Val Acc: 0.8974, Val AUC: 0.9645, LR: 0.001000
+2025-03-05 17:33:11,782 - ufc_model - INFO - Epoch 24/100 - Train Loss: 0.0162, Val Loss: 0.0167, Val Acc: 0.8970, Val AUC: 0.9616, LR: 0.000500
+2025-03-05 17:33:12,453 - ufc_model - INFO - Epoch 25/100 - Train Loss: 0.0149, Val Loss: 0.0163, Val Acc: 0.8952, Val AUC: 0.9636, LR: 0.000500
+2025-03-05 17:33:13,091 - ufc_model - INFO - Epoch 26/100 - Train Loss: 0.0149, Val Loss: 0.0160, Val Acc: 0.9028, Val AUC: 0.9643, LR: 0.000500
+2025-03-05 17:33:13,641 - ufc_model - INFO - Epoch 27/100 - Train Loss: 0.0149, Val Loss: 0.0163, Val Acc: 0.8934, Val AUC: 0.9662, LR: 0.000500
+2025-03-05 17:33:14,210 - ufc_model - INFO - Epoch 28/100 - Train Loss: 0.0147, Val Loss: 0.0157, Val Acc: 0.9001, Val AUC: 0.9661, LR: 0.000500
+2025-03-05 17:33:14,792 - ufc_model - INFO - Epoch 29/100 - Train Loss: 0.0144, Val Loss: 0.0163, Val Acc: 0.8992, Val AUC: 0.9637, LR: 0.000500
+2025-03-05 17:33:15,402 - ufc_model - INFO - Epoch 30/100 - Train Loss: 0.0141, Val Loss: 0.0164, Val Acc: 0.8970, Val AUC: 0.9644, LR: 0.000500
+2025-03-05 17:33:15,998 - ufc_model - INFO - Epoch 31/100 - Train Loss: 0.0147, Val Loss: 0.0181, Val Acc: 0.8884, Val AUC: 0.9624, LR: 0.000500
+2025-03-05 17:33:16,614 - ufc_model - INFO - Epoch 32/100 - Train Loss: 0.0144, Val Loss: 0.0158, Val Acc: 0.8983, Val AUC: 0.9657, LR: 0.000500
+2025-03-05 17:33:17,187 - ufc_model - INFO - Epoch 33/100 - Train Loss: 0.0139, Val Loss: 0.0159, Val Acc: 0.9005, Val AUC: 0.9652, LR: 0.000500
+2025-03-05 17:33:17,761 - ufc_model - INFO - Epoch 34/100 - Train Loss: 0.0138, Val Loss: 0.0166, Val Acc: 0.8938, Val AUC: 0.9634, LR: 0.000250
+2025-03-05 17:33:18,319 - ufc_model - INFO - Epoch 35/100 - Train Loss: 0.0133, Val Loss: 0.0160, Val Acc: 0.9001, Val AUC: 0.9655, LR: 0.000250
+2025-03-05 17:33:18,862 - ufc_model - INFO - Epoch 36/100 - Train Loss: 0.0129, Val Loss: 0.0160, Val Acc: 0.9019, Val AUC: 0.9648, LR: 0.000250
+2025-03-05 17:33:19,443 - ufc_model - INFO - Epoch 37/100 - Train Loss: 0.0127, Val Loss: 0.0160, Val Acc: 0.9037, Val AUC: 0.9657, LR: 0.000250
+2025-03-05 17:33:20,016 - ufc_model - INFO - Epoch 38/100 - Train Loss: 0.0125, Val Loss: 0.0163, Val Acc: 0.8970, Val AUC: 0.9646, LR: 0.000250
+2025-03-05 17:33:20,605 - ufc_model - INFO - Epoch 39/100 - Train Loss: 0.0126, Val Loss: 0.0164, Val Acc: 0.8956, Val AUC: 0.9653, LR: 0.000250
+2025-03-05 17:33:21,197 - ufc_model - INFO - Epoch 40/100 - Train Loss: 0.0123, Val Loss: 0.0162, Val Acc: 0.8974, Val AUC: 0.9643, LR: 0.000125
+2025-03-05 17:33:21,791 - ufc_model - INFO - Epoch 41/100 - Train Loss: 0.0115, Val Loss: 0.0160, Val Acc: 0.9023, Val AUC: 0.9657, LR: 0.000125
+2025-03-05 17:33:22,364 - ufc_model - INFO - Epoch 42/100 - Train Loss: 0.0118, Val Loss: 0.0167, Val Acc: 0.8965, Val AUC: 0.9661, LR: 0.000125
+2025-03-05 17:33:22,951 - ufc_model - INFO - Epoch 43/100 - Train Loss: 0.0111, Val Loss: 0.0166, Val Acc: 0.9023, Val AUC: 0.9651, LR: 0.000125
+2025-03-05 17:33:22,951 - ufc_model - INFO - Early stopping at epoch 43
+2025-03-05 17:33:23,189 - ufc_model - INFO - Evaluating model on test data
+2025-03-05 17:33:23,200 - ufc_model - INFO - Test Metrics:
+2025-03-05 17:33:23,200 - ufc_model - INFO - Accuracy: 0.9056
+2025-03-05 17:33:23,200 - ufc_model - INFO - Precision: 0.8963
+2025-03-05 17:33:23,200 - ufc_model - INFO - Recall: 0.9173
+2025-03-05 17:33:23,201 - ufc_model - INFO - F1 Score: 0.9067
+2025-03-05 17:33:23,201 - ufc_model - INFO - ROC AUC: 0.9657
+2025-03-05 17:33:23,201 - ufc_model - INFO - Confusion Matrix:
+[[1330  158]
+ [ 123 1365]]
+2025-03-05 17:33:23,202 - ufc_model - INFO - Saving model to models\pytorch_model.pth
+2025-03-05 17:33:23,206 - ufc_model - INFO - Model and associated data saved successfully
+2025-03-05 17:33:23,206 - ufc_main - INFO - PyTorch model saved to models\pytorch_model.pth
+2025-03-05 17:33:23,206 - ufc_main - INFO - PyTorch model accuracy: 0.9056
+2025-03-05 17:33:23,206 - ufc_main - INFO - Comparing models:
+2025-03-05 17:33:23,207 - ufc_main - INFO - Ensemble model accuracy: 0.8985
+2025-03-05 17:33:23,207 - ufc_main - INFO - PyTorch model accuracy: 0.9056
+2025-03-05 17:33:23,207 - ufc_main - INFO - PyTorch model performed better
+2025-03-05 17:33:23,212 - ufc_main - INFO - Training complete. Best model: models\pytorch_model.pth
+2025-03-05 17:33:23,212 - ufc_model - INFO - Loading model from models\pytorch_model.pth
+2025-03-05 17:33:23,247 - ufc_model - INFO - Model loaded successfully with 108 features
+2025-03-05 17:33:23,248 - ufc_main - INFO - Testing position bias using 108 features
+2025-03-05 17:33:23,249 - ufc_main - ERROR - Error in bias test case: The feature names should match those that were passed during fit.
+Feature names seen at fit time, yet now missing:
+- is_title_bout
+- r_rev
+
+2025-03-05 17:33:23,250 - ufc_main - ERROR - Error in bias test case: The feature names should match those that were passed during fit.
+Feature names seen at fit time, yet now missing:
+- is_title_bout
+- r_rev
+
+2025-03-05 17:33:23,251 - ufc_main - ERROR - Error in bias test case: The feature names should match those that were passed during fit.
+Feature names seen at fit time, yet now missing:
+- is_title_bout
+- r_rev
+
+2025-03-05 17:33:23,252 - ufc_main - ERROR - Error in bias test case: The feature names should match those that were passed during fit.
+Feature names seen at fit time, yet now missing:
+- is_title_bout
+- r_rev
+
+2025-03-05 17:33:23,253 - ufc_main - ERROR - Error in bias test case: The feature names should match those that were passed during fit.
+Feature names seen at fit time, yet now missing:
+- is_title_bout
+- r_rev
+
+2025-03-05 17:33:23,254 - ufc_main - ERROR - Error in bias test case: The feature names should match those that were passed during fit.
+Feature names seen at fit time, yet now missing:
+- is_title_bout
+- r_rev
+
+2025-03-05 17:33:23,254 - ufc_main - ERROR - Error in bias test case: The feature names should match those that were passed during fit.
+Feature names seen at fit time, yet now missing:
+- is_title_bout
+- r_rev
+
+2025-03-05 17:33:23,255 - ufc_main - ERROR - Error in bias test case: The feature names should match those that were passed during fit.
+Feature names seen at fit time, yet now missing:
+- is_title_bout
+- r_rev
+
+2025-03-05 17:33:23,256 - ufc_main - ERROR - Error in bias test case: The feature names should match those that were passed during fit.
+Feature names seen at fit time, yet now missing:
+- is_title_bout
+- r_rev
+
+2025-03-05 17:33:23,257 - ufc_main - ERROR - Error in bias test case: The feature names should match those that were passed during fit.
+Feature names seen at fit time, yet now missing:
+- is_title_bout
+- r_rev
+
+2025-03-05 17:33:23,257 - ufc_main - ERROR - Error in bias test case: The feature names should match those that were passed during fit.
+Feature names seen at fit time, yet now missing:
+- is_title_bout
+- r_rev
+
+2025-03-05 17:33:23,258 - ufc_main - ERROR - Error in bias test case: The feature names should match those that were passed during fit.
+Feature names seen at fit time, yet now missing:
+- is_title_bout
+- r_rev
+
+2025-03-05 17:33:23,259 - ufc_main - ERROR - Error in bias test case: The feature names should match those that were passed during fit.
+Feature names seen at fit time, yet now missing:
+- is_title_bout
+- r_rev
+
+2025-03-05 17:33:23,259 - ufc_main - ERROR - Error in bias test case: The feature names should match those that were passed during fit.
+Feature names seen at fit time, yet now missing:
+- is_title_bout
+- r_rev
+
+2025-03-05 17:33:23,260 - ufc_main - ERROR - Error in bias test case: The feature names should match those that were passed during fit.
+Feature names seen at fit time, yet now missing:
+- is_title_bout
+- r_rev
+
+2025-03-05 17:33:23,261 - ufc_main - ERROR - Error in bias test case: The feature names should match those that were passed during fit.
+Feature names seen at fit time, yet now missing:
+- is_title_bout
+- r_rev
+
+2025-03-05 17:33:23,262 - ufc_main - ERROR - Error in bias test case: The feature names should match those that were passed during fit.
+Feature names seen at fit time, yet now missing:
+- is_title_bout
+- r_rev
+
+2025-03-05 17:33:23,263 - ufc_main - ERROR - Error in bias test case: The feature names should match those that were passed during fit.
+Feature names seen at fit time, yet now missing:
+- is_title_bout
+- r_rev
+
+2025-03-05 17:33:23,264 - ufc_main - ERROR - Error in bias test case: The feature names should match those that were passed during fit.
+Feature names seen at fit time, yet now missing:
+- is_title_bout
+- r_rev
+
+2025-03-05 17:33:23,264 - ufc_main - ERROR - Error in bias test case: The feature names should match those that were passed during fit.
+Feature names seen at fit time, yet now missing:
+- is_title_bout
+- r_rev
+
+2025-03-05 17:33:23,265 - ufc_main - ERROR - No valid bias test results obtained
+2025-03-05 17:35:18,521 - ufc_main - INFO - Loading data from data\ufc_dataset.csv
+2025-03-05 17:35:18,579 - ufc_main - INFO - Dataset loaded: 7439 rows, 95 columns
+2025-03-05 17:35:18,580 - ufc_main - INFO - Created 'fighter1_won' from 'winner'
+2025-03-05 17:35:18,582 - ufc_main - INFO - Filling missing values in total_rounds
+2025-03-05 17:35:18,584 - ufc_main - INFO - Filling missing values in r_age
+2025-03-05 17:35:18,584 - ufc_main - INFO - Filling missing values in r_reach
+2025-03-05 17:35:18,586 - ufc_main - INFO - Filling missing values in b_age
+2025-03-05 17:35:18,588 - ufc_main - INFO - Filling missing values in b_reach
+2025-03-05 17:35:18,591 - ufc_main - INFO - Filling missing values in age_diff
+2025-03-05 17:35:18,591 - ufc_main - INFO - Filling missing values in reach_diff
+2025-03-05 17:35:18,597 - ufc_main - INFO - Applying enhanced feature engineering
+2025-03-05 17:35:18,597 - ufc_model - INFO - Performing enhanced feature engineering
+2025-03-05 17:35:18,599 - ufc_model - INFO - Using 27 difference columns for bias reduction
+2025-03-05 17:35:18,633 - ufc_model - INFO - Enhanced feature engineering complete. Added 25 new features
+2025-03-05 17:35:18,637 - ufc_main - INFO - Keeping 111 numeric features
+2025-03-05 17:35:18,639 - ufc_main - INFO - Applying position swap augmentation
+2025-03-05 17:35:18,639 - ufc_model - INFO - Starting position swap augmentation on dataset with 7439 rows
+2025-03-05 17:35:18,658 - ufc_model - INFO - Completed position swap augmentation. New dataset size: 14878 rows
+2025-03-05 17:35:18,659 - ufc_main - INFO - Data augmented: 14878 rows
+2025-03-05 17:35:18,660 - ufc_model - INFO - Preparing training data
+2025-03-05 17:35:18,724 - ufc_model - INFO - Data split - Train: 9670, Val: 2232, Test: 2976
+2025-03-05 17:35:18,728 - ufc_main - INFO - Performing feature selection
+2025-03-05 17:35:18,729 - ufc_model - INFO - Selecting optimal features
+2025-03-05 17:35:37,239 - ufc_model - INFO - Selected 108 optimal features out of 110
+2025-03-05 17:35:37,240 - ufc_model - INFO - Top 20 features by importance:
+1. sig_str_diff: 0.1878
+2. str_diff: 0.1082
+3. sub_att_diff: 0.0614
+4. kd_diff: 0.0515
+5. ctrl_sec_diff: 0.0446
+6. b_kd: 0.0315
+7. win_rate_diff: 0.0233
+8. r_kd: 0.0231
+9. str_att_diff: 0.0199
+10. sig_str_acc_diff: 0.0198
+11. time_sec: 0.0185
+12. r_str: 0.0173
+13. td_diff: 0.0145
+14. sig_str_att_diff: 0.0135
+15. str_acc_diff: 0.0113
+16. b_str: 0.0104
+17. wins_total_diff: 0.0104
+18. b_sub_att: 0.0103
+19. finish_round: 0.0101
+20. b_ctrl_sec: 0.0096
+2025-03-05 17:35:37,245 - ufc_main - INFO - Selected 108 features
+2025-03-05 17:35:37,245 - ufc_main - INFO - Training ensemble model
+2025-03-05 17:35:37,245 - ufc_model - INFO - Training ensemble model
+2025-03-05 17:35:37,246 - ufc_model - INFO - Training XGBoost model
+2025-03-05 17:35:37,813 - ufc_model - INFO - XGBoost - Val Accuracy: 0.9046, AUC: 0.9673
+2025-03-05 17:35:37,813 - ufc_model - INFO - Training Random Forest model
+2025-03-05 17:35:39,222 - ufc_model - INFO - Random Forest - Val Accuracy: 0.8920, AUC: 0.9545
+2025-03-05 17:35:39,223 - ufc_model - INFO - Training Gradient Boosting model
+2025-03-05 17:36:16,604 - ufc_model - INFO - Gradient Boosting - Val Accuracy: 0.9041, AUC: 0.9658
+2025-03-05 17:36:16,605 - ufc_model - INFO - Training Logistic Regression model
+2025-03-05 17:36:17,128 - ufc_model - INFO - Logistic Regression - Val Accuracy: 0.8934, AUC: 0.9520
+2025-03-05 17:36:17,205 - ufc_model - INFO - Ensemble - Val Accuracy: 0.8983, AUC: 0.9647
+2025-03-05 17:36:17,205 - ufc_model - INFO - Evaluating model on test data
+2025-03-05 17:36:17,321 - ufc_model - INFO - Test Metrics:
+2025-03-05 17:36:17,322 - ufc_model - INFO - Accuracy: 0.8985
+2025-03-05 17:36:17,322 - ufc_model - INFO - Precision: 0.9012
+2025-03-05 17:36:17,322 - ufc_model - INFO - Recall: 0.8952
+2025-03-05 17:36:17,322 - ufc_model - INFO - F1 Score: 0.8982
+2025-03-05 17:36:17,322 - ufc_model - INFO - ROC AUC: 0.9655
+2025-03-05 17:36:17,323 - ufc_model - INFO - Confusion Matrix:
+[[1342  146]
+ [ 156 1332]]
+2025-03-05 17:36:17,323 - ufc_model - INFO - Saving model to models\ensemble_model.joblib
+2025-03-05 17:36:17,407 - ufc_model - INFO - Model and associated data saved successfully
+2025-03-05 17:36:17,408 - ufc_main - INFO - Ensemble model saved to models\ensemble_model.joblib
+2025-03-05 17:36:17,408 - ufc_main - INFO - Ensemble model accuracy: 0.8985
+2025-03-05 17:36:17,408 - ufc_main - INFO - Training PyTorch model
+2025-03-05 17:36:17,408 - ufc_model - INFO - Training PyTorch neural network model
+2025-03-05 17:36:17,414 - ufc_model - INFO - Using Focal Loss
+2025-03-05 17:36:18,209 - ufc_model - INFO - Epoch 1/100 - Train Loss: 0.0447, Val Loss: 0.0216, Val Acc: 0.8665, Val AUC: 0.9390, LR: 0.001000
+2025-03-05 17:36:19,090 - ufc_model - INFO - Epoch 2/100 - Train Loss: 0.0266, Val Loss: 0.0194, Val Acc: 0.8763, Val AUC: 0.9492, LR: 0.001000
+2025-03-05 17:36:20,105 - ufc_model - INFO - Epoch 3/100 - Train Loss: 0.0224, Val Loss: 0.0186, Val Acc: 0.8822, Val AUC: 0.9533, LR: 0.001000
+2025-03-05 17:36:21,003 - ufc_model - INFO - Epoch 4/100 - Train Loss: 0.0211, Val Loss: 0.0182, Val Acc: 0.8853, Val AUC: 0.9553, LR: 0.001000
+2025-03-05 17:36:22,054 - ufc_model - INFO - Epoch 5/100 - Train Loss: 0.0196, Val Loss: 0.0178, Val Acc: 0.8853, Val AUC: 0.9571, LR: 0.001000
+2025-03-05 17:36:23,037 - ufc_model - INFO - Epoch 6/100 - Train Loss: 0.0188, Val Loss: 0.0175, Val Acc: 0.8920, Val AUC: 0.9606, LR: 0.001000
+2025-03-05 17:36:23,919 - ufc_model - INFO - Epoch 7/100 - Train Loss: 0.0182, Val Loss: 0.0172, Val Acc: 0.8938, Val AUC: 0.9609, LR: 0.001000
+2025-03-05 17:36:24,803 - ufc_model - INFO - Epoch 8/100 - Train Loss: 0.0183, Val Loss: 0.0167, Val Acc: 0.8943, Val AUC: 0.9619, LR: 0.001000
+2025-03-05 17:36:25,569 - ufc_model - INFO - Epoch 9/100 - Train Loss: 0.0180, Val Loss: 0.0163, Val Acc: 0.8992, Val AUC: 0.9642, LR: 0.001000
+2025-03-05 17:36:26,350 - ufc_model - INFO - Epoch 10/100 - Train Loss: 0.0173, Val Loss: 0.0165, Val Acc: 0.8965, Val AUC: 0.9639, LR: 0.001000
+2025-03-05 17:36:27,368 - ufc_model - INFO - Epoch 11/100 - Train Loss: 0.0174, Val Loss: 0.0164, Val Acc: 0.8992, Val AUC: 0.9637, LR: 0.001000
+2025-03-05 17:36:28,452 - ufc_model - INFO - Epoch 12/100 - Train Loss: 0.0171, Val Loss: 0.0170, Val Acc: 0.8911, Val AUC: 0.9610, LR: 0.001000
+2025-03-05 17:36:29,407 - ufc_model - INFO - Epoch 13/100 - Train Loss: 0.0167, Val Loss: 0.0167, Val Acc: 0.8920, Val AUC: 0.9633, LR: 0.001000
+2025-03-05 17:36:30,423 - ufc_model - INFO - Epoch 14/100 - Train Loss: 0.0166, Val Loss: 0.0162, Val Acc: 0.8965, Val AUC: 0.9639, LR: 0.001000
+2025-03-05 17:36:31,547 - ufc_model - INFO - Epoch 15/100 - Train Loss: 0.0165, Val Loss: 0.0162, Val Acc: 0.8907, Val AUC: 0.9640, LR: 0.001000
+2025-03-05 17:36:32,702 - ufc_model - INFO - Epoch 16/100 - Train Loss: 0.0163, Val Loss: 0.0159, Val Acc: 0.8996, Val AUC: 0.9659, LR: 0.001000
+2025-03-05 17:36:33,877 - ufc_model - INFO - Epoch 17/100 - Train Loss: 0.0165, Val Loss: 0.0164, Val Acc: 0.8952, Val AUC: 0.9644, LR: 0.001000
+2025-03-05 17:36:35,048 - ufc_model - INFO - Epoch 18/100 - Train Loss: 0.0171, Val Loss: 0.0162, Val Acc: 0.9005, Val AUC: 0.9644, LR: 0.001000
+2025-03-05 17:36:35,843 - ufc_model - INFO - Epoch 19/100 - Train Loss: 0.0162, Val Loss: 0.0163, Val Acc: 0.8978, Val AUC: 0.9636, LR: 0.001000
+2025-03-05 17:36:36,490 - ufc_model - INFO - Epoch 20/100 - Train Loss: 0.0163, Val Loss: 0.0164, Val Acc: 0.8952, Val AUC: 0.9645, LR: 0.001000
+2025-03-05 17:36:37,176 - ufc_model - INFO - Epoch 21/100 - Train Loss: 0.0161, Val Loss: 0.0163, Val Acc: 0.8929, Val AUC: 0.9636, LR: 0.001000
+2025-03-05 17:36:37,818 - ufc_model - INFO - Epoch 22/100 - Train Loss: 0.0165, Val Loss: 0.0169, Val Acc: 0.8907, Val AUC: 0.9601, LR: 0.000500
+2025-03-05 17:36:38,400 - ufc_model - INFO - Epoch 23/100 - Train Loss: 0.0152, Val Loss: 0.0161, Val Acc: 0.8987, Val AUC: 0.9661, LR: 0.000500
+2025-03-05 17:36:38,981 - ufc_model - INFO - Epoch 24/100 - Train Loss: 0.0151, Val Loss: 0.0156, Val Acc: 0.9019, Val AUC: 0.9668, LR: 0.000500
+2025-03-05 17:36:39,563 - ufc_model - INFO - Epoch 25/100 - Train Loss: 0.0146, Val Loss: 0.0162, Val Acc: 0.8970, Val AUC: 0.9652, LR: 0.000500
+2025-03-05 17:36:40,152 - ufc_model - INFO - Epoch 26/100 - Train Loss: 0.0145, Val Loss: 0.0168, Val Acc: 0.8947, Val AUC: 0.9626, LR: 0.000500
+2025-03-05 17:36:40,738 - ufc_model - INFO - Epoch 27/100 - Train Loss: 0.0149, Val Loss: 0.0164, Val Acc: 0.8920, Val AUC: 0.9648, LR: 0.000500
+2025-03-05 17:36:41,339 - ufc_model - INFO - Epoch 28/100 - Train Loss: 0.0146, Val Loss: 0.0160, Val Acc: 0.8970, Val AUC: 0.9644, LR: 0.000500
+2025-03-05 17:36:41,943 - ufc_model - INFO - Epoch 29/100 - Train Loss: 0.0142, Val Loss: 0.0163, Val Acc: 0.8947, Val AUC: 0.9648, LR: 0.000500
+2025-03-05 17:36:42,568 - ufc_model - INFO - Epoch 30/100 - Train Loss: 0.0145, Val Loss: 0.0158, Val Acc: 0.8965, Val AUC: 0.9654, LR: 0.000250
+2025-03-05 17:36:43,174 - ufc_model - INFO - Epoch 31/100 - Train Loss: 0.0140, Val Loss: 0.0156, Val Acc: 0.8974, Val AUC: 0.9663, LR: 0.000250
+2025-03-05 17:36:43,811 - ufc_model - INFO - Epoch 32/100 - Train Loss: 0.0134, Val Loss: 0.0158, Val Acc: 0.9037, Val AUC: 0.9660, LR: 0.000250
+2025-03-05 17:36:44,556 - ufc_model - INFO - Epoch 33/100 - Train Loss: 0.0128, Val Loss: 0.0160, Val Acc: 0.8996, Val AUC: 0.9654, LR: 0.000250
+2025-03-05 17:36:45,321 - ufc_model - INFO - Epoch 34/100 - Train Loss: 0.0129, Val Loss: 0.0159, Val Acc: 0.8992, Val AUC: 0.9660, LR: 0.000250
+2025-03-05 17:36:45,989 - ufc_model - INFO - Epoch 35/100 - Train Loss: 0.0127, Val Loss: 0.0164, Val Acc: 0.8992, Val AUC: 0.9655, LR: 0.000250
+2025-03-05 17:36:46,663 - ufc_model - INFO - Epoch 36/100 - Train Loss: 0.0129, Val Loss: 0.0158, Val Acc: 0.9005, Val AUC: 0.9667, LR: 0.000250
+2025-03-05 17:36:47,295 - ufc_model - INFO - Epoch 37/100 - Train Loss: 0.0123, Val Loss: 0.0161, Val Acc: 0.8987, Val AUC: 0.9661, LR: 0.000125
+2025-03-05 17:36:47,931 - ufc_model - INFO - Epoch 38/100 - Train Loss: 0.0121, Val Loss: 0.0158, Val Acc: 0.9050, Val AUC: 0.9667, LR: 0.000125
+2025-03-05 17:36:48,557 - ufc_model - INFO - Epoch 39/100 - Train Loss: 0.0116, Val Loss: 0.0160, Val Acc: 0.9064, Val AUC: 0.9661, LR: 0.000125
+2025-03-05 17:36:49,183 - ufc_model - INFO - Epoch 40/100 - Train Loss: 0.0119, Val Loss: 0.0158, Val Acc: 0.9046, Val AUC: 0.9659, LR: 0.000125
+2025-03-05 17:36:49,832 - ufc_model - INFO - Epoch 41/100 - Train Loss: 0.0115, Val Loss: 0.0165, Val Acc: 0.8983, Val AUC: 0.9651, LR: 0.000125
+2025-03-05 17:36:50,443 - ufc_model - INFO - Epoch 42/100 - Train Loss: 0.0115, Val Loss: 0.0164, Val Acc: 0.8996, Val AUC: 0.9648, LR: 0.000125
+2025-03-05 17:36:51,011 - ufc_model - INFO - Epoch 43/100 - Train Loss: 0.0113, Val Loss: 0.0164, Val Acc: 0.9005, Val AUC: 0.9641, LR: 0.000063
+2025-03-05 17:36:51,584 - ufc_model - INFO - Epoch 44/100 - Train Loss: 0.0111, Val Loss: 0.0166, Val Acc: 0.9005, Val AUC: 0.9642, LR: 0.000063
+2025-03-05 17:36:52,159 - ufc_model - INFO - Epoch 45/100 - Train Loss: 0.0112, Val Loss: 0.0166, Val Acc: 0.8970, Val AUC: 0.9638, LR: 0.000063
+2025-03-05 17:36:52,739 - ufc_model - INFO - Epoch 46/100 - Train Loss: 0.0110, Val Loss: 0.0166, Val Acc: 0.9005, Val AUC: 0.9644, LR: 0.000063
+2025-03-05 17:36:52,739 - ufc_model - INFO - Early stopping at epoch 46
+2025-03-05 17:36:52,970 - ufc_model - INFO - Evaluating model on test data
+2025-03-05 17:36:52,982 - ufc_model - INFO - Test Metrics:
+2025-03-05 17:36:52,982 - ufc_model - INFO - Accuracy: 0.9032
+2025-03-05 17:36:52,982 - ufc_model - INFO - Precision: 0.9138
+2025-03-05 17:36:52,982 - ufc_model - INFO - Recall: 0.8905
+2025-03-05 17:36:52,982 - ufc_model - INFO - F1 Score: 0.9020
+2025-03-05 17:36:52,982 - ufc_model - INFO - ROC AUC: 0.9686
+2025-03-05 17:36:52,982 - ufc_model - INFO - Confusion Matrix:
+[[1363  125]
+ [ 163 1325]]
+2025-03-05 17:36:52,983 - ufc_model - INFO - Saving model to models\pytorch_model.pth
+2025-03-05 17:36:52,986 - ufc_model - INFO - Model and associated data saved successfully
+2025-03-05 17:36:52,986 - ufc_main - INFO - PyTorch model saved to models\pytorch_model.pth
+2025-03-05 17:36:52,986 - ufc_main - INFO - PyTorch model accuracy: 0.9032
+2025-03-05 17:36:52,986 - ufc_main - INFO - Comparing models:
+2025-03-05 17:36:52,986 - ufc_main - INFO - Ensemble model accuracy: 0.8985
+2025-03-05 17:36:52,986 - ufc_main - INFO - PyTorch model accuracy: 0.9032
+2025-03-05 17:36:52,986 - ufc_main - INFO - PyTorch model performed better
+2025-03-05 17:36:52,992 - ufc_main - INFO - Training complete. Best model: models\pytorch_model.pth
+2025-03-05 17:36:52,992 - ufc_model - INFO - Loading model from models\pytorch_model.pth
+2025-03-05 17:36:53,026 - ufc_model - INFO - Model loaded successfully with 108 features
+2025-03-05 17:36:53,026 - ufc_main - INFO - Testing position bias using 108 features
+2025-03-05 17:36:53,027 - ufc_main - INFO - Skipping detailed position bias test due to feature availability constraints
+2025-03-05 17:36:53,027 - ufc_main - INFO - Using simplified position bias assessment

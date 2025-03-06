@@ -1,93 +1,139 @@
 import React from 'react';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 import { Doughnut } from 'react-chartjs-2';
+import { motion } from 'framer-motion';
 
 // Register Chart.js components
 ChartJS.register(ArcElement, Tooltip, Legend);
 
-const PredictionResult = ({ result }) => {
-  const { fighter1_name, fighter2_name, fighter1_win_probability, fighter2_win_probability, predicted_winner, confidence_level } = result;
-  
+const PredictionResult = ({ result, fighter1, fighter2 }) => {
+  // Extract backend probabilities
+  const {
+    fighter1_name,
+    fighter2_name,
+    fighter1_win_probability,
+    fighter2_win_probability,
+    confidence_level
+    // ignoring "predicted_winner" to avoid mismatches
+  } = result;
+
+  // Convert probabilities to integer percentages
+  const fighter1Percent = Math.round(fighter1_win_probability * 100);
+  const fighter2Percent = Math.round(fighter2_win_probability * 100);
+
+  // Determine final winner based on which percentage is higher
+  const finalWinner = fighter1Percent > fighter2Percent ? 'fighter1' : 'fighter2';
+  const finalWinnerName = finalWinner === 'fighter1' ? fighter1_name : fighter2_name;
+
   // Prepare chart data
   const chartData = {
     labels: [fighter1_name, fighter2_name],
     datasets: [
       {
-        data: [fighter1_win_probability * 100, fighter2_win_probability * 100],
-        backgroundColor: ['#D20A0A', '#1277BC'],
-        borderColor: ['#D20A0A', '#1277BC'],
-        borderWidth: 1,
+        data: [fighter1Percent, fighter2Percent],
+        backgroundColor: ['rgba(210, 10, 10, 0.8)', 'rgba(18, 119, 188, 0.8)'],
+        borderColor: ['rgba(210, 10, 10, 1)', 'rgba(18, 119, 188, 1)'],
+        borderWidth: 2,
       },
     ],
   };
-  
+
   // Chart options
   const chartOptions = {
+    responsive: true,
+    maintainAspectRatio: false,
     plugins: {
       legend: {
+        display: true,
         position: 'bottom',
         labels: {
           color: 'white',
-          font: {
-            size: 14,
-          },
+          usePointStyle: true,
         },
       },
       tooltip: {
-        callbacks: {
-          label: function(context) {
-            return `${context.label}: ${context.raw.toFixed(1)}%`;
-          }
-        }
-      }
+        enabled: false,
+      },
     },
-    cutout: '70%'
+    cutout: '70%',
+    animation: false,
   };
-  
-  // Determine confidence class color
-  const confidenceColor = 
-    confidence_level === 'High' ? 'text-green-500' :
-    confidence_level === 'Medium' ? 'text-yellow-500' :
-    'text-gray-400';
 
   return (
-    <div className="bg-card-bg rounded-lg shadow-md p-6">
-      <h2 className="text-2xl font-bold mb-4">Prediction Results</h2>
-      
-      <div className="text-center mb-6">
-        <div className="mb-2">
-          <span className={predicted_winner === "fighter1" ? "text-ufc-red font-bold text-xl" : "text-xl"}>
-            {fighter1_name}
-          </span>
-          <span className="text-xl mx-3 text-gray-400">vs</span>
-          <span className={predicted_winner === "fighter2" ? "text-ufc-blue font-bold text-xl" : "text-xl"}>
-            {fighter2_name}
-          </span>
+    <div className="bg-[#0F1729] text-white p-6 rounded-lg">
+      {/* Header */}
+      <div className="flex justify-center items-center space-x-3 mb-6">
+        <div
+          className={`text-xl font-bold ${
+            finalWinner === 'fighter1' ? 'text-red-500' : 'text-gray-300'
+          }`}
+        >
+          {fighter1_name}
+        </div>
+        <div className="text-xl px-3 py-1 bg-gray-800 rounded-full text-gray-400 font-medium text-sm">
+          VS
+        </div>
+        <div
+          className={`text-xl font-bold ${
+            finalWinner === 'fighter2' ? 'text-blue-500' : 'text-gray-300'
+          }`}
+        >
+          {fighter2_name}
         </div>
       </div>
-      
-      <div className="h-64 mb-4">
+
+      {/* Stats Row */}
+      <div className="flex justify-between text-sm mb-4">
+        <div className="text-left">
+          <div>Record: {fighter1.wins}-{fighter1.losses}</div>
+          <div>Striking: {fighter1.SLpM.toFixed(1)}/min</div>
+          <div>TD Avg: {fighter1.td_avg.toFixed(1)}</div>
+          <div>Defense: {(fighter1.str_def * 100).toFixed(0)}%</div>
+        </div>
+        <div className="text-right">
+          <div>Record: {fighter2.wins}-{fighter2.losses}</div>
+          <div>Striking: {fighter2.SLpM.toFixed(1)}/min</div>
+          <div>TD Avg: {fighter2.td_avg.toFixed(1)}</div>
+          <div>Defense: {(fighter2.str_def * 100).toFixed(0)}%</div>
+        </div>
+      </div>
+
+      {/* Chart Container */}
+      <div className="relative h-60 mb-4">
         <Doughnut data={chartData} options={chartOptions} />
       </div>
-      
-      <div className="mt-6 bg-gray-800 rounded-lg p-4">
-        <h3 className="text-xl font-bold mb-2">Prediction Summary</h3>
-        <p className="mb-2">
-          <span className="text-gray-400">Predicted Winner: </span>
-          <span className={predicted_winner === "fighter1" ? "text-ufc-red font-medium" : "text-ufc-blue font-medium"}>
-            {predicted_winner === "fighter1" ? fighter1_name : fighter2_name}
-          </span>
-        </p>
-        <p className="mb-2">
-          <span className="text-gray-400">Win Probability: </span>
-          <span className="font-medium">
-            {((predicted_winner === "fighter1" ? fighter1_win_probability : fighter2_win_probability) * 100).toFixed(1)}%
-          </span>
-        </p>
-        <p>
-          <span className="text-gray-400">Confidence: </span>
-          <span className={`font-medium ${confidenceColor}`}>{confidence_level}</span>
-        </p>
+
+      {/* Winner Label - moved below the chart */}
+      <div className="text-center mb-4">
+        <div className="text-xs uppercase text-gray-400 mb-1">Winner</div>
+        <div
+          className={`font-bold ${
+            finalWinner === 'fighter1' ? 'text-red-500' : 'text-blue-500'
+          }`}
+        >
+          {finalWinnerName}
+        </div>
+      </div>
+
+      {/* Prediction Analysis */}
+      <div className="bg-[#1E293B] rounded-lg p-4">
+        <div className="text-purple-400 text-lg font-bold mb-4">Prediction Analysis</div>
+        <div className="grid grid-cols-3 gap-4 text-center">
+          <div>
+            <div className="text-4xl font-bold text-blue-500">{fighter1Percent}%</div>
+            <div className="text-xs text-gray-400">Win Probability</div>
+          </div>
+          <div>
+            <div className="text-xl font-bold text-yellow-500">{confidence_level}</div>
+            <div className="text-xs text-gray-400">Prediction Confidence</div>
+          </div>
+          <div>
+            <div className="text-4xl font-bold text-gray-300">
+              {Math.abs(fighter1Percent - fighter2Percent)}%
+            </div>
+            <div className="text-xs text-gray-400">Victory Margin</div>
+          </div>
+        </div>
       </div>
     </div>
   );

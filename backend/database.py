@@ -1,7 +1,10 @@
 import sqlite3
 import pandas as pd
 import os
-from config import DATABASE_PATH, CSV_FILE_PATH, TRAINING_CSV_PATH
+from config import FIGHTER_STATS_PATH, DATA_DIR
+
+# Define database path
+DATABASE_PATH = os.path.join(DATA_DIR, 'ufc_fighters.db')
 
 def get_db_connection():
     """
@@ -16,6 +19,7 @@ def init_db():
     """
     Initialize the database schema with all required tables
     """
+    os.makedirs(DATA_DIR, exist_ok=True)
     conn = get_db_connection()
     cursor = conn.cursor()
     
@@ -28,9 +32,21 @@ def init_db():
         weight REAL,
         reach REAL,
         stance TEXT,
+        age REAL,              /* Added age column */
         wins INTEGER DEFAULT 0,
         losses INTEGER DEFAULT 0,
-        draws INTEGER DEFAULT 0
+        draws INTEGER DEFAULT 0,
+        sig_strikes_per_min REAL,
+        sig_strike_accuracy REAL,
+        sig_strikes_absorbed_per_min REAL,
+        sig_strike_defense REAL,
+        takedown_avg REAL,
+        takedown_accuracy REAL,
+        takedown_defense REAL,
+        sub_avg REAL,
+        win_by_ko REAL,
+        win_by_sub REAL,
+        win_by_dec REAL
     )
     ''')
     
@@ -76,13 +92,105 @@ def init_db():
     conn.close()
     print("Database schema initialized")
 
+
+def import_fighter_stats_to_db():
+    """
+    Import fighter statistics from the FIGHTER_STATS_PATH CSV into the database
+    This is the main function to call for populating the fighter database
+    """
+    if not os.path.exists(FIGHTER_STATS_PATH):
+        print(f"Fighter stats file not found at {FIGHTER_STATS_PATH}")
+        return False
+    
+    # Initialize the database if it doesn't exist
+    if not os.path.exists(DATABASE_PATH):
+        init_db()
+    
+    # Load fighter stats from CSV
+    print(f"Loading fighter stats from {FIGHTER_STATS_PATH}")
+    df = pd.read_csv(FIGHTER_STATS_PATH)
+    
+    # Filter out rows with missing name (required field)
+    df = df[df['name'].notna()]
+    print(f"Filtered to {len(df)} fighters with valid names")
+    
+    # Connect to the database
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    
+    # Drop and recreate the fighters table to match the CSV structure exactly
+    cursor.execute("DROP TABLE IF EXISTS fighters")
+    conn.commit()
+    
+    # Create the fighters table with columns that exactly match the CSV
+    columns = []
+    for col in df.columns:
+        if col == 'name':
+            columns.append(f"{col} TEXT NOT NULL")
+        else:
+            columns.append(f"{col} REAL")
+    
+    create_table_sql = f"""
+    CREATE TABLE fighters (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        {', '.join(columns)}
+    )
+    """
+    
+    cursor.execute(create_table_sql)
+    conn.commit()
+    
+    # Print available columns for debugging
+    print(f"Created table with columns: {', '.join(df.columns)}")
+    
+    # Import each fighter
+    success_count = 0
+    error_count = 0
+    
+    # Build the INSERT statement dynamically
+    placeholders = ', '.join(['?'] * len(df.columns))
+    column_names = ', '.join(df.columns)
+    insert_sql = f"INSERT INTO fighters ({column_names}) VALUES ({placeholders})"
+    
+    for idx, row in df.iterrows():
+        try:
+            # Extract values, handling NaN
+            values = []
+            for col in df.columns:
+                if pd.isna(row[col]):
+                    values.append(None)
+                else:
+                    values.append(row[col])
+            
+            # Insert into database
+            cursor.execute(insert_sql, values)
+            success_count += 1
+            
+        except Exception as e:
+            print(f"Error importing fighter at row {idx}: {e}")
+            error_count += 1
+            continue
+    
+    # Commit changes and close connection
+    conn.commit()
+    conn.close()
+    
+    print(f"Imported {success_count} fighters from {FIGHTER_STATS_PATH} to database")
+    if error_count > 0:
+        print(f"Encountered {error_count} errors during import")
+    return True
+
 def import_csv_to_db():
     """
-    Import data from the main CSV file into the database
+    Import data from the main UFC dataset CSV file into the database
     """
     if not os.path.exists(CSV_FILE_PATH):
         print(f"CSV file not found at {CSV_FILE_PATH}")
         return False
+    
+    # Initialize the database if it doesn't exist
+    if not os.path.exists(DATABASE_PATH):
+        init_db()
     
     df = pd.read_csv(CSV_FILE_PATH)
     conn = get_db_connection()
@@ -228,9 +336,9 @@ def import_csv_to_db():
                 row.get('R_avg_SIG_STR_attempted') if 'R_avg_SIG_STR_attempted' in row and pd.notna(row['R_avg_SIG_STR_attempted']) else None,
                 row.get('R_avg_TD_landed') if 'R_avg_TD_landed' in row and pd.notna(row['R_avg_TD_landed']) else None,
                 row.get('R_avg_TD_attempted') if 'R_avg_TD_attempted' in row and pd.notna(row['R_avg_TD_attempted']) else None,
-                row.get('R_avg_SIG_STR_landed') if 'R_avg_SIG_STR_landed' in row and pd.notna(row['R_avg_SIG_STR_landed']) else None,
-                row.get('R_avg_TD_landed') if 'R_avg_TD_landed' in row and pd.notna(row['R_avg_TD_landed']) else None,
-                row.get('R_avg_SUB_ATT') if 'R_avg_SUB_ATT' in row and pd.notna(row['R_avg_SUB_ATT']) else None,
+                row.get('R_SLpM_total') if 'R_SLpM_total' in row and pd.notna(row['R_SLpM_total']) else None,
+                row.get('R_td_avg') if 'R_td_avg' in row and pd.notna(row['R_td_avg']) else None,
+                row.get('R_sub_avg') if 'R_sub_avg' in row and pd.notna(row['R_sub_avg']) else None,
                 row.get('fighter1_win_streak') if 'fighter1_win_streak' in row and pd.notna(row['fighter1_win_streak']) else None
             ))
             
@@ -249,9 +357,9 @@ def import_csv_to_db():
                 row.get('B_avg_SIG_STR_attempted') if 'B_avg_SIG_STR_attempted' in row and pd.notna(row['B_avg_SIG_STR_attempted']) else None,
                 row.get('B_avg_TD_landed') if 'B_avg_TD_landed' in row and pd.notna(row['B_avg_TD_landed']) else None,
                 row.get('B_avg_TD_attempted') if 'B_avg_TD_attempted' in row and pd.notna(row['B_avg_TD_attempted']) else None,
-                row.get('B_avg_SIG_STR_landed') if 'B_avg_SIG_STR_landed' in row and pd.notna(row['B_avg_SIG_STR_landed']) else None,
-                row.get('B_avg_TD_landed') if 'B_avg_TD_landed' in row and pd.notna(row['B_avg_TD_landed']) else None,
-                row.get('B_avg_SUB_ATT') if 'B_avg_SUB_ATT' in row and pd.notna(row['B_avg_SUB_ATT']) else None,
+                row.get('B_SLpM_total') if 'B_SLpM_total' in row and pd.notna(row['B_SLpM_total']) else None,
+                row.get('B_td_avg') if 'B_td_avg' in row and pd.notna(row['B_td_avg']) else None,
+                row.get('B_sub_avg') if 'B_sub_avg' in row and pd.notna(row['B_sub_avg']) else None,
                 row.get('fighter2_win_streak') if 'fighter2_win_streak' in row and pd.notna(row['fighter2_win_streak']) else None
             ))
     
@@ -305,129 +413,182 @@ def update_fighter_records(conn):
     )
     ''')
 
-def get_fight_data_for_training():
+def get_all_fighters():
     """
-    Retrieve processed fight data for model training.
-    Now uses the dedicated training CSV file instead of querying the database directly.
+    Get a list of all fighters in the database
     
     Returns:
-        pd.DataFrame: DataFrame with fight data in format suitable for model training
+        list: List of fighter dictionaries
     """
-    from config import TRAINING_CSV_PATH
-    import pandas as pd
-    import os
-    from csv_sync import verify_csv_consistency, sync_csv_files
-    
-    # Check if the training CSV exists
-    if not os.path.exists(TRAINING_CSV_PATH):
-        # If it doesn't exist, try to generate it from the main CSV
-        print(f"Training CSV not found at {TRAINING_CSV_PATH}, attempting to generate it")
-        sync_csv_files()
-        
-        # If it still doesn't exist, fall back to the database query
-        if not os.path.exists(TRAINING_CSV_PATH):
-            print("Failed to generate training CSV, falling back to database query")
-            return get_fight_data_from_database()
-    
-    try:
-        # Load the pre-processed training data
-        df = pd.read_csv(TRAINING_CSV_PATH)
-        print(f"Loaded training data from {TRAINING_CSV_PATH}: {len(df)} rows, {len(df.columns)} columns")
-        
-        # Make sure we have the fighter1_won target column
-        if 'fighter1_won' not in df.columns:
-            if 'Winner' in df.columns:
-                # Convert Winner column to fighter1_won if needed
-                df['fighter1_won'] = (df['Winner'] == 'Red').astype(int)
-            else:
-                raise ValueError("Training data does not contain 'fighter1_won' or 'Winner' column")
-        
-        return df
-    
-    except Exception as e:
-        print(f"Error loading training data: {e}")
-        # Fall back to the original method if anything goes wrong
-        return get_fight_data_from_database()
-
-def get_fight_data_from_database():
-    """
-    Original function to retrieve fight data from the database.
-    Used as a fallback when the training CSV is not available.
-    
-    Returns:
-        pd.DataFrame: DataFrame with fight data from database
-    """
-    import pandas as pd
-    
     conn = get_db_connection()
+    cursor = conn.cursor()
     
-    # Query to get fight data with features from both fighters
-    query = '''
-    SELECT 
-        f.id AS fight_id,
-        f1.name AS fighter1_name,
-        f2.name AS fighter2_name,
-        f1.height AS fighter1_height,
-        f1.weight AS fighter1_weight,
-        f1.reach AS fighter1_reach,
-        f1.stance AS fighter1_stance,
-        f1.wins AS fighter1_wins,
-        f1.losses AS fighter1_losses,
-        f1.draws AS fighter1_draws,
-        f2.height AS fighter2_height,
-        f2.weight AS fighter2_weight,
-        f2.reach AS fighter2_reach,
-        f2.stance AS fighter2_stance,
-        f2.wins AS fighter2_wins,
-        f2.losses AS fighter2_losses,
-        f2.draws AS fighter2_draws,
-        fs1.sig_strikes_landed AS fighter1_sig_strikes_landed,
-        fs1.sig_strikes_attempted AS fighter1_sig_strikes_attempted,
-        fs1.takedowns_landed AS fighter1_takedowns_landed,
-        fs1.takedowns_attempted AS fighter1_takedowns_attempted,
-        fs1.sig_strikes_per_min AS fighter1_sig_strikes_per_min,
-        fs1.takedown_avg AS fighter1_takedown_avg,
-        fs1.sub_avg AS fighter1_sub_avg,
-        fs1.win_streak AS fighter1_win_streak,
-        fs2.sig_strikes_landed AS fighter2_sig_strikes_landed,
-        fs2.sig_strikes_attempted AS fighter2_sig_strikes_attempted,
-        fs2.takedowns_landed AS fighter2_takedowns_landed,
-        fs2.takedowns_attempted AS fighter2_takedowns_attempted,
-        fs2.sig_strikes_per_min AS fighter2_sig_strikes_per_min,
-        fs2.takedown_avg AS fighter2_takedown_avg,
-        fs2.sub_avg AS fighter2_sub_avg,
-        fs2.win_streak AS fighter2_win_streak,
-        CASE WHEN f.winner_id = f.fighter1_id THEN 1 ELSE 0 END AS fighter1_won
-    FROM 
-        fights f
-    JOIN 
-        fighters f1 ON f.fighter1_id = f1.id
-    JOIN 
-        fighters f2 ON f.fighter2_id = f2.id
-    JOIN 
-        fight_stats fs1 ON fs1.fight_id = f.id AND fs1.fighter_id = f.fighter1_id
-    JOIN 
-        fight_stats fs2 ON fs2.fight_id = f.id AND fs2.fighter_id = f.fighter2_id
-    WHERE 
-        f.winner_id IS NOT NULL
-    '''
+    cursor.execute('''
+    SELECT * FROM fighters
+    ORDER BY name
+    ''')
     
-    df = pd.read_sql_query(query, conn)
+    # Convert row objects to dictionaries
+    fighters = [dict(row) for row in cursor.fetchall()]
     conn.close()
     
-    # Add additional columns for compatibility with model
-    if 'fighter1_won' not in df.columns:
-        if 'winner_id' in df.columns and 'fighter1_id' in df.columns:
-            df['fighter1_won'] = (df['winner_id'] == df['fighter1_id']).astype(int)
+    return fighters
+
+def get_fighter_details(fighter_id):
+    """
+    Get detailed information about a specific fighter
     
-    # Handle non-numeric columns - convert stance to one-hot if needed
-    if 'fighter1_stance' in df.columns and df['fighter1_stance'].dtype == 'object':
-        # Get dummy variables for stance
-        stance_dummies = pd.get_dummies(df[['fighter1_stance', 'fighter2_stance']], 
-                                       prefix=['fighter1', 'fighter2'],
-                                       prefix_sep='_stance_')
-        # Drop original stance columns and join with dummies
-        df = df.drop(['fighter1_stance', 'fighter2_stance'], axis=1)
-        df = pd.concat([df, stance_dummies], axis=1)
+    Args:
+        fighter_id (int): ID of the fighter
+        
+    Returns:
+        dict: Fighter details
+    """
+    conn = get_db_connection()
+    cursor = conn.cursor()
     
-    return df
+    # Get basic fighter info
+    cursor.execute('''
+    SELECT * FROM fighters
+    WHERE id = ?
+    ''', (fighter_id,))
+    fighter = dict(cursor.fetchone() or {})
+    
+    if fighter:
+        # Get fight history
+        cursor.execute('''
+        SELECT 
+            f.id as fight_id,
+            f.date,
+            f.method,
+            f.rounds,
+            f.weight_class,
+            CASE 
+                WHEN f.fighter1_id = ? THEN f2.name 
+                ELSE f1.name 
+            END as opponent,
+            CASE 
+                WHEN f.winner_id = ? THEN 'Win'
+                WHEN f.winner_id IS NULL THEN 'Draw'
+                ELSE 'Loss'
+            END as result
+        FROM 
+            fights f
+        JOIN 
+            fighters f1 ON f.fighter1_id = f1.id
+        JOIN 
+            fighters f2 ON f.fighter2_id = f2.id
+        WHERE 
+            f.fighter1_id = ? OR f.fighter2_id = ?
+        ORDER BY 
+            f.date DESC
+        ''', (fighter_id, fighter_id, fighter_id, fighter_id))
+        
+        fighter['fight_history'] = [dict(row) for row in cursor.fetchall()]
+        
+        # Get statistics from fight_stats
+        cursor.execute('''
+        SELECT 
+            AVG(sig_strikes_landed) as avg_sig_strikes_landed,
+            AVG(takedowns_landed) as avg_takedowns_landed,
+            MAX(win_streak) as max_win_streak
+        FROM 
+            fight_stats
+        WHERE 
+            fighter_id = ?
+        ''', (fighter_id,))
+        
+        stats = dict(cursor.fetchone() or {})
+        fighter.update(stats)
+    
+    conn.close()
+    return fighter
+
+def search_fighters(query):
+    """
+    Search for fighters by name
+    
+    Args:
+        query (str): Search query
+        
+    Returns:
+        list: List of matching fighters
+    """
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    
+    search_term = f"%{query}%"
+    cursor.execute('''
+    SELECT * FROM fighters
+    WHERE name LIKE ?
+    ORDER BY name
+    LIMIT 20
+    ''', (search_term,))
+    
+    fighters = [dict(row) for row in cursor.fetchall()]
+    conn.close()
+    
+    return fighters
+
+# CLI Handler
+if __name__ == "__main__":
+    import argparse
+    
+    parser = argparse.ArgumentParser(description="UFC Fighter Database Manager")
+    parser.add_argument('--init-db', action='store_true', help='Initialize the database schema')
+    parser.add_argument('--import-fighters', action='store_true', help='Import fighter stats from CSV')
+    parser.add_argument('--import-fights', action='store_true', help='Import fight data from CSV')
+    parser.add_argument('--list-fighters', action='store_true', help='List all fighters')
+    parser.add_argument('--search', type=str, help='Search for a fighter by name')
+    parser.add_argument('--fighter-details', type=int, help='Get details for a fighter by ID')
+    
+    args = parser.parse_args()
+    
+    if args.init_db:
+        init_db()
+        print(f"Database initialized at {DATABASE_PATH}")
+        
+    if args.import_fighters:
+        import_fighter_stats_to_db()
+        
+    if args.import_fights:
+        import_csv_to_db()
+        
+    if args.list_fighters:
+        fighters = get_all_fighters()
+        print(f"Found {len(fighters)} fighters:")
+        for fighter in fighters[:20]:  # Show first 20
+            print(f"{fighter['id']}: {fighter['name']} ({fighter['wins']}-{fighter['losses']}-{fighter['draws']})")
+        if len(fighters) > 20:
+            print(f"...and {len(fighters) - 20} more")
+            
+    if args.search:
+        fighters = search_fighters(args.search)
+        print(f"Found {len(fighters)} matches for '{args.search}':")
+        for fighter in fighters:
+            print(f"{fighter['id']}: {fighter['name']} ({fighter['wins']}-{fighter['losses']}-{fighter['draws']})")
+            
+    if args.fighter_details:
+        fighter = get_fighter_details(args.fighter_details)
+        if fighter:
+            print(f"Details for {fighter['name']}:")
+            print(f"Record: {fighter['wins']}-{fighter['losses']}-{fighter['draws']}")
+            print(f"Height: {fighter['height']}")
+            print(f"Weight: {fighter['weight']}")
+            print(f"Reach: {fighter['reach']}")
+            print(f"Stance: {fighter['stance']}")
+            print("\nFight History:")
+            for fight in fighter.get('fight_history', [])[:5]:
+                print(f"{fight['date']}: {fighter['name']} vs {fight['opponent']} - {fight['result']}")
+        else:
+            print(f"Fighter with ID {args.fighter_details} not found")
+            
+    # If no arguments provided, show help
+    if not any(vars(args).values()):
+        parser.print_help()
+
+'''python database.py --init-db                 # Initialize the database
+python database.py --import-fighters         # Import fighter stats from CSV
+python database.py --list-fighters           # List all fighters in the database
+python database.py --search "McGregor"       # Search for a fighter
+python database.py --fighter-details 123     # Get detailed stats for a fighter'''

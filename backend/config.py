@@ -1,50 +1,136 @@
+"""
+UFC Fight Predictor Configuration
+
+This file contains all configurable parameters for the UFC Fight Predictor model.
+"""
+
 import os
 
-# Flask application settings
-DEBUG = True
-SECRET_KEY = os.environ.get('SECRET_KEY', 'dev_key_for_development')
+# File and directory paths
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+DATA_DIR = os.path.join(BASE_DIR, 'data')
+MODEL_DIR = os.path.join(BASE_DIR, 'models')
+LOG_DIR = os.path.join(BASE_DIR, 'logs')
 
-# Database settings
-DATABASE_PATH = os.path.join(os.path.dirname(__file__), 'data', 'ufc_fights.db')
-CSV_FILE_PATH = os.path.join(os.path.dirname(__file__), 'data', 'ufc_data.csv')  # Main data CSV for lookups
-TRAINING_CSV_PATH = os.path.join(os.path.dirname(__file__), 'data', 'ufc_training_data.csv')  # Processed CSV for training
-SCALER_PATH = os.path.join(os.path.dirname(__file__), 'data', 'scaler.save')
+# Create directories if they don't exist
+os.makedirs(DATA_DIR, exist_ok=True)
+os.makedirs(MODEL_DIR, exist_ok=True)
+os.makedirs(LOG_DIR, exist_ok=True)
 
-# CSV file settings
-CSV_SYNC_ON_STARTUP = True  # Whether to check CSV consistency on startup
+# Dataset paths
+RAW_DATASET_PATH = os.path.join(DATA_DIR, 'ufc_dataset.csv')
+PROCESSED_DATASET_PATH = os.path.join(DATA_DIR, 'ufc_processed.csv')
+FIGHTER_STATS_PATH = os.path.join(DATA_DIR, 'fighter_stats.csv')
 
-# Model settings - optimized for more realistic results
-MODEL_PATH = os.path.join(os.path.dirname(__file__), 'data', 'fight_predictor_model.pth')
-BATCH_SIZE = 32  # Reduced batch size for better gradient estimation
-LEARNING_RATE = 0.0005  # Reduced for more precise optimization
-EPOCHS = 400  # Higher count with early stopping
-TEST_SIZE = 0.15  # Test data portion
-VALIDATION_SIZE = 0.15  # Validation data portion
+# Model paths
+ENSEMBLE_MODEL_PATH = os.path.join(MODEL_DIR, 'ensemble_model.joblib')
+PYTORCH_MODEL_PATH = os.path.join(MODEL_DIR, 'pytorch_model.pth')
+FEATURE_IMPORTANCE_PATH = os.path.join(MODEL_DIR, 'feature_importance.csv')
+SCALER_PATH = os.path.join(MODEL_DIR, 'scaler.joblib')
 
-# Bias mitigation and augmentation settings
-ENABLE_CROSS_VALIDATION = False  # Set to True only when you want to perform full cross-validation
-BIAS_CORRECTION_LEVEL = 'medium'  # Options: 'none', 'light', 'medium', 'aggressive'
+# Training configuration
+RANDOM_SEED = 42
+TEST_SIZE = 0.15
+VALIDATION_SIZE = 0.15
+USE_ENSEMBLE = True
+USE_PYTORCH = True
+AUGMENT_DATA = True
+FEATURE_REDUCTION = True
 POSITION_SWAP_WEIGHT = 1.0  # Weight for position-swapped predictions (0.0-1.0)
 
-# Quick debug mode with minimal augmentation
-QUICK_MODE = False  # Set to True for fast debugging
+# Ensemble model parameters
+ENSEMBLE_PARAMS = {
+    'xgboost': {
+        'n_estimators': 200,
+        'learning_rate': 0.05,
+        'max_depth': 5,
+        'min_child_weight': 2,
+        'gamma': 0.1,
+        'subsample': 0.8,
+        'colsample_bytree': 0.8,
+        'objective': 'binary:logistic',
+        'random_state': RANDOM_SEED
+    },
+    'random_forest': {
+        'n_estimators': 200,
+        'max_depth': 10,
+        'min_samples_split': 5,
+        'min_samples_leaf': 2,
+        'max_features': 'sqrt',
+        'bootstrap': True,
+        'random_state': RANDOM_SEED
+    },
+    'gradient_boosting': {
+        'n_estimators': 150,
+        'learning_rate': 0.05,
+        'max_depth': 5,
+        'min_samples_split': 5,
+        'min_samples_leaf': 2,
+        'subsample': 0.8,
+        'random_state': RANDOM_SEED
+    },
+    'logistic_regression': {
+        'C': 1.0,
+        'penalty': 'l2',
+        'solver': 'liblinear',
+        'max_iter': 1000,
+        'random_state': RANDOM_SEED
+    }
+}
 
-# Augmentation controls
-ENABLE_POSITION_SWAP = True  # Enable position swapping augmentation
-POSITION_SWAP_FACTOR = 1  # Add 1 swapped version per original sample (2x data)
-MAX_AUGMENTATION_FACTOR = 2  # Maximum multiplication of dataset size
-ENABLE_DOMINANT_FIGHTER_CORRECTION = True  # Enable dominant fighter bias correction
+# PyTorch model parameters
+PYTORCH_PARAMS = {
+    'hidden_size': 128,
+    'dropout_rate': 0.3,
+    'batch_size': 64,
+    'learning_rate': 0.001,
+    'weight_decay': 0.0005,
+    'epochs': 100,
+    'patience': 15,
+    'focal_loss': True,
+    'focal_alpha': 0.25,
+    'focal_gamma': 2.0
+}
 
-# Training parameters for quick mode
-if QUICK_MODE:
-    EPOCHS = 20
-    BATCH_SIZE = 64
-    ENABLE_POSITION_SWAP = True
-    POSITION_SWAP_FACTOR = 1  # Only double the data in quick mode
-    ENABLE_DOMINANT_FIGHTER_CORRECTION = False
-    
-# Feature selection - whether to use reduced feature set
-USE_REDUCED_FEATURES = False  # Set to True to use only essential features
-REGULARIZATION_STRENGTH = 1e-3  # L2 regularization weight decay
-GRADIENT_CLIP_VALUE = 0.5  # Gradient clipping threshold
-EARLY_STOPPING_PATIENCE = 15  # Epochs with no improvement before stopping
+# Feature engineering parameters
+FEATURE_ENGINEERING_PARAMS = {
+    'use_physical_advantages': True,
+    'use_style_indicators': True,
+    'use_efficiency_metrics': True,
+    'use_experience_metrics': True,
+    'use_interaction_features': True,
+    'normalize_features': True
+}
+
+# Logging configuration
+LOGGING_CONFIG = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'standard': {
+            'format': '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+        },
+    },
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+            'level': 'INFO',
+            'formatter': 'standard',
+            'stream': 'ext://sys.stdout'
+        },
+        'file': {
+            'class': 'logging.FileHandler',
+            'level': 'INFO',
+            'formatter': 'standard',
+            'filename': os.path.join(LOG_DIR, 'ufc_predictor.log'),
+            'mode': 'a'
+        },
+    },
+    'loggers': {
+        '': {
+            'handlers': ['console', 'file'],
+            'level': 'INFO',
+            'propagate': True
+        }
+    }
+}

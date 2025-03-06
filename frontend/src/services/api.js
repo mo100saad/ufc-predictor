@@ -16,8 +16,15 @@ export const fighterService = {
   },
   
   getFighterByName: async (name) => {
-    const response = await api.get(`/fighter/${encodeURIComponent(name)}`);
-    return response.data.fighter;
+    try {
+      console.log(`Requesting fighter: ${name}`);
+      const response = await api.get(`/fighter/${encodeURIComponent(name)}`);
+      console.log('API Response:', response.data);
+      return response.data.fighter;
+    } catch (error) {
+      console.error('Error fetching fighter:', error.response?.data || error.message);
+      throw error;
+    }
   },
 };
 
