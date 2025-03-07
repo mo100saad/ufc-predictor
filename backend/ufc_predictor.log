@@ -1544,3 +1544,102 @@ AttributeError: 'RandomForestClassifier' object has no attribute 'parameters'
 2025-03-07 01:19:02,937 - werkzeug - INFO - 127.0.0.1 - - [07/Mar/2025 01:19:02] "[35m[1mGET /api/fighters HTTP/1.1[0m" 500 -
 2025-03-07 01:19:03,242 - ufc_api - ERROR - Error getting fighters: no such table: fighters
 2025-03-07 01:19:03,243 - werkzeug - INFO - 127.0.0.1 - - [07/Mar/2025 01:19:03] "[35m[1mGET /api/fighters HTTP/1.1[0m" 500 -
+2025-03-07 01:36:05,317 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.2.195:5000
+2025-03-07 01:36:05,317 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-03-07 01:36:08,667 - werkzeug - INFO - 127.0.0.1 - - [07/Mar/2025 01:36:08] "GET /api/fighters HTTP/1.1" 200 -
+2025-03-07 01:36:08,927 - werkzeug - INFO - 127.0.0.1 - - [07/Mar/2025 01:36:08] "GET /api/fighters HTTP/1.1" 200 -
+2025-03-07 01:37:18,280 - werkzeug - INFO - 127.0.0.1 - - [07/Mar/2025 01:37:18] "GET /api/fighters/Justin%20Gaethje HTTP/1.1" 200 -
+2025-03-07 01:37:18,538 - werkzeug - INFO - 127.0.0.1 - - [07/Mar/2025 01:37:18] "GET /api/fighters/Justin%20Gaethje HTTP/1.1" 200 -
+2025-03-07 01:38:00,997 - werkzeug - INFO - 127.0.0.1 - - [07/Mar/2025 01:38:00] "GET /api/fighters HTTP/1.1" 200 -
+2025-03-07 01:38:01,352 - werkzeug - INFO - 127.0.0.1 - - [07/Mar/2025 01:38:01] "GET /api/fighters HTTP/1.1" 200 -
+2025-03-07 01:38:21,869 - werkzeug - INFO - 127.0.0.1 - - [07/Mar/2025 01:38:21] "GET /api/fighters HTTP/1.1" 200 -
+2025-03-07 01:38:22,131 - werkzeug - INFO - 127.0.0.1 - - [07/Mar/2025 01:38:22] "GET /api/fighters HTTP/1.1" 200 -
+2025-03-07 01:38:50,801 - werkzeug - INFO - 127.0.0.1 - - [07/Mar/2025 01:38:50] "GET /api/fighters HTTP/1.1" 200 -
+2025-03-07 01:38:51,068 - werkzeug - INFO - 127.0.0.1 - - [07/Mar/2025 01:38:51] "GET /api/fighters HTTP/1.1" 200 -
+2025-03-07 01:39:07,997 - werkzeug - INFO - 127.0.0.1 - - [07/Mar/2025 01:39:07] "GET /api/fighters HTTP/1.1" 200 -
+2025-03-07 01:39:08,262 - werkzeug - INFO - 127.0.0.1 - - [07/Mar/2025 01:39:08] "GET /api/fighters HTTP/1.1" 200 -
+2025-03-07 01:39:31,251 - werkzeug - INFO - 127.0.0.1 - - [07/Mar/2025 01:39:31] "GET /api/fighters HTTP/1.1" 200 -
+2025-03-07 01:39:31,505 - werkzeug - INFO - 127.0.0.1 - - [07/Mar/2025 01:39:31] "GET /api/fighters HTTP/1.1" 200 -
+2025-03-07 01:39:41,351 - werkzeug - INFO - 127.0.0.1 - - [07/Mar/2025 01:39:41] "GET /api/fighters HTTP/1.1" 200 -
+2025-03-07 01:39:41,693 - werkzeug - INFO - 127.0.0.1 - - [07/Mar/2025 01:39:41] "GET /api/fighters HTTP/1.1" 200 -
+2025-03-07 01:39:54,598 - werkzeug - INFO - 127.0.0.1 - - [07/Mar/2025 01:39:54] "GET /api/fighters HTTP/1.1" 200 -
+2025-03-07 01:39:54,859 - werkzeug - INFO - 127.0.0.1 - - [07/Mar/2025 01:39:54] "GET /api/fighters HTTP/1.1" 200 -
+2025-03-07 01:40:08,370 - werkzeug - INFO - 127.0.0.1 - - [07/Mar/2025 01:40:08] "GET /api/fighters HTTP/1.1" 200 -
+2025-03-07 01:40:08,716 - werkzeug - INFO - 127.0.0.1 - - [07/Mar/2025 01:40:08] "GET /api/fighters HTTP/1.1" 200 -
+2025-03-07 01:48:43,488 - werkzeug - INFO - 127.0.0.1 - - [07/Mar/2025 01:48:43] "GET /api/fighters HTTP/1.1" 200 -
+2025-03-07 01:48:43,750 - werkzeug - INFO - 127.0.0.1 - - [07/Mar/2025 01:48:43] "GET /api/fighters HTTP/1.1" 200 -
+2025-03-07 01:49:02,342 - werkzeug - INFO - 127.0.0.1 - - [07/Mar/2025 01:49:02] "GET /api/fighters HTTP/1.1" 200 -
+2025-03-07 01:49:02,695 - werkzeug - INFO - 127.0.0.1 - - [07/Mar/2025 01:49:02] "GET /api/fighters HTTP/1.1" 200 -
+2025-03-07 01:49:15,789 - werkzeug - INFO - 127.0.0.1 - - [07/Mar/2025 01:49:15] "GET /api/fighters HTTP/1.1" 200 -
+2025-03-07 01:49:16,067 - werkzeug - INFO - 127.0.0.1 - - [07/Mar/2025 01:49:16] "GET /api/fighters HTTP/1.1" 200 -
+2025-03-07 01:51:01,444 - werkzeug - INFO - 127.0.0.1 - - [07/Mar/2025 01:51:01] "GET /api/fighters HTTP/1.1" 200 -
+2025-03-07 01:51:01,711 - werkzeug - INFO - 127.0.0.1 - - [07/Mar/2025 01:51:01] "GET /api/fighters HTTP/1.1" 200 -
+2025-03-07 01:51:02,967 - werkzeug - INFO - 127.0.0.1 - - [07/Mar/2025 01:51:02] "GET /api/fighters HTTP/1.1" 200 -
+2025-03-07 01:51:03,307 - werkzeug - INFO - 127.0.0.1 - - [07/Mar/2025 01:51:03] "GET /api/fighters HTTP/1.1" 200 -
+2025-03-07 01:51:04,608 - werkzeug - INFO - 127.0.0.1 - - [07/Mar/2025 01:51:04] "GET /api/fighters HTTP/1.1" 200 -
+2025-03-07 01:51:04,872 - werkzeug - INFO - 127.0.0.1 - - [07/Mar/2025 01:51:04] "GET /api/fighters HTTP/1.1" 200 -
+2025-03-07 01:51:13,362 - werkzeug - INFO - 127.0.0.1 - - [07/Mar/2025 01:51:13] "GET /api/fighters/Khabib%20Nurmagomedov HTTP/1.1" 200 -
+2025-03-07 01:51:13,690 - werkzeug - INFO - 127.0.0.1 - - [07/Mar/2025 01:51:13] "GET /api/fighters/Conor%20McGregor HTTP/1.1" 200 -
+2025-03-07 01:51:13,949 - werkzeug - INFO - 127.0.0.1 - - [07/Mar/2025 01:51:13] "OPTIONS /api/predict HTTP/1.1" 200 -
+2025-03-07 01:51:14,017 - ufc_api - INFO - Received prediction request: {'fighter1': {'SApM': 1.75, 'SLpM': 4.1, 'draws': 0, 'height': 177.8, 'id': 946, 'losses': 0, 'name': 'Khabib Nurmagomedov', 'reach': 177.8, 'sig_str_acc': 0.48, 'stance': 'Orthodox', 'str_def': 0.65, 'sub_avg': 0.8, 'td_acc': 0.48, 'td_avg': 5.32, 'td_def': 0.84, 'weight': 70.31, 'wins': 29}, 'fighter2': {'SApM': 4.66, 'SLpM': 5.32, 'draws': 0, 'height': 175.26, 'id': 874, 'losses': 6, 'name': 'Conor McGregor', 'reach': 187.96, 'sig_str_acc': 0.49, 'stance': 'Southpaw', 'str_def': 0.54, 'sub_avg': 0.1, 'td_acc': 0.55, 'td_avg': 0.67, 'td_def': 0.66, 'weight': 70.31, 'wins': 22}}
+2025-03-07 01:51:14,017 - ufc_api - INFO - Formatting fighter data for prediction: {'SApM': 1.75, 'SLpM': 4.1, 'draws': 0, 'height': 177.8, 'id': 946, 'losses': 0, 'name': 'Khabib Nurmagomedov', 'reach': 177.8, 'sig_str_acc': 0.48, 'stance': 'Orthodox', 'str_def': 0.65, 'sub_avg': 0.8, 'td_acc': 0.48, 'td_avg': 5.32, 'td_def': 0.84, 'weight': 70.31, 'wins': 29}
+2025-03-07 01:51:14,017 - ufc_api - INFO - Formatted prediction data: {'name': 'Khabib Nurmagomedov', 'height': 177.8, 'weight': 70.31, 'reach': 177.8, 'stance': 'Orthodox', 'wins': 29, 'losses': 0, 'sig_strikes_per_min': 4.1, 'sig_strike_accuracy': 0.48, 'sig_strikes_absorbed_per_min': 1.75, 'sig_strike_defense': 0.65, 'takedown_avg': 5.32, 'takedown_accuracy': 0.48, 'takedown_defense': 0.84, 'sub_avg': 0.8}
+2025-03-07 01:51:14,018 - ufc_api - INFO - Formatting fighter data for prediction: {'SApM': 4.66, 'SLpM': 5.32, 'draws': 0, 'height': 175.26, 'id': 874, 'losses': 6, 'name': 'Conor McGregor', 'reach': 187.96, 'sig_str_acc': 0.49, 'stance': 'Southpaw', 'str_def': 0.54, 'sub_avg': 0.1, 'td_acc': 0.55, 'td_avg': 0.67, 'td_def': 0.66, 'weight': 70.31, 'wins': 22}
+2025-03-07 01:51:14,018 - ufc_api - INFO - Formatted prediction data: {'name': 'Conor McGregor', 'height': 175.26, 'weight': 70.31, 'reach': 187.96, 'stance': 'Southpaw', 'wins': 22, 'losses': 6, 'sig_strikes_per_min': 5.32, 'sig_strike_accuracy': 0.49, 'sig_strikes_absorbed_per_min': 4.66, 'sig_strike_defense': 0.54, 'takedown_avg': 0.67, 'takedown_accuracy': 0.55, 'takedown_defense': 0.66, 'sub_avg': 0.1}
+2025-03-07 01:51:14,018 - ufc_api - INFO - Using fighter1 data: {'name': 'Khabib Nurmagomedov', 'height': 177.8, 'weight': 70.31, 'reach': 177.8, 'stance': 'Orthodox', 'wins': 29, 'losses': 0, 'sig_strikes_per_min': 4.1, 'sig_strike_accuracy': 0.48, 'sig_strikes_absorbed_per_min': 1.75, 'sig_strike_defense': 0.65, 'takedown_avg': 5.32, 'takedown_accuracy': 0.48, 'takedown_defense': 0.84, 'sub_avg': 0.8}
+2025-03-07 01:51:14,018 - ufc_api - INFO - Using fighter2 data: {'name': 'Conor McGregor', 'height': 175.26, 'weight': 70.31, 'reach': 187.96, 'stance': 'Southpaw', 'wins': 22, 'losses': 6, 'sig_strikes_per_min': 5.32, 'sig_strike_accuracy': 0.49, 'sig_strikes_absorbed_per_min': 4.66, 'sig_strike_defense': 0.54, 'takedown_avg': 0.67, 'takedown_accuracy': 0.55, 'takedown_defense': 0.66, 'sub_avg': 0.1}
+2025-03-07 01:51:14,020 - ufc_api - INFO - Loading ensemble model from models\ensemble_model.joblib
+2025-03-07 01:51:14,020 - ufc_model - INFO - Loading model from models\ensemble_model.joblib
+2025-03-07 01:51:14,071 - ufc_model - INFO - Model loaded successfully with 47 features
+2025-03-07 01:51:14,072 - ufc_model - INFO - predict_fight called with fighter1: Khabib Nurmagomedov
+2025-03-07 01:51:14,072 - ufc_model - INFO - predict_fight called with fighter2: Conor McGregor
+2025-03-07 01:51:14,072 - ufc_model - WARNING - Error setting PyTorch model to eval mode: 'RandomForestClassifier' object has no attribute 'parameters'
+2025-03-07 01:51:14,088 - ufc_model - INFO - Prediction result: {'probability_fighter1_wins': 0.68, 'probability_fighter2_wins': 0.31999999999999995, 'predicted_winner': 'fighter1', 'confidence_level': 'Medium'}
+2025-03-07 01:51:14,090 - werkzeug - INFO - 127.0.0.1 - - [07/Mar/2025 01:51:14] "POST /api/predict HTTP/1.1" 200 -
+2025-03-07 01:51:24,825 - werkzeug - INFO - 127.0.0.1 - - [07/Mar/2025 01:51:24] "GET /api/fighters/Conor%20McGregor HTTP/1.1" 200 -
+2025-03-07 01:51:25,162 - werkzeug - INFO - 127.0.0.1 - - [07/Mar/2025 01:51:25] "GET /api/fighters/Khabib%20Nurmagomedov HTTP/1.1" 200 -
+2025-03-07 01:51:25,415 - werkzeug - INFO - 127.0.0.1 - - [07/Mar/2025 01:51:25] "OPTIONS /api/predict HTTP/1.1" 200 -
+2025-03-07 01:51:25,471 - ufc_api - INFO - Received prediction request: {'fighter1': {'SApM': 4.66, 'SLpM': 5.32, 'draws': 0, 'height': 175.26, 'id': 874, 'losses': 6, 'name': 'Conor McGregor', 'reach': 187.96, 'sig_str_acc': 0.49, 'stance': 'Southpaw', 'str_def': 0.54, 'sub_avg': 0.1, 'td_acc': 0.55, 'td_avg': 0.67, 'td_def': 0.66, 'weight': 70.31, 'wins': 22}, 'fighter2': {'SApM': 1.75, 'SLpM': 4.1, 'draws': 0, 'height': 177.8, 'id': 946, 'losses': 0, 'name': 'Khabib Nurmagomedov', 'reach': 177.8, 'sig_str_acc': 0.48, 'stance': 'Orthodox', 'str_def': 0.65, 'sub_avg': 0.8, 'td_acc': 0.48, 'td_avg': 5.32, 'td_def': 0.84, 'weight': 70.31, 'wins': 29}}
+2025-03-07 01:51:25,471 - ufc_api - INFO - Formatting fighter data for prediction: {'SApM': 4.66, 'SLpM': 5.32, 'draws': 0, 'height': 175.26, 'id': 874, 'losses': 6, 'name': 'Conor McGregor', 'reach': 187.96, 'sig_str_acc': 0.49, 'stance': 'Southpaw', 'str_def': 0.54, 'sub_avg': 0.1, 'td_acc': 0.55, 'td_avg': 0.67, 'td_def': 0.66, 'weight': 70.31, 'wins': 22}
+2025-03-07 01:51:25,472 - ufc_api - INFO - Formatted prediction data: {'name': 'Conor McGregor', 'height': 175.26, 'weight': 70.31, 'reach': 187.96, 'stance': 'Southpaw', 'wins': 22, 'losses': 6, 'sig_strikes_per_min': 5.32, 'sig_strike_accuracy': 0.49, 'sig_strikes_absorbed_per_min': 4.66, 'sig_strike_defense': 0.54, 'takedown_avg': 0.67, 'takedown_accuracy': 0.55, 'takedown_defense': 0.66, 'sub_avg': 0.1}
+2025-03-07 01:51:25,472 - ufc_api - INFO - Formatting fighter data for prediction: {'SApM': 1.75, 'SLpM': 4.1, 'draws': 0, 'height': 177.8, 'id': 946, 'losses': 0, 'name': 'Khabib Nurmagomedov', 'reach': 177.8, 'sig_str_acc': 0.48, 'stance': 'Orthodox', 'str_def': 0.65, 'sub_avg': 0.8, 'td_acc': 0.48, 'td_avg': 5.32, 'td_def': 0.84, 'weight': 70.31, 'wins': 29}
+2025-03-07 01:51:25,472 - ufc_api - INFO - Formatted prediction data: {'name': 'Khabib Nurmagomedov', 'height': 177.8, 'weight': 70.31, 'reach': 177.8, 'stance': 'Orthodox', 'wins': 29, 'losses': 0, 'sig_strikes_per_min': 4.1, 'sig_strike_accuracy': 0.48, 'sig_strikes_absorbed_per_min': 1.75, 'sig_strike_defense': 0.65, 'takedown_avg': 5.32, 'takedown_accuracy': 0.48, 'takedown_defense': 0.84, 'sub_avg': 0.8}
+2025-03-07 01:51:25,473 - ufc_api - INFO - Using fighter1 data: {'name': 'Conor McGregor', 'height': 175.26, 'weight': 70.31, 'reach': 187.96, 'stance': 'Southpaw', 'wins': 22, 'losses': 6, 'sig_strikes_per_min': 5.32, 'sig_strike_accuracy': 0.49, 'sig_strikes_absorbed_per_min': 4.66, 'sig_strike_defense': 0.54, 'takedown_avg': 0.67, 'takedown_accuracy': 0.55, 'takedown_defense': 0.66, 'sub_avg': 0.1}
+2025-03-07 01:51:25,473 - ufc_api - INFO - Using fighter2 data: {'name': 'Khabib Nurmagomedov', 'height': 177.8, 'weight': 70.31, 'reach': 177.8, 'stance': 'Orthodox', 'wins': 29, 'losses': 0, 'sig_strikes_per_min': 4.1, 'sig_strike_accuracy': 0.48, 'sig_strikes_absorbed_per_min': 1.75, 'sig_strike_defense': 0.65, 'takedown_avg': 5.32, 'takedown_accuracy': 0.48, 'takedown_defense': 0.84, 'sub_avg': 0.8}
+2025-03-07 01:51:25,473 - ufc_api - INFO - Loading ensemble model from models\ensemble_model.joblib
+2025-03-07 01:51:25,473 - ufc_model - INFO - Loading model from models\ensemble_model.joblib
+2025-03-07 01:51:25,515 - ufc_model - INFO - Model loaded successfully with 47 features
+2025-03-07 01:51:25,515 - ufc_model - INFO - predict_fight called with fighter1: Conor McGregor
+2025-03-07 01:51:25,515 - ufc_model - INFO - predict_fight called with fighter2: Khabib Nurmagomedov
+2025-03-07 01:51:25,515 - ufc_model - WARNING - Error setting PyTorch model to eval mode: 'RandomForestClassifier' object has no attribute 'parameters'
+2025-03-07 01:51:25,530 - ufc_model - INFO - Prediction result: {'probability_fighter1_wins': 0.48, 'probability_fighter2_wins': 0.52, 'predicted_winner': 'fighter2', 'confidence_level': 'Low'}
+2025-03-07 01:51:25,533 - werkzeug - INFO - 127.0.0.1 - - [07/Mar/2025 01:51:25] "POST /api/predict HTTP/1.1" 200 -
+2025-03-07 01:51:33,303 - werkzeug - INFO - 127.0.0.1 - - [07/Mar/2025 01:51:33] "GET /api/fighters/Khabib%20Nurmagomedov HTTP/1.1" 200 -
+2025-03-07 01:51:33,635 - werkzeug - INFO - 127.0.0.1 - - [07/Mar/2025 01:51:33] "GET /api/fighters/Conor%20McGregor HTTP/1.1" 200 -
+2025-03-07 01:51:33,895 - werkzeug - INFO - 127.0.0.1 - - [07/Mar/2025 01:51:33] "OPTIONS /api/predict HTTP/1.1" 200 -
+2025-03-07 01:51:33,941 - ufc_api - INFO - Received prediction request: {'fighter1': {'SApM': 1.75, 'SLpM': 4.1, 'draws': 0, 'height': 177.8, 'id': 946, 'losses': 0, 'name': 'Khabib Nurmagomedov', 'reach': 177.8, 'sig_str_acc': 0.48, 'stance': 'Orthodox', 'str_def': 0.65, 'sub_avg': 0.8, 'td_acc': 0.48, 'td_avg': 5.32, 'td_def': 0.84, 'weight': 70.31, 'wins': 29}, 'fighter2': {'SApM': 4.66, 'SLpM': 5.32, 'draws': 0, 'height': 175.26, 'id': 874, 'losses': 6, 'name': 'Conor McGregor', 'reach': 187.96, 'sig_str_acc': 0.49, 'stance': 'Southpaw', 'str_def': 0.54, 'sub_avg': 0.1, 'td_acc': 0.55, 'td_avg': 0.67, 'td_def': 0.66, 'weight': 70.31, 'wins': 22}}
+2025-03-07 01:51:33,942 - ufc_api - INFO - Formatting fighter data for prediction: {'SApM': 1.75, 'SLpM': 4.1, 'draws': 0, 'height': 177.8, 'id': 946, 'losses': 0, 'name': 'Khabib Nurmagomedov', 'reach': 177.8, 'sig_str_acc': 0.48, 'stance': 'Orthodox', 'str_def': 0.65, 'sub_avg': 0.8, 'td_acc': 0.48, 'td_avg': 5.32, 'td_def': 0.84, 'weight': 70.31, 'wins': 29}
+2025-03-07 01:51:33,942 - ufc_api - INFO - Formatted prediction data: {'name': 'Khabib Nurmagomedov', 'height': 177.8, 'weight': 70.31, 'reach': 177.8, 'stance': 'Orthodox', 'wins': 29, 'losses': 0, 'sig_strikes_per_min': 4.1, 'sig_strike_accuracy': 0.48, 'sig_strikes_absorbed_per_min': 1.75, 'sig_strike_defense': 0.65, 'takedown_avg': 5.32, 'takedown_accuracy': 0.48, 'takedown_defense': 0.84, 'sub_avg': 0.8}
+2025-03-07 01:51:33,942 - ufc_api - INFO - Formatting fighter data for prediction: {'SApM': 4.66, 'SLpM': 5.32, 'draws': 0, 'height': 175.26, 'id': 874, 'losses': 6, 'name': 'Conor McGregor', 'reach': 187.96, 'sig_str_acc': 0.49, 'stance': 'Southpaw', 'str_def': 0.54, 'sub_avg': 0.1, 'td_acc': 0.55, 'td_avg': 0.67, 'td_def': 0.66, 'weight': 70.31, 'wins': 22}
+2025-03-07 01:51:33,944 - ufc_api - INFO - Formatted prediction data: {'name': 'Conor McGregor', 'height': 175.26, 'weight': 70.31, 'reach': 187.96, 'stance': 'Southpaw', 'wins': 22, 'losses': 6, 'sig_strikes_per_min': 5.32, 'sig_strike_accuracy': 0.49, 'sig_strikes_absorbed_per_min': 4.66, 'sig_strike_defense': 0.54, 'takedown_avg': 0.67, 'takedown_accuracy': 0.55, 'takedown_defense': 0.66, 'sub_avg': 0.1}
+2025-03-07 01:51:33,944 - ufc_api - INFO - Using fighter1 data: {'name': 'Khabib Nurmagomedov', 'height': 177.8, 'weight': 70.31, 'reach': 177.8, 'stance': 'Orthodox', 'wins': 29, 'losses': 0, 'sig_strikes_per_min': 4.1, 'sig_strike_accuracy': 0.48, 'sig_strikes_absorbed_per_min': 1.75, 'sig_strike_defense': 0.65, 'takedown_avg': 5.32, 'takedown_accuracy': 0.48, 'takedown_defense': 0.84, 'sub_avg': 0.8}
+2025-03-07 01:51:33,944 - ufc_api - INFO - Using fighter2 data: {'name': 'Conor McGregor', 'height': 175.26, 'weight': 70.31, 'reach': 187.96, 'stance': 'Southpaw', 'wins': 22, 'losses': 6, 'sig_strikes_per_min': 5.32, 'sig_strike_accuracy': 0.49, 'sig_strikes_absorbed_per_min': 4.66, 'sig_strike_defense': 0.54, 'takedown_avg': 0.67, 'takedown_accuracy': 0.55, 'takedown_defense': 0.66, 'sub_avg': 0.1}
+2025-03-07 01:51:33,944 - ufc_api - INFO - Loading ensemble model from models\ensemble_model.joblib
+2025-03-07 01:51:33,944 - ufc_model - INFO - Loading model from models\ensemble_model.joblib
+2025-03-07 01:51:33,986 - ufc_model - INFO - Model loaded successfully with 47 features
+2025-03-07 01:51:33,988 - ufc_model - INFO - predict_fight called with fighter1: Khabib Nurmagomedov
+2025-03-07 01:51:33,989 - ufc_model - INFO - predict_fight called with fighter2: Conor McGregor
+2025-03-07 01:51:33,989 - ufc_model - WARNING - Error setting PyTorch model to eval mode: 'RandomForestClassifier' object has no attribute 'parameters'
+2025-03-07 01:51:33,995 - ufc_model - INFO - Prediction result: {'probability_fighter1_wins': 0.68, 'probability_fighter2_wins': 0.31999999999999995, 'predicted_winner': 'fighter1', 'confidence_level': 'Medium'}
+2025-03-07 01:51:33,998 - werkzeug - INFO - 127.0.0.1 - - [07/Mar/2025 01:51:33] "POST /api/predict HTTP/1.1" 200 -
+2025-03-07 01:54:18,835 - werkzeug - INFO - 127.0.0.1 - - [07/Mar/2025 01:54:18] "GET /api/fighters HTTP/1.1" 200 -
+2025-03-07 01:54:19,092 - werkzeug - INFO - 127.0.0.1 - - [07/Mar/2025 01:54:19] "GET /api/fighters HTTP/1.1" 200 -
+2025-03-07 01:54:20,527 - werkzeug - INFO - 127.0.0.1 - - [07/Mar/2025 01:54:20] "GET /api/fighters HTTP/1.1" 200 -
+2025-03-07 01:54:20,872 - werkzeug - INFO - 127.0.0.1 - - [07/Mar/2025 01:54:20] "GET /api/fighters HTTP/1.1" 200 -
+2025-03-07 01:55:27,519 - werkzeug - INFO - 127.0.0.1 - - [07/Mar/2025 01:55:27] "GET /api/fighters HTTP/1.1" 200 -
+2025-03-07 01:55:27,770 - werkzeug - INFO - 127.0.0.1 - - [07/Mar/2025 01:55:27] "GET /api/fighters HTTP/1.1" 200 -
+2025-03-07 01:55:52,663 - werkzeug - INFO - 127.0.0.1 - - [07/Mar/2025 01:55:52] "GET /api/fighters HTTP/1.1" 200 -
+2025-03-07 01:55:53,016 - werkzeug - INFO - 127.0.0.1 - - [07/Mar/2025 01:55:53] "GET /api/fighters HTTP/1.1" 200 -

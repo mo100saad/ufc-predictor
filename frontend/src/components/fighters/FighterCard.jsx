@@ -42,7 +42,7 @@ const getWeightClass = (weightInKg) => {
       transition={{ duration: 0.2 }}
     >
       <Link 
-        to={`/fighter/${encodeURIComponent(fighter.name)}`}
+        to={`/fighters/${encodeURIComponent(fighter.name)}`}
         className="block h-full"
       >
         <div className="relative h-full backdrop-blur-sm bg-gray-900/60 border border-gray-800 shadow-lg hover:shadow-xl rounded-lg overflow-hidden transition-all duration-300 hover:border-gray-700 group-hover:bg-gray-900/80">

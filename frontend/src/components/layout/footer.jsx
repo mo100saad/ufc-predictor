@@ -66,14 +66,14 @@ const Footer = () => {
             </motion.a>
             
             <p className="mt-6 text-gray-500 text-sm">
-              This application is for educational purposes only.
+              This application is for educational purposes only don't gamble.
             </p>
           </div>
         </div>
         
         <div className="mt-10 pt-6 border-t border-gray-800 text-center">
           <p className="text-gray-500 text-xs">
-            UFC is a registered trademark of Zuffa, LLC. This site is not affiliated with UFC or Zuffa, LLC.
+            UFC is a registered trademark of Zuffa, LLC. This site is not affiliated with UFC or Zuffa, LLC but is taken as inspiration by Mohammad Saad.
           </p>
         </div>
       </div>

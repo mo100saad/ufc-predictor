@@ -19,7 +19,7 @@ const Fighters = () => {
   const [displayCount, setDisplayCount] = useState(24);
   const [statsView, setStatsView] = useState(false);
 
-  // Define weight classes with proper kg ranges (using the same thresholds as in your FighterCard)
+  // Define weight classes with proper kg ranges
   const weightClasses = [
     'All',
     'Flyweight',     // ≤ 56.8 kg (125 lbs)
@@ -225,15 +225,28 @@ const Fighters = () => {
     hidden: { opacity: 0, y: 20 },
     show: { opacity: 1, y: 0, transition: { duration: 0.3 } }
   };
+  
+  // Create keyframes animation for the glow effect on the toggle button
+  const pulseKeyframes = `
+    @keyframes pulse-slow {
+      0% { opacity: 0.2; }
+      50% { opacity: 0.3; }
+      100% { opacity: 0.2; }
+    }
+  `;
 
   return (
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
+      className="max-w-screen-2xl mx-auto px-4 pt-6 pb-12"
     >
+      {/* Custom keyframes for animations */}
+      <style>{pulseKeyframes}</style>
+
       {/* Hero Section */}
-      <div className="relative mb-12">
+      <div className="relative mb-8">
         <div className="absolute inset-0 bg-gradient-to-b from-black via-gray-900 to-transparent h-48 -z-10"></div>
         
         <motion.h1 
@@ -255,129 +268,219 @@ const Fighters = () => {
         </motion.p>
       </div>
       
-      {/* Search and Filter Controls */}
-      <motion.div 
-        className="mb-8 p-6 backdrop-blur-sm bg-gray-900/60 border border-gray-800 shadow-xl rounded-lg"
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, delay: 0.2 }}
-      >
-        <div className="flex flex-col md:flex-row gap-4 mb-4">
-          {/* Search Input */}
-          <div className="flex-grow">
-            <div className="relative">
-              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <svg className="h-5 w-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                  <path fillRule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clipRule="evenodd" />
-                </svg>
-              </div>
-              <input
-                type="text"
-                placeholder="Search fighters by name..."
-                className="w-full pl-10 p-3 bg-gray-800 border border-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-              />
-            </div>
-          </div>
-          
-          {/* Filter Dropdown - Weight Class */}
-          <div className="md:w-56">
-            <div className="relative">
-              <label className="block text-sm text-gray-400 mb-1 pl-1">Weight Class</label>
-              <select
-                className="w-full p-3 bg-gray-800 border border-gray-700 rounded-lg text-white appearance-none focus:outline-none focus:ring-2 focus:ring-blue-500"
-                value={weightClassFilter}
-                onChange={(e) => setWeightClassFilter(e.target.value)}
-              >
-                {weightClasses.map(weightClass => (
-                  <option key={weightClass} value={weightClass}>
-                    {weightClass} {weightClass !== 'All' ? `(${getWeightClassRange(weightClass)})` : ''}
-                  </option>
-                ))}
-              </select>
-              <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none mt-6">
-                <svg className="h-5 w-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                  <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
-                </svg>
-              </div>
-            </div>
-          </div>
-          
-          {/* Filter Dropdown - Stance */}
-          <div className="md:w-56">
-            <div className="relative">
-              <label className="block text-sm text-gray-400 mb-1 pl-1">Stance</label>
-              <select
-                className="w-full p-3 bg-gray-800 border border-gray-700 rounded-lg text-white appearance-none focus:outline-none focus:ring-2 focus:ring-blue-500"
-                value={stanceFilter}
-                onChange={(e) => setStanceFilter(e.target.value)}
-              >
-                {stanceOptions.map(stance => (
-                  <option key={stance} value={stance}>
-                    {stance}
-                  </option>
-                ))}
-              </select>
-              <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none mt-6">
-                <svg className="h-5 w-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                  <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
-                </svg>
-              </div>
+     {/* Search and Filter Controls - Redesigned for better alignment and visual appeal */}
+<motion.div 
+  className="mb-6 rounded-xl overflow-hidden shadow-2xl"
+  initial={{ opacity: 0, y: 20 }}
+  animate={{ opacity: 1, y: 0 }}
+  transition={{ duration: 0.5, delay: 0.2 }}
+>
+  {/* Top Search Bar - Full width with gradient background */}
+  <div className="bg-gradient-to-r from-gray-900 to-gray-800 p-4">
+    <div className="relative">
+      <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+        <svg className="h-5 w-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+          <path fillRule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clipRule="evenodd" />
+        </svg>
+      </div>
+      <input
+        type="text"
+        placeholder="Search fighters by name..."
+        className="w-full pl-12 p-3.5 bg-gray-800 border border-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-300"
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.target.value)}
+      />
+    </div>
+  </div>
+  
+  {/* Filter Controls Bar - Flex container with improved alignment */}
+  <div className="bg-gray-900 p-4 flex flex-col md:flex-row items-center justify-between space-y-4 md:space-y-0 md:space-x-4">
+    {/* Left Side - Filters Group */}
+    <div className="flex flex-col sm:flex-row items-start sm:items-center sm:justify-start space-y-4 sm:space-y-0 sm:space-x-8 w-full md:w-auto">
+      {/* Weight Class Filter */}
+      <div className="w-full sm:w-auto">
+        <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2">
+          <label className="text-sm text-gray-400 whitespace-nowrap font-medium">Weight Class:</label>
+          <div className="relative flex-grow">
+            <select
+              className="w-full p-2.5 bg-gray-800 border border-gray-700 rounded-lg text-white appearance-none focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all min-w-[200px]"
+              value={weightClassFilter}
+              onChange={(e) => setWeightClassFilter(e.target.value)}
+            >
+              {weightClasses.map(weightClass => (
+                <option key={weightClass} value={weightClass}>
+                  {weightClass !== 'All' ? weightClass : 'All Weight Classes'}
+                </option>
+              ))}
+            </select>
+            <div className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
+              <svg className="h-5 w-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                <path
+                  fillRule="evenodd"
+                  d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                  clipRule="evenodd"
+                />
+              </svg>
             </div>
           </div>
         </div>
-        
-        <div className="flex flex-col md:flex-row justify-between items-end">
-          {/* Sort Options */}
-          <div className="md:w-64 mb-4 md:mb-0">
-            <div className="relative">
-              <label className="block text-sm text-gray-400 mb-1 pl-1">Sort By</label>
-              <div className="flex">
-                <select
-                  className="w-full p-3 bg-gray-800 border border-gray-700 rounded-l-lg text-white appearance-none focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  value={sortOption}
-                  onChange={(e) => setSortOption(e.target.value)}
-                >
-                  {sortOptions.map(option => (
-                    <option key={option.value} value={option.value}>
-                      {option.label}
-                    </option>
-                  ))}
-                </select>
-                <button
-                  className="px-3 bg-gray-700 border border-gray-600 rounded-r-lg focus:outline-none hover:bg-gray-600"
-                  onClick={toggleSortDirection}
-                  title={sortDirection === 'asc' ? 'Ascending' : 'Descending'}
-                >
-                  {sortDirection === 'asc' ? (
-                    <svg className="h-5 w-5 text-gray-300" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                      <path fillRule="evenodd" d="M14.707 12.707a1 1 0 01-1.414 0L10 9.414l-3.293 3.293a1 1 0 01-1.414-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 010 1.414z" clipRule="evenodd" />
-                    </svg>
-                  ) : (
-                    <svg className="h-5 w-5 text-gray-300" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                      <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
-                    </svg>
-                  )}
-                </button>
-              </div>
+      </div>
+
+      {/* Stance Filter */}
+      <div className="w-full sm:w-auto">
+        <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2">
+          <label className="text-sm text-gray-400 whitespace-nowrap font-medium">Stance:</label>
+          <div className="relative flex-grow">
+            <select
+              className="w-full p-2.5 bg-gray-800 border border-gray-700 rounded-lg text-white appearance-none focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all min-w-[140px]"
+              value={stanceFilter}
+              onChange={(e) => setStanceFilter(e.target.value)}
+            >
+              {stanceOptions.map(stance => (
+                <option key={stance} value={stance}>
+                  {stance !== 'All' ? stance : 'All Stances'}
+                </option>
+              ))}
+            </select>
+            <div className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
+              <svg className="h-5 w-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
+              </svg>
             </div>
           </div>
-          
-          {/* View Toggle Button */}
-          <button 
-            className={`px-4 py-2 rounded-lg transition-colors flex items-center border ${
-              statsView 
-                ? 'bg-blue-600 border-blue-500 hover:bg-blue-700 text-white' 
-                : 'bg-gray-800 border-gray-700 hover:bg-gray-700 text-gray-300'
-            }`}
-            onClick={toggleStatsView}
-          >
-            <svg className="h-5 w-5 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-              <path d="M5 3a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2V5a2 2 0 00-2-2H5zM3 5a2 2 0 012-2h10a2 2 0 012 2v10a2 2 0 01-2 2H5a2 2 0 01-2-2V5z" />
-            </svg>
-            {statsView ? 'Card View' : 'Stats View'}
-          </button>
+        </div>
+      </div>
+    </div>
+
+    {/* Right Side - Sort Controls and View Toggle */}
+    <div className="flex flex-col sm:flex-row items-center space-y-4 sm:space-y-0 sm:space-x-4 w-full md:w-auto">
+      {/* Sort Controls */}
+      <div className="w-full sm:w-auto">
+        <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2">
+          <label className="text-sm text-gray-400 whitespace-nowrap font-medium">Sort By:</label>
+          <div className="relative flex-grow">
+            <div className="flex">
+              <select
+                className="p-2.5 bg-gray-800 border border-gray-700 rounded-l-lg text-white appearance-none focus:outline-none focus:ring-2 focus:ring-blue-500 pl-3 pr-8 min-w-[120px] transition-all"
+                value={sortOption}
+                onChange={(e) => setSortOption(e.target.value)}
+              >
+                {sortOptions.map(option => (
+                  <option key={option.value} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
+              </select>
+              <button
+                className="p-2.5 bg-gray-700 border border-gray-600 rounded-r-lg focus:outline-none hover:bg-gray-600 transition-all duration-300 transform hover:scale-105"
+                onClick={toggleSortDirection}
+                title={sortDirection === 'asc' ? 'Switch to Descending' : 'Switch to Ascending'}
+              >
+                {sortDirection === 'asc' ? (
+                  <svg className="h-5 w-5 text-gray-300" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                    <path fillRule="evenodd" d="M14.707 12.707a1 1 0 01-1.414 0L10 9.414l-3.293 3.293a1 1 0 01-1.414-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 010 1.414z" clipRule="evenodd" />
+                  </svg>
+                ) : (
+                  <svg className="h-5 w-5 text-gray-300" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                    <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
+                  </svg>
+                )}
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+            {/* Enhanced View Toggle Button */}
+            <button 
+              className={`
+                px-5 py-2.5 rounded-lg font-medium
+                min-w-[140px] h-[42px]
+                shadow-lg hover:shadow-xl
+                transition-all duration-300 transform hover:translate-y-[-2px]
+                flex items-center justify-center gap-2 overflow-hidden relative
+                ${
+                  statsView 
+                    ? 'bg-gradient-to-r from-blue-600 via-blue-500 to-blue-600 text-white' 
+                    : 'bg-gradient-to-r from-gray-800 via-gray-700 to-gray-800 text-gray-200 border border-gray-700'
+                }
+              `}
+              onClick={toggleStatsView}
+            >
+              {/* Button Background Animation */}
+              <div className={`
+                absolute inset-0 bg-gradient-to-r 
+                ${statsView 
+                  ? 'from-blue-700 via-blue-500 to-blue-700' 
+                  : 'from-gray-700 via-gray-600 to-gray-700'
+                }
+                opacity-0 hover:opacity-100 transition-opacity duration-500
+              `}></div>
+              
+              {/* Icons with Fade Transition */}
+              <div className="relative flex items-center justify-center w-full">
+                {/* Card View Icon - Shown when in Stats View */}
+                <div className={`
+                  absolute inset-0 flex items-center justify-center
+                  transition-all duration-300 transform
+                  ${statsView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}
+                `}>
+                  <svg className="h-5 w-5 mr-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                    <path d="M7 3a1 1 0 000 2h6a1 1 0 100-2H7zM4 7a1 1 0 011-1h10a1 1 0 110 2H5a1 1 0 01-1-1zM2 11a2 2 0 012-2h12a2 2 0 012 2v4a2 2 0 01-2 2H4a2 2 0 01-2-2v-4z" />
+                  </svg>
+                  <span>Card View</span>
+                </div>
+                
+                {/* Stats View Icon - Shown when in Card View */}
+                <div className={`
+                  absolute inset-0 flex items-center justify-center
+                  transition-all duration-300 transform
+                  ${!statsView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}
+                `}>
+                  <svg className="h-5 w-5 mr-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                    <path d="M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zm6-4a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zm6-3a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z" />
+                  </svg>
+                  <span>Stats View</span>
+                </div>
+              </div>
+              
+              {/* Button Glow Effect */}
+              <div className={`
+                absolute inset-0 rounded-lg
+                transition-opacity duration-500
+                ${statsView 
+                  ? 'opacity-30 animate-pulse-slow bg-blue-400' 
+                  : 'opacity-0'
+                }
+                blur-xl
+              `}></div>
+            </button>
+          </div>
+        </div>
+      </motion.div>
+      
+      {/* Results Summary Bar - Clean, aligned with the main controls */}
+      <motion.div 
+        className="flex flex-wrap justify-between items-center mb-5 px-4 py-3 bg-gray-900/60 backdrop-blur-sm rounded-lg border border-gray-800 shadow-md"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.5, delay: 0.3 }}
+      >
+        <div className="text-gray-400">
+          <span className="font-medium text-white">{filteredFighters.length}</span> fighters found
+          {weightClassFilter !== 'All' && (
+            <span> in <span className="text-blue-400">{weightClassFilter}</span> division</span>
+          )}
+          {stanceFilter !== 'All' && (
+            <span> with <span className="text-purple-400">{stanceFilter}</span> stance</span>
+          )}
+          {searchTerm && (
+            <span> matching <span className="text-green-400">"{searchTerm}"</span></span>
+          )}
+        </div>
+        
+        <div className="text-sm text-gray-500 mt-2 sm:mt-0">
+          Sorted by <span className="text-gray-300">{sortOptions.find(o => o.value === sortOption)?.label || 'Name'}</span> ({sortDirection === 'asc' ? 'ascending' : 'descending'})
         </div>
       </motion.div>
       
@@ -390,95 +493,82 @@ const Fighters = () => {
         <ErrorAlert message={error} />
       ) : (
         <>
-          {/* Results Summary */}
-          <motion.div 
-            className="flex justify-between items-center mb-6"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.5, delay: 0.3 }}
-          >
-            <p className="text-gray-400">
-              <span className="font-medium text-white">{filteredFighters.length}</span> fighters found
-              {weightClassFilter !== 'All' && (
-                <span> in <span className="text-blue-400">{weightClassFilter}</span> division</span>
-              )}
-              {stanceFilter !== 'All' && (
-                <span> with <span className="text-purple-400">{stanceFilter}</span> stance</span>
-              )}
-              {searchTerm && (
-                <span> matching <span className="text-green-400">{searchTerm}</span></span>
-              )}
-            </p>
-            
-            <div className="text-sm text-gray-500">
-              Sorted by <span className="text-gray-300">{sortOptions.find(o => o.value === sortOption)?.label || 'Name'}</span> ({sortDirection === 'asc' ? 'ascending' : 'descending'})
-            </div>
-          </motion.div>
-          
           {/* Fighter Display */}
           {filteredFighters.length > 0 ? (
             <>
               {statsView ? (
                 // Stats Table View
                 <motion.div 
-                  className="overflow-x-auto"
+                  className="overflow-x-auto bg-gray-900/50 backdrop-blur-sm border border-gray-800 rounded-xl shadow-xl"
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ duration: 0.5 }}
                 >
                   <table className="w-full border-collapse">
                     <thead>
-                      <tr className="bg-gray-800 text-left">
-                        <th className="p-3 border-b border-gray-700">Name</th>
-                        <th className="p-3 border-b border-gray-700">Record</th>
-                        <th className="p-3 border-b border-gray-700">Weight (kg)</th>
-                        <th className="p-3 border-b border-gray-700">Height</th>
-                        <th className="p-3 border-b border-gray-700">Reach</th>
-                        <th className="p-3 border-b border-gray-700">Stance</th>
-                        <th className="p-3 border-b border-gray-700">Style</th>
-                        <th className="p-3 border-b border-gray-700">SLpM</th>
-                        <th className="p-3 border-b border-gray-700">TD Avg</th>
-                        <th className="p-3 border-b border-gray-700">Sub Avg</th>
+                      <tr className="bg-gradient-to-r from-gray-800 to-gray-700 text-left">
+                        <th className="p-3 border-b border-gray-700 font-semibold">Name</th>
+                        <th className="p-3 border-b border-gray-700 font-semibold">Record</th>
+                        <th className="p-3 border-b border-gray-700 font-semibold">Weight (kg)</th>
+                        <th className="p-3 border-b border-gray-700 font-semibold">Height</th>
+                        <th className="p-3 border-b border-gray-700 font-semibold">Reach</th>
+                        <th className="p-3 border-b border-gray-700 font-semibold">Stance</th>
+                        <th className="p-3 border-b border-gray-700 font-semibold">Style</th>
+                        <th className="p-3 border-b border-gray-700 font-semibold">SLpM</th>
+                        <th className="p-3 border-b border-gray-700 font-semibold">TD Avg</th>
+                        <th className="p-3 border-b border-gray-700 font-semibold">Sub Avg</th>
                       </tr>
                     </thead>
                     <tbody>
                       {filteredFighters.slice(0, displayCount).map((fighter, index) => (
-                        <tr key={fighter.id || index} className={index % 2 === 0 ? 'bg-gray-900' : 'bg-gray-800/50'}>
+                        <tr key={fighter.id || index} className={index % 2 === 0 ? 'bg-gray-900/80' : 'bg-gray-800/50'}>
                           <td className="p-3 border-b border-gray-700 font-medium text-white">
                             <Link 
-                              to={`/fighter/${encodeURIComponent(fighter.name)}`}
-                              className="hover:text-blue-400 transition-colors"
+                              to={`/fighters/${encodeURIComponent(fighter.name)}`}
+                              className="hover:text-blue-400 transition-colors hover:underline flex items-center"
                             >
                               {fighter.name}
+                              <svg className="h-4 w-4 ml-1 opacity-50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                <path fillRule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clipRule="evenodd" />
+                              </svg>
                             </Link>
                           </td>
                           <td className="p-3 border-b border-gray-700">
-                            {fighter.wins || 0}-{fighter.losses || 0}
-                            {fighter.draws > 0 ? `-${fighter.draws}` : ''}
+                            <span className="py-1 px-2 rounded bg-gray-800 text-gray-300">
+                              {fighter.wins || 0}-{fighter.losses || 0}
+                              {fighter.draws > 0 ? `-${fighter.draws}` : ''}
+                            </span>
                           </td>
                           <td className="p-3 border-b border-gray-700">
-                            {fighter.weight ? fighter.weight.toFixed(1) : 'N/A'}
+                            {fighter.weight !== null && fighter.weight !== undefined ? fighter.weight.toFixed(1) : 'N/A'}
                           </td>
                           <td className="p-3 border-b border-gray-700">
-                            {fighter.height ? fighter.height.toFixed(2) : 'N/A'}
+                            {fighter.height !== null && fighter.height !== undefined ? fighter.height.toFixed(2) : 'N/A'}
                           </td>
                           <td className="p-3 border-b border-gray-700">
-                            {fighter.reach ? fighter.reach.toFixed(1) : 'N/A'}
+                            {fighter.reach !== null && fighter.reach !== undefined ? fighter.reach.toFixed(1) : 'N/A'}
                           </td>
                           <td className="p-3 border-b border-gray-700">
-                            {fighter.stance || 'N/A'}
+                            {fighter.stance !== null && fighter.stance !== undefined ? fighter.stance : 'N/A'}
                           </td>
                           <td className="p-3 border-b border-gray-700">
-                            {getFighterStyle(fighter)}
+                            <span className={`py-1 px-2 rounded text-sm ${
+                              getFighterStyle(fighter) === 'Striker' ? 'bg-red-900/30 text-red-300' :
+                              getFighterStyle(fighter) === 'Grappler' ? 'bg-blue-900/30 text-blue-300' :
+                              getFighterStyle(fighter) === 'Well-Rounded' ? 'bg-purple-900/30 text-purple-300' :
+                              'bg-gray-800 text-gray-300'
+                            }`}>
+                              {getFighterStyle(fighter)}
+                            </span>
                           </td>
                           <td className="p-3 border-b border-gray-700">
-                            {fighter.SLpM ? fighter.SLpM.toFixed(1) : 'N/A'}
+                            {fighter.SLpM !== null && fighter.SLpM !== undefined ? fighter.SLpM.toFixed(1) : 'N/A'}
                           </td>
                           <td className="p-3 border-b border-gray-700">
-                            {fighter.td_avg ? fighter.td_avg.toFixed(1) : 'N/A'}
+                            {fighter.td_avg !== null && fighter.td_avg !== undefined ? fighter.td_avg.toFixed(1) : 'N/A'}
                           </td>
                           <td className="p-3 border-b border-gray-700">
-                            {fighter.sub_avg ? fighter.sub_avg.toFixed(1) : 'N/A'}
+                            {fighter.sub_avg !== null && fighter.sub_avg !== undefined ? fighter.sub_avg.toFixed(1) : 'N/A'}
                           </td>
                         </tr>
                       ))}
@@ -486,7 +576,7 @@ const Fighters = () => {
                   </table>
                 </motion.div>
               ) : (
-                // Card Grid View
+                // Card Grid View with improved animations
                 <motion.div 
                   className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
                   variants={container}
@@ -494,14 +584,18 @@ const Fighters = () => {
                   animate="show"
                 >
                   {filteredFighters.slice(0, displayCount).map((fighter, index) => (
-                    <motion.div key={fighter.id || index} variants={item}>
+                    <motion.div 
+                      key={fighter.id || index} 
+                      variants={item}
+                      whileHover={{ y: -5, transition: { duration: 0.2 } }}
+                    >
                       <FighterCard fighter={fighter} />
                     </motion.div>
                   ))}
                 </motion.div>
               )}
               
-              {/* Load More Button */}
+              {/* Load More Button - Enhanced */}
               {displayCount < filteredFighters.length && (
                 <motion.div 
                   className="mt-10 flex justify-center"
@@ -510,24 +604,32 @@ const Fighters = () => {
                   transition={{ delay: 0.5 }}
                 >
                   <button 
-                    className="px-6 py-3 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-medium rounded-lg shadow-lg transition-all duration-300 transform hover:scale-105"
+                    className="px-6 py-3 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-medium rounded-lg shadow-lg transition-all duration-300 transform hover:scale-105 hover:shadow-xl"
                     onClick={loadMore}
                   >
-                    Load More Fighters
+                    <div className="flex items-center">
+                      <span>Load More Fighters</span>
+                      <svg className="ml-2 h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v3.586L7.707 9.293a1 1 0 00-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L11 10.586V7z" clipRule="evenodd" />
+                      </svg>
+                    </div>
                   </button>
                 </motion.div>
               )}
             </>
           ) : (
             <motion.div 
-              className="text-center py-16"
+              className="text-center py-16 bg-gray-900/50 backdrop-blur-sm border border-gray-800 rounded-xl shadow-xl"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.5 }}
             >
+              <svg className="mx-auto h-16 w-16 text-gray-600 mb-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
               <p className="text-gray-400 text-lg mb-4">No fighters found matching your criteria</p>
               <button
-                className="px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-lg transition-colors"
+                className="px-5 py-2.5 bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl"
                 onClick={() => {
                   setSearchTerm('');
                   setWeightClassFilter('All');

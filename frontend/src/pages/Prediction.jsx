@@ -287,7 +287,7 @@ const Prediction = () => {
         <p className="text-gray-400 mt-8 text-sm text-center max-w-3xl mx-auto">
           <span className="font-semibold text-yellow-400">Disclaimer:</span> Predictions are based on statistical models and historical data. 
           UFC fights are inherently unpredictable, and our model provides probabilities rather than guarantees.
-          Always exercise responsible decision-making when using prediction data.
+          Always exercise responsible decision-making when using prediction data. Don't Gamble.
         </p>
       </motion.div>
     </motion.div>
