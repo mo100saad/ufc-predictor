@@ -21,6 +21,7 @@ os.makedirs(LOG_DIR, exist_ok=True)
 RAW_DATASET_PATH = os.path.join(DATA_DIR, 'ufc_dataset.csv')
 PROCESSED_DATASET_PATH = os.path.join(DATA_DIR, 'ufc_processed.csv')
 FIGHTER_STATS_PATH = os.path.join(DATA_DIR, 'fighter_stats.csv')
+#UFC_DATASET_MASTER = os.path.join(DATA_DIR, 'ufc-datasetmaster.csv')
 
 # Model paths
 ENSEMBLE_MODEL_PATH = os.path.join(MODEL_DIR, 'ensemble_model.joblib')

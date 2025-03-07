@@ -4,6 +4,7 @@ import FighterCard from '../components/fighters/FighterCard';
 import LoadingSpinner from '../components/common/LoadingSpinner';
 import ErrorAlert from '../components/common/ErrorAlert';
 import { motion } from 'framer-motion';
+import { Link } from 'react-router-dom';
 
 const Fighters = () => {
   const [fighters, setFighters] = useState([]);
@@ -12,20 +13,32 @@ const Fighters = () => {
   const [error, setError] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [weightClassFilter, setWeightClassFilter] = useState('All');
+  const [stanceFilter, setStanceFilter] = useState('All');
   const [sortOption, setSortOption] = useState('name');
   const [sortDirection, setSortDirection] = useState('asc');
   const [displayCount, setDisplayCount] = useState(24);
+  const [statsView, setStatsView] = useState(false);
 
+  // Define weight classes with proper kg ranges (using the same thresholds as in your FighterCard)
   const weightClasses = [
     'All',
-    'Flyweight',
-    'Bantamweight',
-    'Featherweight',
-    'Lightweight',
-    'Welterweight',
-    'Middleweight',
-    'Light Heavyweight',
-    'Heavyweight'
+    'Flyweight',     // ≤ 56.8 kg (125 lbs)
+    'Bantamweight',  // 56.8 - 61.3 kg (135 lbs)
+    'Featherweight', // 61.3 - 65.9 kg (145 lbs)
+    'Lightweight',   // 65.9 - 70.32 kg (155 lbs)
+    'Welterweight',  // 70.32 - 77.2 kg (170 lbs)
+    'Middleweight',  // 77.2 - 84.0 kg (185 lbs)
+    'Light Heavyweight', // 84.0 - 93.1 kg (205 lbs)
+    'Heavyweight'    // > 93.1 kg (> 205 lbs)
+  ];
+
+  // Define stance options based on database
+  const stanceOptions = [
+    'All',
+    'Orthodox',
+    'Southpaw',
+    'Switch',
+    'Open Stance'
   ];
 
   const sortOptions = [
@@ -33,7 +46,11 @@ const Fighters = () => {
     { value: 'wins', label: 'Wins' },
     { value: 'winRate', label: 'Win %' },
     { value: 'SLpM', label: 'Striking' },
-    { value: 'td_avg', label: 'Takedowns' }
+    { value: 'td_avg', label: 'Takedowns' },
+    { value: 'sub_avg', label: 'Submissions' },
+    { value: 'weight', label: 'Weight' },
+    { value: 'height', label: 'Height' },
+    { value: 'reach', label: 'Reach' }
   ];
 
   useEffect(() => {
@@ -66,24 +83,31 @@ const Fighters = () => {
       );
     }
     
-    // Filter by weight class
+    // Filter by weight class - using kg values matching the FighterCard thresholds
     if (weightClassFilter !== 'All') {
       results = results.filter(fighter => {
-        // Determine weight class based on weight
+        // Determine weight class based on weight in kg
         const weight = fighter.weight || 0;
         
         switch(weightClassFilter) {
-          case 'Flyweight': return weight <= 125;
-          case 'Bantamweight': return weight > 125 && weight <= 135;
-          case 'Featherweight': return weight > 135 && weight <= 145;
-          case 'Lightweight': return weight > 145 && weight <= 155;
-          case 'Welterweight': return weight > 155 && weight <= 170;
-          case 'Middleweight': return weight > 170 && weight <= 185;
-          case 'Light Heavyweight': return weight > 185 && weight <= 205;
-          case 'Heavyweight': return weight > 205;
+          case 'Flyweight': return weight <= 56.8;
+          case 'Bantamweight': return weight > 56.8 && weight <= 61.3;
+          case 'Featherweight': return weight > 61.3 && weight <= 65.9;
+          case 'Lightweight': return weight > 65.9 && weight <= 70.32;
+          case 'Welterweight': return weight > 70.32 && weight <= 77.2;
+          case 'Middleweight': return weight > 77.2 && weight <= 84.0;
+          case 'Light Heavyweight': return weight > 84.0 && weight <= 93.1;
+          case 'Heavyweight': return weight > 93.1;
           default: return true;
         }
       });
+    }
+    
+    // Filter by stance
+    if (stanceFilter !== 'All') {
+      results = results.filter(fighter => 
+        fighter.stance && fighter.stance.toLowerCase() === stanceFilter.toLowerCase()
+      );
     }
     
     // Sort fighters
@@ -106,8 +130,8 @@ const Fighters = () => {
         case 'winRate':
           const aTotal = (a.wins || 0) + (a.losses || 0);
           const bTotal = (b.wins || 0) + (b.losses || 0);
-          aValue = aTotal > 0 ? (a.wins || 0) / aTotal : 0;
-          bValue = bTotal > 0 ? (b.wins || 0) / bTotal : 0;
+          aValue = aTotal > 0 ? (a.wins || 0) / aTotal * 100 : 0;
+          bValue = bTotal > 0 ? (b.wins || 0) / bTotal * 100 : 0;
           return sortDirection === 'asc' ? aValue - bValue : bValue - aValue;
           
         case 'SLpM':
@@ -119,6 +143,26 @@ const Fighters = () => {
           aValue = a.td_avg || 0;
           bValue = b.td_avg || 0;
           return sortDirection === 'asc' ? aValue - bValue : bValue - aValue;
+        
+        case 'sub_avg':
+          aValue = a.sub_avg || 0;
+          bValue = b.sub_avg || 0;
+          return sortDirection === 'asc' ? aValue - bValue : bValue - aValue;
+          
+        case 'weight':
+          aValue = a.weight || 0;
+          bValue = b.weight || 0;
+          return sortDirection === 'asc' ? aValue - bValue : bValue - aValue;
+          
+        case 'height':
+          aValue = a.height || 0;
+          bValue = b.height || 0;
+          return sortDirection === 'asc' ? aValue - bValue : bValue - aValue;
+          
+        case 'reach':
+          aValue = a.reach || 0;
+          bValue = b.reach || 0;
+          return sortDirection === 'asc' ? aValue - bValue : bValue - aValue;
           
         default:
           return 0;
@@ -126,7 +170,7 @@ const Fighters = () => {
     });
     
     setFilteredFighters(results);
-  }, [searchTerm, weightClassFilter, sortOption, sortDirection, fighters]);
+  }, [searchTerm, weightClassFilter, stanceFilter, sortOption, sortDirection, fighters]);
 
   const toggleSortDirection = () => {
     setSortDirection(prev => prev === 'asc' ? 'desc' : 'asc');
@@ -134,6 +178,36 @@ const Fighters = () => {
 
   const loadMore = () => {
     setDisplayCount(prev => prev + 24);
+  };
+
+  const toggleStatsView = () => {
+    setStatsView(prev => !prev);
+  };
+
+  // Convert weight class to display range in kg
+  const getWeightClassRange = (weightClass) => {
+    switch (weightClass) {
+      case 'Flyweight': return '≤ 56.8 kg';
+      case 'Bantamweight': return '56.8 - 61.3 kg';
+      case 'Featherweight': return '61.3 - 65.9 kg';
+      case 'Lightweight': return '65.9 - 70.32 kg';
+      case 'Welterweight': return '70.32 - 77.2 kg';
+      case 'Middleweight': return '77.2 - 84.0 kg';
+      case 'Light Heavyweight': return '84.0 - 93.1 kg';
+      case 'Heavyweight': return '> 93.1 kg';
+      default: return '';
+    }
+  };
+  
+  // Helper to determine fighter style based on stats
+  const getFighterStyle = (fighter) => {
+    const strikingRatio = (fighter.SLpM || 0) / 5; // Normalized to 0-1 where 5 is high
+    const grapplingRatio = ((fighter.td_avg || 0) + (fighter.sub_avg || 0)) / 6; // Normalized
+    
+    if (strikingRatio > 0.7 && grapplingRatio < 0.3) return "Striker";
+    if (strikingRatio < 0.3 && grapplingRatio > 0.7) return "Grappler";
+    if (strikingRatio > 0.5 && grapplingRatio > 0.5) return "Well-Rounded";
+    return "Balanced";
   };
 
   // Animation variants
@@ -188,7 +262,7 @@ const Fighters = () => {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.2 }}
       >
-        <div className="flex flex-col md:flex-row gap-4">
+        <div className="flex flex-col md:flex-row gap-4 mb-4">
           {/* Search Input */}
           <div className="flex-grow">
             <div className="relative">
@@ -207,7 +281,7 @@ const Fighters = () => {
             </div>
           </div>
           
-          {/* Filter Dropdown */}
+          {/* Filter Dropdown - Weight Class */}
           <div className="md:w-56">
             <div className="relative">
               <label className="block text-sm text-gray-400 mb-1 pl-1">Weight Class</label>
@@ -218,7 +292,7 @@ const Fighters = () => {
               >
                 {weightClasses.map(weightClass => (
                   <option key={weightClass} value={weightClass}>
-                    {weightClass}
+                    {weightClass} {weightClass !== 'All' ? `(${getWeightClassRange(weightClass)})` : ''}
                   </option>
                 ))}
               </select>
@@ -230,8 +304,33 @@ const Fighters = () => {
             </div>
           </div>
           
-          {/* Sort Options */}
+          {/* Filter Dropdown - Stance */}
           <div className="md:w-56">
+            <div className="relative">
+              <label className="block text-sm text-gray-400 mb-1 pl-1">Stance</label>
+              <select
+                className="w-full p-3 bg-gray-800 border border-gray-700 rounded-lg text-white appearance-none focus:outline-none focus:ring-2 focus:ring-blue-500"
+                value={stanceFilter}
+                onChange={(e) => setStanceFilter(e.target.value)}
+              >
+                {stanceOptions.map(stance => (
+                  <option key={stance} value={stance}>
+                    {stance}
+                  </option>
+                ))}
+              </select>
+              <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none mt-6">
+                <svg className="h-5 w-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                  <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
+                </svg>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div className="flex flex-col md:flex-row justify-between items-end">
+          {/* Sort Options */}
+          <div className="md:w-64 mb-4 md:mb-0">
             <div className="relative">
               <label className="block text-sm text-gray-400 mb-1 pl-1">Sort By</label>
               <div className="flex">
@@ -249,6 +348,7 @@ const Fighters = () => {
                 <button
                   className="px-3 bg-gray-700 border border-gray-600 rounded-r-lg focus:outline-none hover:bg-gray-600"
                   onClick={toggleSortDirection}
+                  title={sortDirection === 'asc' ? 'Ascending' : 'Descending'}
                 >
                   {sortDirection === 'asc' ? (
                     <svg className="h-5 w-5 text-gray-300" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
@@ -263,6 +363,21 @@ const Fighters = () => {
               </div>
             </div>
           </div>
+          
+          {/* View Toggle Button */}
+          <button 
+            className={`px-4 py-2 rounded-lg transition-colors flex items-center border ${
+              statsView 
+                ? 'bg-blue-600 border-blue-500 hover:bg-blue-700 text-white' 
+                : 'bg-gray-800 border-gray-700 hover:bg-gray-700 text-gray-300'
+            }`}
+            onClick={toggleStatsView}
+          >
+            <svg className="h-5 w-5 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+              <path d="M5 3a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2V5a2 2 0 00-2-2H5zM3 5a2 2 0 012-2h10a2 2 0 012 2v10a2 2 0 01-2 2H5a2 2 0 01-2-2V5z" />
+            </svg>
+            {statsView ? 'Card View' : 'Stats View'}
+          </button>
         </div>
       </motion.div>
       
@@ -287,6 +402,9 @@ const Fighters = () => {
               {weightClassFilter !== 'All' && (
                 <span> in <span className="text-blue-400">{weightClassFilter}</span> division</span>
               )}
+              {stanceFilter !== 'All' && (
+                <span> with <span className="text-purple-400">{stanceFilter}</span> stance</span>
+              )}
               {searchTerm && (
                 <span> matching <span className="text-green-400">{searchTerm}</span></span>
               )}
@@ -297,21 +415,91 @@ const Fighters = () => {
             </div>
           </motion.div>
           
-          {/* Fighter Cards Grid */}
+          {/* Fighter Display */}
           {filteredFighters.length > 0 ? (
             <>
-              <motion.div 
-                className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
-                variants={container}
-                initial="hidden"
-                animate="show"
-              >
-                {filteredFighters.slice(0, displayCount).map((fighter, index) => (
-                  <motion.div key={fighter.id || index} variants={item}>
-                    <FighterCard fighter={fighter} />
-                  </motion.div>
-                ))}
-              </motion.div>
+              {statsView ? (
+                // Stats Table View
+                <motion.div 
+                  className="overflow-x-auto"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 0.5 }}
+                >
+                  <table className="w-full border-collapse">
+                    <thead>
+                      <tr className="bg-gray-800 text-left">
+                        <th className="p-3 border-b border-gray-700">Name</th>
+                        <th className="p-3 border-b border-gray-700">Record</th>
+                        <th className="p-3 border-b border-gray-700">Weight (kg)</th>
+                        <th className="p-3 border-b border-gray-700">Height</th>
+                        <th className="p-3 border-b border-gray-700">Reach</th>
+                        <th className="p-3 border-b border-gray-700">Stance</th>
+                        <th className="p-3 border-b border-gray-700">Style</th>
+                        <th className="p-3 border-b border-gray-700">SLpM</th>
+                        <th className="p-3 border-b border-gray-700">TD Avg</th>
+                        <th className="p-3 border-b border-gray-700">Sub Avg</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {filteredFighters.slice(0, displayCount).map((fighter, index) => (
+                        <tr key={fighter.id || index} className={index % 2 === 0 ? 'bg-gray-900' : 'bg-gray-800/50'}>
+                          <td className="p-3 border-b border-gray-700 font-medium text-white">
+                            <Link 
+                              to={`/fighter/${encodeURIComponent(fighter.name)}`}
+                              className="hover:text-blue-400 transition-colors"
+                            >
+                              {fighter.name}
+                            </Link>
+                          </td>
+                          <td className="p-3 border-b border-gray-700">
+                            {fighter.wins || 0}-{fighter.losses || 0}
+                            {fighter.draws > 0 ? `-${fighter.draws}` : ''}
+                          </td>
+                          <td className="p-3 border-b border-gray-700">
+                            {fighter.weight ? fighter.weight.toFixed(1) : 'N/A'}
+                          </td>
+                          <td className="p-3 border-b border-gray-700">
+                            {fighter.height ? fighter.height.toFixed(2) : 'N/A'}
+                          </td>
+                          <td className="p-3 border-b border-gray-700">
+                            {fighter.reach ? fighter.reach.toFixed(1) : 'N/A'}
+                          </td>
+                          <td className="p-3 border-b border-gray-700">
+                            {fighter.stance || 'N/A'}
+                          </td>
+                          <td className="p-3 border-b border-gray-700">
+                            {getFighterStyle(fighter)}
+                          </td>
+                          <td className="p-3 border-b border-gray-700">
+                            {fighter.SLpM ? fighter.SLpM.toFixed(1) : 'N/A'}
+                          </td>
+                          <td className="p-3 border-b border-gray-700">
+                            {fighter.td_avg ? fighter.td_avg.toFixed(1) : 'N/A'}
+                          </td>
+                          <td className="p-3 border-b border-gray-700">
+                            {fighter.sub_avg ? fighter.sub_avg.toFixed(1) : 'N/A'}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </motion.div>
+              ) : (
+                // Card Grid View
+                <motion.div 
+                  className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
+                  variants={container}
+                  initial="hidden"
+                  animate="show"
+                >
+                  {filteredFighters.slice(0, displayCount).map((fighter, index) => (
+                    <motion.div key={fighter.id || index} variants={item}>
+                      <FighterCard fighter={fighter} />
+                    </motion.div>
+                  ))}
+                </motion.div>
+              )}
               
               {/* Load More Button */}
               {displayCount < filteredFighters.length && (
@@ -343,6 +531,7 @@ const Fighters = () => {
                 onClick={() => {
                   setSearchTerm('');
                   setWeightClassFilter('All');
+                  setStanceFilter('All');
                 }}
               >
                 Reset Filters

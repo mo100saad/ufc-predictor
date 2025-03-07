@@ -2,6 +2,10 @@ import sqlite3
 import pandas as pd
 import os
 from config import FIGHTER_STATS_PATH, DATA_DIR
+import logging
+# Configure logging
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+logger = logging.getLogger('ufc_database')
 
 # Define database path
 DATABASE_PATH = os.path.join(DATA_DIR, 'ufc_fighters.db')
@@ -17,40 +21,36 @@ def get_db_connection():
 
 def init_db():
     """
-    Initialize the database schema with all required tables
+    Initialize the database schema with the original tables
     """
     os.makedirs(DATA_DIR, exist_ok=True)
     conn = get_db_connection()
     cursor = conn.cursor()
     
-    # Create fighters table
+    # Create fighters table with original schema
     cursor.execute('''
     CREATE TABLE IF NOT EXISTS fighters (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         name TEXT NOT NULL,
+        wins INTEGER DEFAULT 0,
+        losses INTEGER DEFAULT 0,
+        draws INTEGER DEFAULT 0,
         height REAL,
         weight REAL,
         reach REAL,
         stance TEXT,
-        age REAL,              /* Added age column */
-        wins INTEGER DEFAULT 0,
-        losses INTEGER DEFAULT 0,
-        draws INTEGER DEFAULT 0,
-        sig_strikes_per_min REAL,
-        sig_strike_accuracy REAL,
-        sig_strikes_absorbed_per_min REAL,
-        sig_strike_defense REAL,
-        takedown_avg REAL,
-        takedown_accuracy REAL,
-        takedown_defense REAL,
-        sub_avg REAL,
-        win_by_ko REAL,
-        win_by_sub REAL,
-        win_by_dec REAL
+        SLpM REAL,
+        sig_str_acc REAL,
+        SApM REAL,
+        str_def REAL,
+        td_avg REAL,
+        td_acc REAL,
+        td_def REAL,
+        sub_avg REAL
     )
     ''')
     
-    # Create fights table
+    # Create fights table (keep this for future use)
     cursor.execute('''
     CREATE TABLE IF NOT EXISTS fights (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -69,349 +69,122 @@ def init_db():
     )
     ''')
     
-    # Create fight_stats table
-    cursor.execute('''
-    CREATE TABLE IF NOT EXISTS fight_stats (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        fight_id INTEGER,
-        fighter_id INTEGER,
-        sig_strikes_landed INTEGER,
-        sig_strikes_attempted INTEGER,
-        takedowns_landed INTEGER,
-        takedowns_attempted INTEGER,
-        sig_strikes_per_min REAL,
-        takedown_avg REAL,
-        sub_avg REAL,
-        win_streak INTEGER,
-        FOREIGN KEY (fight_id) REFERENCES fights (id),
-        FOREIGN KEY (fighter_id) REFERENCES fighters (id)
-    )
-    ''')
-    
     conn.commit()
     conn.close()
-    print("Database schema initialized")
-
+    logger.info("Database schema initialized")
 
 def import_fighter_stats_to_db():
     """
-    Import fighter statistics from the FIGHTER_STATS_PATH CSV into the database
-    This is the main function to call for populating the fighter database
+    Import fighter statistics from the CSV into the database
     """
     if not os.path.exists(FIGHTER_STATS_PATH):
-        print(f"Fighter stats file not found at {FIGHTER_STATS_PATH}")
+        logger.error(f"Fighter stats file not found at {FIGHTER_STATS_PATH}")
         return False
     
     # Initialize the database if it doesn't exist
     if not os.path.exists(DATABASE_PATH):
         init_db()
     
-    # Load fighter stats from CSV
-    print(f"Loading fighter stats from {FIGHTER_STATS_PATH}")
-    df = pd.read_csv(FIGHTER_STATS_PATH)
-    
-    # Filter out rows with missing name (required field)
-    df = df[df['name'].notna()]
-    print(f"Filtered to {len(df)} fighters with valid names")
-    
-    # Connect to the database
-    conn = get_db_connection()
-    cursor = conn.cursor()
-    
-    # Drop and recreate the fighters table to match the CSV structure exactly
-    cursor.execute("DROP TABLE IF EXISTS fighters")
-    conn.commit()
-    
-    # Create the fighters table with columns that exactly match the CSV
-    columns = []
-    for col in df.columns:
-        if col == 'name':
-            columns.append(f"{col} TEXT NOT NULL")
-        else:
-            columns.append(f"{col} REAL")
-    
-    create_table_sql = f"""
-    CREATE TABLE fighters (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        {', '.join(columns)}
-    )
-    """
-    
-    cursor.execute(create_table_sql)
-    conn.commit()
-    
-    # Print available columns for debugging
-    print(f"Created table with columns: {', '.join(df.columns)}")
-    
-    # Import each fighter
-    success_count = 0
-    error_count = 0
-    
-    # Build the INSERT statement dynamically
-    placeholders = ', '.join(['?'] * len(df.columns))
-    column_names = ', '.join(df.columns)
-    insert_sql = f"INSERT INTO fighters ({column_names}) VALUES ({placeholders})"
-    
-    for idx, row in df.iterrows():
-        try:
-            # Extract values, handling NaN
-            values = []
-            for col in df.columns:
-                if pd.isna(row[col]):
-                    values.append(None)
-                else:
-                    values.append(row[col])
-            
-            # Insert into database
-            cursor.execute(insert_sql, values)
-            success_count += 1
-            
-        except Exception as e:
-            print(f"Error importing fighter at row {idx}: {e}")
-            error_count += 1
-            continue
-    
-    # Commit changes and close connection
-    conn.commit()
-    conn.close()
-    
-    print(f"Imported {success_count} fighters from {FIGHTER_STATS_PATH} to database")
-    if error_count > 0:
-        print(f"Encountered {error_count} errors during import")
-    return True
-
-def import_csv_to_db():
-    """
-    Import data from the main UFC dataset CSV file into the database
-    """
-    if not os.path.exists(CSV_FILE_PATH):
-        print(f"CSV file not found at {CSV_FILE_PATH}")
+    try:
+        # Load fighter stats from CSV
+        logger.info(f"Loading fighter stats from {FIGHTER_STATS_PATH}")
+        df = pd.read_csv(FIGHTER_STATS_PATH)
+        
+        # Filter out rows with missing name (required field)
+        df = df[df['name'].notna()]
+        logger.info(f"Filtered to {len(df)} fighters with valid names")
+        
+        # Connect to the database
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        
+        # Drop the existing fighters table to start fresh
+        cursor.execute("DROP TABLE IF EXISTS fighters")
+        conn.commit()
+        
+        # Create the fighters table with original schema
+        cursor.execute('''
+        CREATE TABLE fighters (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            name TEXT NOT NULL,
+            wins INTEGER DEFAULT 0,
+            losses INTEGER DEFAULT 0,
+            draws INTEGER DEFAULT 0,
+            height REAL,
+            weight REAL,
+            reach REAL,
+            stance TEXT,
+            SLpM REAL,
+            sig_str_acc REAL,
+            SApM REAL,
+            str_def REAL,
+            td_avg REAL,
+            td_acc REAL,
+            td_def REAL,
+            sub_avg REAL
+        )
+        ''')
+        conn.commit()
+        
+        # Import each fighter
+        success_count = 0
+        error_count = 0
+        
+        insert_sql = '''
+        INSERT INTO fighters (
+            name, wins, losses, draws, height, weight, reach, stance,
+            SLpM, sig_str_acc, SApM, str_def, td_avg, td_acc, td_def, sub_avg
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        '''
+        
+        for idx, row in df.iterrows():
+            try:
+                # Handle all columns, extracting values with proper null handling
+                name = row['name'] if 'name' in row and pd.notna(row['name']) else None
+                wins = int(row['wins']) if 'wins' in row and pd.notna(row['wins']) else 0
+                losses = int(row['losses']) if 'losses' in row and pd.notna(row['losses']) else 0
+                draws = int(row['draws']) if 'draws' in row and pd.notna(row['draws']) else 0
+                height = float(row['height']) if 'height' in row and pd.notna(row['height']) else None
+                weight = float(row['weight']) if 'weight' in row and pd.notna(row['weight']) else None
+                reach = float(row['reach']) if 'reach' in row and pd.notna(row['reach']) else None
+                stance = row['stance'] if 'stance' in row and pd.notna(row['stance']) else None
+                SLpM = float(row['SLpM']) if 'SLpM' in row and pd.notna(row['SLpM']) else None
+                sig_str_acc = float(row['sig_str_acc']) if 'sig_str_acc' in row and pd.notna(row['sig_str_acc']) else None
+                SApM = float(row['SApM']) if 'SApM' in row and pd.notna(row['SApM']) else None
+                str_def = float(row['str_def']) if 'str_def' in row and pd.notna(row['str_def']) else None
+                td_avg = float(row['td_avg']) if 'td_avg' in row and pd.notna(row['td_avg']) else None
+                td_acc = float(row['td_acc']) if 'td_acc' in row and pd.notna(row['td_acc']) else None
+                td_def = float(row['td_def']) if 'td_def' in row and pd.notna(row['td_def']) else None
+                sub_avg = float(row['sub_avg']) if 'sub_avg' in row and pd.notna(row['sub_avg']) else None
+                
+                if name is None:
+                    continue  # Skip if name is missing
+                
+                # Insert into database
+                cursor.execute(insert_sql, (
+                    name, wins, losses, draws, height, weight, reach, stance,
+                    SLpM, sig_str_acc, SApM, str_def, td_avg, td_acc, td_def, sub_avg
+                ))
+                success_count += 1
+                
+            except Exception as e:
+                logger.error(f"Error importing fighter at row {idx}: {e}")
+                error_count += 1
+                continue
+        
+        # Commit changes and close connection
+        conn.commit()
+        conn.close()
+        
+        logger.info(f"Imported {success_count} fighters from {FIGHTER_STATS_PATH} to database")
+        if error_count > 0:
+            logger.warning(f"Encountered {error_count} errors during import")
+        return True
+        
+    except Exception as e:
+        logger.error(f"Error during fighter import: {e}")
         return False
     
-    # Initialize the database if it doesn't exist
-    if not os.path.exists(DATABASE_PATH):
-        init_db()
-    
-    df = pd.read_csv(CSV_FILE_PATH)
-    conn = get_db_connection()
-    cursor = conn.cursor()
-    
-    # Track the IDs of fighters for reference
-    fighter_ids = {}
-    
-    # Import fighters (Red corner)
-    for _, row in df.iterrows():
-        if 'R_fighter' in row and pd.notna(row['R_fighter']):
-            fighter_name = row['R_fighter']
-            
-            # Check if fighter already exists
-            cursor.execute('SELECT id FROM fighters WHERE name = ?', (fighter_name,))
-            fighter = cursor.fetchone()
-            
-            if fighter is None:
-                # Add new fighter
-                cursor.execute('''
-                INSERT INTO fighters (name, height, weight, reach, stance)
-                VALUES (?, ?, ?, ?, ?)
-                ''', (
-                    fighter_name,
-                    row.get('R_Height_cms') if 'R_Height_cms' in row and pd.notna(row['R_Height_cms']) else None,
-                    row.get('R_Weight_lbs') if 'R_Weight_lbs' in row and pd.notna(row['R_Weight_lbs']) else None,
-                    row.get('R_Reach_cms') if 'R_Reach_cms' in row and pd.notna(row['R_Reach_cms']) else None,
-                    row.get('R_Stance') if 'R_Stance' in row and pd.notna(row['R_Stance']) else None
-                ))
-                fighter_id = cursor.lastrowid
-            else:
-                fighter_id = fighter['id']
-                
-                # Update fighter stats if we have new data
-                cursor.execute('''
-                UPDATE fighters SET 
-                    height = COALESCE(?, height),
-                    weight = COALESCE(?, weight),
-                    reach = COALESCE(?, reach),
-                    stance = COALESCE(?, stance)
-                WHERE id = ?
-                ''', (
-                    row.get('R_Height_cms') if 'R_Height_cms' in row and pd.notna(row['R_Height_cms']) else None,
-                    row.get('R_Weight_lbs') if 'R_Weight_lbs' in row and pd.notna(row['R_Weight_lbs']) else None,
-                    row.get('R_Reach_cms') if 'R_Reach_cms' in row and pd.notna(row['R_Reach_cms']) else None,
-                    row.get('R_Stance') if 'R_Stance' in row and pd.notna(row['R_Stance']) else None,
-                    fighter_id
-                ))
-            
-            fighter_ids[fighter_name] = fighter_id
-    
-    # Import fighters (Blue corner)
-    for _, row in df.iterrows():
-        if 'B_fighter' in row and pd.notna(row['B_fighter']):
-            fighter_name = row['B_fighter']
-            
-            # Check if fighter already exists
-            cursor.execute('SELECT id FROM fighters WHERE name = ?', (fighter_name,))
-            fighter = cursor.fetchone()
-            
-            if fighter is None:
-                # Add new fighter
-                cursor.execute('''
-                INSERT INTO fighters (name, height, weight, reach, stance)
-                VALUES (?, ?, ?, ?, ?)
-                ''', (
-                    fighter_name,
-                    row.get('B_Height_cms') if 'B_Height_cms' in row and pd.notna(row['B_Height_cms']) else None,
-                    row.get('B_Weight_lbs') if 'B_Weight_lbs' in row and pd.notna(row['B_Weight_lbs']) else None,
-                    row.get('B_Reach_cms') if 'B_Reach_cms' in row and pd.notna(row['B_Reach_cms']) else None,
-                    row.get('B_Stance') if 'B_Stance' in row and pd.notna(row['B_Stance']) else None
-                ))
-                fighter_id = cursor.lastrowid
-            else:
-                fighter_id = fighter['id']
-                
-                # Update fighter stats if we have new data
-                cursor.execute('''
-                UPDATE fighters SET 
-                    height = COALESCE(?, height),
-                    weight = COALESCE(?, weight),
-                    reach = COALESCE(?, reach),
-                    stance = COALESCE(?, stance)
-                WHERE id = ?
-                ''', (
-                    row.get('B_Height_cms') if 'B_Height_cms' in row and pd.notna(row['B_Height_cms']) else None,
-                    row.get('B_Weight_lbs') if 'B_Weight_lbs' in row and pd.notna(row['B_Weight_lbs']) else None,
-                    row.get('B_Reach_cms') if 'B_Reach_cms' in row and pd.notna(row['B_Reach_cms']) else None,
-                    row.get('B_Stance') if 'B_Stance' in row and pd.notna(row['B_Stance']) else None,
-                    fighter_id
-                ))
-            
-            fighter_ids[fighter_name] = fighter_id
-    
-    # Import fights
-    for _, row in df.iterrows():
-        if 'R_fighter' in row and 'B_fighter' in row and pd.notna(row['R_fighter']) and pd.notna(row['B_fighter']):
-            fighter1_name = row['R_fighter']
-            fighter2_name = row['B_fighter']
-            
-            # Determine winner
-            winner_id = None
-            if 'Winner' in row and pd.notna(row['Winner']):
-                if row['Winner'] == 'Red' and fighter1_name in fighter_ids:
-                    winner_id = fighter_ids[fighter1_name]
-                elif row['Winner'] == 'Blue' and fighter2_name in fighter_ids:
-                    winner_id = fighter_ids[fighter2_name]
-                elif row['Winner'] == 'Draw':
-                    winner_id = None
-                elif row['Winner'] in fighter_ids:  # If Winner contains fighter name
-                    winner_id = fighter_ids[row['Winner']]
-            
-            # Add fight
-            cursor.execute('''
-            INSERT INTO fights (fighter1_id, fighter2_id, winner_id, date, location, weight_class, method, rounds, time)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-            ''', (
-                fighter_ids.get(fighter1_name),
-                fighter_ids.get(fighter2_name),
-                winner_id,
-                row.get('date') if 'date' in row and pd.notna(row['date']) else None,
-                row.get('location') if 'location' in row and pd.notna(row['location']) else None,
-                row.get('weight_class') if 'weight_class' in row and pd.notna(row['weight_class']) else None,
-                row.get('method') if 'method' in row and pd.notna(row['method']) else None,
-                row.get('rounds') if 'rounds' in row and pd.notna(row['rounds']) else None,
-                row.get('time') if 'time' in row and pd.notna(row['time']) else None
-            ))
-            
-            fight_id = cursor.lastrowid
-            
-            # Add fight stats for fighter1 (Red corner)
-            cursor.execute('''
-            INSERT INTO fight_stats (
-                fight_id, fighter_id, sig_strikes_landed, sig_strikes_attempted,
-                takedowns_landed, takedowns_attempted, sig_strikes_per_min,
-                takedown_avg, sub_avg, win_streak
-            )
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-            ''', (
-                fight_id,
-                fighter_ids.get(fighter1_name),
-                row.get('R_avg_SIG_STR_landed') if 'R_avg_SIG_STR_landed' in row and pd.notna(row['R_avg_SIG_STR_landed']) else None,
-                row.get('R_avg_SIG_STR_attempted') if 'R_avg_SIG_STR_attempted' in row and pd.notna(row['R_avg_SIG_STR_attempted']) else None,
-                row.get('R_avg_TD_landed') if 'R_avg_TD_landed' in row and pd.notna(row['R_avg_TD_landed']) else None,
-                row.get('R_avg_TD_attempted') if 'R_avg_TD_attempted' in row and pd.notna(row['R_avg_TD_attempted']) else None,
-                row.get('R_SLpM_total') if 'R_SLpM_total' in row and pd.notna(row['R_SLpM_total']) else None,
-                row.get('R_td_avg') if 'R_td_avg' in row and pd.notna(row['R_td_avg']) else None,
-                row.get('R_sub_avg') if 'R_sub_avg' in row and pd.notna(row['R_sub_avg']) else None,
-                row.get('fighter1_win_streak') if 'fighter1_win_streak' in row and pd.notna(row['fighter1_win_streak']) else None
-            ))
-            
-            # Add fight stats for fighter2 (Blue corner)
-            cursor.execute('''
-            INSERT INTO fight_stats (
-                fight_id, fighter_id, sig_strikes_landed, sig_strikes_attempted,
-                takedowns_landed, takedowns_attempted, sig_strikes_per_min,
-                takedown_avg, sub_avg, win_streak
-            )
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-            ''', (
-                fight_id,
-                fighter_ids.get(fighter2_name),
-                row.get('B_avg_SIG_STR_landed') if 'B_avg_SIG_STR_landed' in row and pd.notna(row['B_avg_SIG_STR_landed']) else None,
-                row.get('B_avg_SIG_STR_attempted') if 'B_avg_SIG_STR_attempted' in row and pd.notna(row['B_avg_SIG_STR_attempted']) else None,
-                row.get('B_avg_TD_landed') if 'B_avg_TD_landed' in row and pd.notna(row['B_avg_TD_landed']) else None,
-                row.get('B_avg_TD_attempted') if 'B_avg_TD_attempted' in row and pd.notna(row['B_avg_TD_attempted']) else None,
-                row.get('B_SLpM_total') if 'B_SLpM_total' in row and pd.notna(row['B_SLpM_total']) else None,
-                row.get('B_td_avg') if 'B_td_avg' in row and pd.notna(row['B_td_avg']) else None,
-                row.get('B_sub_avg') if 'B_sub_avg' in row and pd.notna(row['B_sub_avg']) else None,
-                row.get('fighter2_win_streak') if 'fighter2_win_streak' in row and pd.notna(row['fighter2_win_streak']) else None
-            ))
-    
-    # Update fighter win/loss records
-    update_fighter_records(conn)
-    
-    conn.commit()
-    conn.close()
-    print(f"Imported data from {CSV_FILE_PATH} to database")
-    return True
-
-def update_fighter_records(conn):
-    """
-    Update fighter win/loss/draw records based on fight data
-    
-    Args:
-        conn: Database connection
-    """
-    cursor = conn.cursor()
-    
-    # Update wins
-    cursor.execute('''
-    UPDATE fighters 
-    SET wins = (
-        SELECT COUNT(*) 
-        FROM fights 
-        WHERE winner_id = fighters.id
-    )
-    ''')
-    
-    # Update losses
-    cursor.execute('''
-    UPDATE fighters 
-    SET losses = (
-        SELECT COUNT(*) 
-        FROM fights 
-        WHERE (fighter1_id = fighters.id OR fighter2_id = fighters.id)
-        AND winner_id IS NOT NULL
-        AND winner_id != fighters.id
-    )
-    ''')
-    
-    # Update draws
-    cursor.execute('''
-    UPDATE fighters 
-    SET draws = (
-        SELECT COUNT(*) 
-        FROM fights 
-        WHERE (fighter1_id = fighters.id OR fighter2_id = fighters.id)
-        AND winner_id IS NULL
-    )
-    ''')
 
 def get_all_fighters():
     """
@@ -428,81 +201,24 @@ def get_all_fighters():
     ORDER BY name
     ''')
     
-    # Convert row objects to dictionaries
-    fighters = [dict(row) for row in cursor.fetchall()]
-    conn.close()
+    # Convert row objects to dictionaries with proper serialization
+    fighters = []
+    for row in cursor.fetchall():
+        fighter = {}
+        for idx, col in enumerate(cursor.description):
+            value = row[idx]
+            # Handle binary data for JSON serialization
+            if isinstance(value, bytes):
+                try:
+                    fighter[col[0]] = value.decode('utf-8', errors='ignore') or None
+                except:
+                    fighter[col[0]] = None
+            else:
+                fighter[col[0]] = value
+        fighters.append(fighter)
     
+    conn.close()
     return fighters
-
-def get_fighter_details(fighter_id):
-    """
-    Get detailed information about a specific fighter
-    
-    Args:
-        fighter_id (int): ID of the fighter
-        
-    Returns:
-        dict: Fighter details
-    """
-    conn = get_db_connection()
-    cursor = conn.cursor()
-    
-    # Get basic fighter info
-    cursor.execute('''
-    SELECT * FROM fighters
-    WHERE id = ?
-    ''', (fighter_id,))
-    fighter = dict(cursor.fetchone() or {})
-    
-    if fighter:
-        # Get fight history
-        cursor.execute('''
-        SELECT 
-            f.id as fight_id,
-            f.date,
-            f.method,
-            f.rounds,
-            f.weight_class,
-            CASE 
-                WHEN f.fighter1_id = ? THEN f2.name 
-                ELSE f1.name 
-            END as opponent,
-            CASE 
-                WHEN f.winner_id = ? THEN 'Win'
-                WHEN f.winner_id IS NULL THEN 'Draw'
-                ELSE 'Loss'
-            END as result
-        FROM 
-            fights f
-        JOIN 
-            fighters f1 ON f.fighter1_id = f1.id
-        JOIN 
-            fighters f2 ON f.fighter2_id = f2.id
-        WHERE 
-            f.fighter1_id = ? OR f.fighter2_id = ?
-        ORDER BY 
-            f.date DESC
-        ''', (fighter_id, fighter_id, fighter_id, fighter_id))
-        
-        fighter['fight_history'] = [dict(row) for row in cursor.fetchall()]
-        
-        # Get statistics from fight_stats
-        cursor.execute('''
-        SELECT 
-            AVG(sig_strikes_landed) as avg_sig_strikes_landed,
-            AVG(takedowns_landed) as avg_takedowns_landed,
-            MAX(win_streak) as max_win_streak
-        FROM 
-            fight_stats
-        WHERE 
-            fighter_id = ?
-        ''', (fighter_id,))
-        
-        stats = dict(cursor.fetchone() or {})
-        fighter.update(stats)
-    
-    conn.close()
-    return fighter
 
 def search_fighters(query):
     """
@@ -525,10 +241,64 @@ def search_fighters(query):
     LIMIT 20
     ''', (search_term,))
     
-    fighters = [dict(row) for row in cursor.fetchall()]
-    conn.close()
+    # Convert to properly serializable dictionaries
+    fighters = []
+    for row in cursor.fetchall():
+        fighter = {}
+        for idx, col in enumerate(cursor.description):
+            value = row[idx]
+            # Handle binary data
+            if isinstance(value, bytes):
+                try:
+                    fighter[col[0]] = value.decode('utf-8', errors='ignore') or None
+                except:
+                    fighter[col[0]] = None
+            else:
+                fighter[col[0]] = value
+        fighters.append(fighter)
     
+    conn.close()
     return fighters
+
+def get_fighter_details(fighter_id):
+    """
+    Get detailed information about a specific fighter
+    
+    Args:
+        fighter_id (int): ID of the fighter
+        
+    Returns:
+        dict: Fighter details
+    """
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    
+    # Get basic fighter info
+    cursor.execute('''
+    SELECT * FROM fighters
+    WHERE id = ?
+    ''', (fighter_id,))
+    
+    fighter_row = cursor.fetchone()
+    if not fighter_row:
+        conn.close()
+        return None
+    
+    # Convert row to dict with proper JSON serialization
+    fighter = {}
+    for idx, col in enumerate(cursor.description):
+        value = fighter_row[idx]
+        # Handle binary data
+        if isinstance(value, bytes):
+            try:
+                fighter[col[0]] = value.decode('utf-8', errors='ignore') or None
+            except:
+                fighter[col[0]] = None
+        else:
+            fighter[col[0]] = value
+    
+    conn.close()
+    return fighter
 
 # CLI Handler
 if __name__ == "__main__":
@@ -537,7 +307,6 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="UFC Fighter Database Manager")
     parser.add_argument('--init-db', action='store_true', help='Initialize the database schema')
     parser.add_argument('--import-fighters', action='store_true', help='Import fighter stats from CSV')
-    parser.add_argument('--import-fights', action='store_true', help='Import fight data from CSV')
     parser.add_argument('--list-fighters', action='store_true', help='List all fighters')
     parser.add_argument('--search', type=str, help='Search for a fighter by name')
     parser.add_argument('--fighter-details', type=int, help='Get details for a fighter by ID')
@@ -550,9 +319,6 @@ if __name__ == "__main__":
         
     if args.import_fighters:
         import_fighter_stats_to_db()
-        
-    if args.import_fights:
-        import_csv_to_db()
         
     if args.list_fighters:
         fighters = get_all_fighters()
@@ -577,9 +343,9 @@ if __name__ == "__main__":
             print(f"Weight: {fighter['weight']}")
             print(f"Reach: {fighter['reach']}")
             print(f"Stance: {fighter['stance']}")
-            print("\nFight History:")
-            for fight in fighter.get('fight_history', [])[:5]:
-                print(f"{fight['date']}: {fighter['name']} vs {fight['opponent']} - {fight['result']}")
+            
+            # Remove fight history section since we don't have that data anymore
+            
         else:
             print(f"Fighter with ID {args.fighter_details} not found")
             

@@ -6,29 +6,41 @@ import ErrorAlert from '../components/common/ErrorAlert';
 import { motion } from 'framer-motion';
 
 const Home = () => {
+  // Move state variables to the main component
   const [topFighters, setTopFighters] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
-  // Require at least 18 fights for a fighter to be considered
+  
+  // Calculate win percentage with minimum fight requirement
   const calculateWinPercentage = (fighter) => {
-    const { wins, losses } = fighter;
+    const wins = fighter.wins || 0;
+    const losses = fighter.losses || 0;
     const totalFights = wins + losses;
+    
+    // Require at least 5 fights for consideration
     if (totalFights < 18) return 0;
     return wins / totalFights;
   };
-
+  
   useEffect(() => {
     const loadFighters = async () => {
       try {
         setLoading(true);
         const fighters = await fighterService.getAllFighters();
+        
+        // Add win percentage to each fighter
         const fightersWithWinPct = fighters.map(fighter => ({
           ...fighter,
           winPct: calculateWinPercentage(fighter)
-        })).filter(fighter => fighter.winPct > 0);
-        const sortedTopFighters = fightersWithWinPct.sort((a, b) => b.winPct - a.winPct).slice(0, 5);
-        setTopFighters(sortedTopFighters);
+        }))
+        // Filter out fighters with < 80% win rate
+        .filter(fighter => fighter.winPct >= 0.8)
+        // Sort by win percentage (highest first)
+        .sort((a, b) => b.winPct - a.winPct)
+        // Take top 5
+        .slice(0, 5);
+        
+        setTopFighters(fightersWithWinPct);
         setLoading(false);
       } catch (err) {
         console.error("Failed to load fighters:", err);
@@ -36,6 +48,7 @@ const Home = () => {
         setLoading(false);
       }
     };
+    
     loadFighters();
   }, []);
 
@@ -137,32 +150,19 @@ const Home = () => {
                 <ErrorAlert message={error} />
               ) : (
                 <div className="space-y-4">
-                  {topFighters.length > 0 ? (
-                    topFighters.map((fighter, index) => (
-                      <Link key={fighter.id || index} to={`/fighters/${encodeURIComponent(fighter.name)}`}>
-                        <motion.div 
-                          className="bg-gray-700/50 rounded-lg p-4 hover:bg-gray-700/70 transition-all duration-300 group"
-                          variants={itemVariants}
-                        >
-                          <div className="flex justify-between items-center">
-                            <div>
-                              <div className="text-lg font-semibold text-white group-hover:text-red-400 transition-colors">
-                                {fighter.name}
-                              </div>
-                              <div className="text-sm text-gray-400">
-                                Record: {fighter.wins} - {fighter.losses}
-                              </div>
-                            </div>
-                            <div className="text-sm font-bold text-green-400">
-                              {(fighter.winPct * 100).toFixed(1)}%
-                            </div>
-                          </div>
-                        </motion.div>
-                      </Link>
-                    ))
-                  ) : (
-                    <p className="text-gray-500 text-center py-8">No top fighters available</p>
-                  )}
+                  {topFighters.map((fighter, index) => (
+                    <motion.div 
+                      key={index}
+                      variants={itemVariants}
+                      className="bg-gray-700/50 rounded-lg p-4 hover:bg-gray-700/70 transition-colors duration-300"
+                    >
+                      <h3 className="text-xl font-semibold text-white">{fighter.name}</h3>
+                      <p className="text-gray-300">Record: {fighter.wins || 0} - {fighter.losses || 0}</p>
+                      <p className="text-green-400 font-medium">
+                        Win Rate: {(fighter.winPct * 100).toFixed(1)}%
+                      </p>
+                    </motion.div>
+                  ))}
                 </div>
               )}
             </motion.div>

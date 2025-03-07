@@ -10,11 +10,23 @@ import { Radar } from 'react-chartjs-2';
 // Register Chart.js components
 ChartJS.register(RadialLinearScale, PointElement, LineElement, Filler, Tooltip, Legend);
 
+// Helper functions for formatting
+const formatPercentage = (value) => {
+  if (value === null || value === undefined) return 'N/A';
+  return `${(value * 100).toFixed(0)}%`;
+};
+
+const formatRate = (value, suffix) => {
+  if (value === null || value === undefined) return 'N/A';
+  return `${parseFloat(value).toFixed(1)}${suffix}`;
+};
+
 const FighterDetail = () => {
   const { name } = useParams();
   const [fighter, setFighter] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  
   useEffect(() => {
     const loadFighter = async () => {
       try {
@@ -32,7 +44,23 @@ const FighterDetail = () => {
           return;
         }
         
-        setFighter(data);
+        // Ensure we have consistent data
+        const cleanedData = {
+          ...data,
+          SLpM: data.SLpM || 0,
+          SApM: data.SApM || 0,
+          str_def: data.str_def || 0,
+          sig_str_acc: data.sig_str_acc || 0,
+          td_avg: data.td_avg || 0,
+          td_acc: data.td_acc || 0,
+          td_def: data.td_def || 0,
+          sub_avg: data.sub_avg || 0,
+          wins: data.wins || 0,
+          losses: data.losses || 0,
+          draws: data.draws || 0
+        };
+        
+        setFighter(cleanedData);
         setLoading(false);
       } catch (err) {
         console.error('Complete error:', err);
@@ -80,12 +108,12 @@ const FighterDetail = () => {
         {
           label: 'Fighter Stats',
           data: [
-            normalize(fighter.SLpM || 0, 8),                    // Striking (max ~8 strikes per min)
-            normalize(fighter.td_avg || 0, 6),                  // Takedowns (max ~6 per fight)
-            normalize(fighter.sub_avg || 0, 2),                 // Submissions (max ~2 per fight)
-            normalize((fighter.str_def || 0.5) * 100, 100),     // Defense (percentage)
-            normalize(fighter.wins || 0, 30),                   // Experience (max ~30 wins)
-            normalize(fighter.SLpM * (fighter.sig_str_acc || 0.5), 4)  // Power - combination of strikes and accuracy
+            normalize(fighter.SLpM || 0, 8),                // Striking (max ~8 strikes per min)
+            normalize(fighter.td_avg || 0, 6),              // Takedowns (max ~6 per fight)
+            normalize(fighter.sub_avg || 0, 2),             // Submissions (max ~2 per fight)
+            normalize((fighter.str_def || 0.5) * 100, 100), // Defense (percentage)
+            normalize(fighter.wins || 0, 30),               // Experience (max ~30 wins)
+            normalize((fighter.SLpM || 0) * (fighter.sig_str_acc || 0.5), 4)  // Power - combination of strikes and accuracy
           ],
           backgroundColor: 'rgba(255, 99, 132, 0.2)',
           borderColor: 'rgba(255, 99, 132, 1)',
@@ -188,8 +216,9 @@ const FighterDetail = () => {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
+      className="container mx-auto px-4 pt-8"
     >
-      <div className="mb-6">
+      <div className="mb-8">
         <Link to="/fighters" className="text-blue-500 hover:text-red-500 transition-colors duration-300 flex items-center">
           <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
@@ -224,7 +253,7 @@ const FighterDetail = () => {
               <div className="space-y-3">
                 {[
                   { icon: '📏', label: 'Height', value: fighter.height ? `${fighter.height} cm` : 'N/A' },
-                  { icon: '⚖️', label: 'Weight', value: fighter.weight ? `${fighter.weight} lbs` : 'N/A' },
+                  { icon: '⚖️', label: 'Weight', value: fighter.weight ? `${fighter.weight} kg` : 'N/A' },
                   { icon: '🤜', label: 'Reach', value: fighter.reach ? `${fighter.reach} cm` : 'N/A' },
                   { icon: '🥋', label: 'Stance', value: fighter.stance || 'N/A' }
                 ].map((attr, index) => (
@@ -240,22 +269,22 @@ const FighterDetail = () => {
             </div>
           </div>
           
-          {/* Win Breakdown */}
+          {/* Record Card */}
           <motion.div variants={item} className="mt-8">
             <div className="card backdrop-blur-sm bg-gray-900/60 border border-gray-800 shadow-xl rounded-lg p-6">
-              <h2 className="text-xl font-bold mb-4 text-gray-200">Win Breakdown</h2>
+              <h2 className="text-xl font-bold mb-4 text-gray-200">Professional Record</h2>
               <div className="grid grid-cols-3 gap-4">
                 <div className="bg-gray-800/50 p-4 rounded-lg text-center">
-                  <div className="text-3xl font-bold text-red-500 mb-1">{fighter.win_by_KO_TKO || '0'}</div>
-                  <div className="text-xs text-gray-400">KO/TKO</div>
+                  <div className="text-3xl font-bold text-green-500 mb-1">{fighter.wins || 0}</div>
+                  <div className="text-xs text-gray-400">Wins</div>
                 </div>
                 <div className="bg-gray-800/50 p-4 rounded-lg text-center">
-                  <div className="text-3xl font-bold text-blue-500 mb-1">{fighter.win_by_SUB || '0'}</div>
-                  <div className="text-xs text-gray-400">Submission</div>
+                  <div className="text-3xl font-bold text-red-500 mb-1">{fighter.losses || 0}</div>
+                  <div className="text-xs text-gray-400">Losses</div>
                 </div>
                 <div className="bg-gray-800/50 p-4 rounded-lg text-center">
-                  <div className="text-3xl font-bold text-yellow-500 mb-1">{fighter.win_by_DEC || '0'}</div>
-                  <div className="text-xs text-gray-400">Decision</div>
+                  <div className="text-3xl font-bold text-yellow-500 mb-1">{fighter.draws || 0}</div>
+                  <div className="text-xs text-gray-400">Draws</div>
                 </div>
               </div>
             </div>
@@ -267,18 +296,18 @@ const FighterDetail = () => {
           <div className="card backdrop-blur-sm bg-gray-900/60 border border-gray-800 shadow-xl rounded-lg p-6">
             <h2 className="text-xl font-bold mb-6 text-gray-200">Performance Analysis</h2>
             
-            <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
-              {/* Stats - 2 columns */}
-              <div className="lg:col-span-2">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              {/* Stats - 1 column */}
+              <div>
                 <h3 className="text-lg font-medium mb-4 text-gray-300">Fighting Statistics</h3>
                 <div className="space-y-4">
                   {[
-                    { label: 'Striking Rate', value: fighter.SLpM ? `${fighter.SLpM.toFixed(1)}/min` : 'N/A', bg: 'bg-red-900/20' },
-                    { label: 'Striking Accuracy', value: fighter.sig_str_acc ? `${(fighter.sig_str_acc * 100).toFixed(0)}%` : 'N/A', bg: 'bg-red-900/20' },
-                    { label: 'Striking Defense', value: fighter.str_def ? `${(fighter.str_def * 100).toFixed(0)}%` : 'N/A', bg: 'bg-blue-900/20' },
-                    { label: 'Takedown Average', value: fighter.td_avg ? `${fighter.td_avg.toFixed(1)}/fight` : 'N/A', bg: 'bg-green-900/20' },
-                    { label: 'Takedown Defense', value: fighter.td_def ? `${(fighter.td_def * 100).toFixed(0)}%` : 'N/A', bg: 'bg-green-900/20' },
-                    { label: 'Submission Average', value: fighter.sub_avg ? `${fighter.sub_avg.toFixed(1)}/fight` : 'N/A', bg: 'bg-purple-900/20' }
+                    { label: 'Striking Rate', value: formatRate(fighter.SLpM, '/min'), bg: 'bg-red-900/20' },
+                    { label: 'Striking Accuracy', value: formatPercentage(fighter.sig_str_acc), bg: 'bg-red-900/20' },
+                    { label: 'Striking Defense', value: formatPercentage(fighter.str_def), bg: 'bg-blue-900/20' },
+                    { label: 'Takedown Average', value: formatRate(fighter.td_avg, '/fight'), bg: 'bg-green-900/20' },
+                    { label: 'Takedown Defense', value: formatPercentage(fighter.td_def), bg: 'bg-green-900/20' },
+                    { label: 'Submission Average', value: formatRate(fighter.sub_avg, '/fight'), bg: 'bg-purple-900/20' }
                   ].map((stat, index) => (
                     <div key={index} className={`flex justify-between items-center p-3 rounded-lg ${stat.bg}`}>
                       <span className="text-gray-300">{stat.label}</span>
@@ -288,8 +317,8 @@ const FighterDetail = () => {
                 </div>
               </div>
               
-              {/* Radar Chart - 3 columns */}
-              <div className="lg:col-span-3 flex flex-col justify-center">
+              {/* Radar Chart - 1 column */}
+              <div className="flex flex-col justify-center">
                 <h3 className="text-lg font-medium mb-4 text-gray-300 text-center">Fighter Radar</h3>
                 <div className="h-64">
                   {getRadarData(fighter) && (
@@ -302,26 +331,81 @@ const FighterDetail = () => {
             {/* Fighter strength analysis */}
             <div className="mt-8">
               <h3 className="text-lg font-medium mb-4 text-gray-300">Fighter Analysis</h3>
-              <div className="bg-gray-800/50 p-4 rounded-lg">
-                <p className="text-gray-300 mb-3">
-                  {fighter.name} is a {getFightStyle().toLowerCase()} with {fighter.wins || 0} professional wins.
-                  {fighter.SLpM > 4 ? ` Known for high striking output (${fighter.SLpM.toFixed(1)} strikes/min).` : ''}
-                  {fighter.td_avg > 3 ? ` Excellent takedown ability (${fighter.td_avg.toFixed(1)} per fight).` : ''}
-                  {fighter.sub_avg > 1 ? ` Submission specialist (${fighter.sub_avg.toFixed(1)} per fight).` : ''}
-                  {fighter.td_def > 0.8 ? ` Exceptional takedown defense (${(fighter.td_def * 100).toFixed(0)}%).` : ''}
-                </p>
-                <p className="text-gray-300">
-                  {fighter.SLpM > fighter.SApM ? 
-                    `Offensive fighter who lands more strikes (${fighter.SLpM?.toFixed(1)}) than absorbed (${fighter.SApM?.toFixed(1)}).` : 
-                    `Takes more strikes (${fighter.SApM?.toFixed(1)}) than lands (${fighter.SLpM?.toFixed(1)}).`
-                  }
-                  {fighter.win_by_KO_TKO > fighter.win_by_SUB && fighter.win_by_KO_TKO > fighter.win_by_DEC ? 
-                    ` Primarily wins by KO/TKO (${fighter.win_by_KO_TKO}).` : 
-                    fighter.win_by_SUB > fighter.win_by_KO_TKO && fighter.win_by_SUB > fighter.win_by_DEC ?
-                    ` Primarily wins by submission (${fighter.win_by_SUB}).` :
-                    ` Primarily wins by decision (${fighter.win_by_DEC}).`
-                  }
-                </p>
+              <div className="bg-gray-800/50 p-5 rounded-lg">
+                <div className="space-y-4">
+                  {/* Fighter Profile Overview */}
+                  <div className="flex flex-col">
+                    <div className="flex items-center">
+                      <div className="h-2 w-2 bg-red-500 rounded-full mr-2"></div>
+                      <span className="text-lg font-semibold text-gray-200">
+                        {fighter.name} is a {getFightStyle().toLowerCase()} with {fighter.wins || 0} professional wins
+                      </span>
+                    </div>
+                  </div>
+                  
+                  {/* Fighter Key Strengths - only show if values exist */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {fighter.SLpM > 4 && (
+                      <div className="bg-gray-700/30 p-3 rounded-lg">
+                        <div className="flex items-center">
+                          <div className="mr-2 text-red-400">⚡</div>
+                          <span className="text-gray-300">High striking output: <span className="font-medium text-white">{fighter.SLpM.toFixed(1)} strikes/min</span></span>
+                        </div>
+                      </div>
+                    )}
+                    
+                    {fighter.td_avg > 3 && (
+                      <div className="bg-gray-700/30 p-3 rounded-lg">
+                        <div className="flex items-center">
+                          <div className="mr-2 text-blue-400">💪</div>
+                          <span className="text-gray-300">Excellent takedowns: <span className="font-medium text-white">{fighter.td_avg.toFixed(1)} per fight</span></span>
+                        </div>
+                      </div>
+                    )}
+                    
+                    {fighter.sub_avg > 1 && (
+                      <div className="bg-gray-700/30 p-3 rounded-lg">
+                        <div className="flex items-center">
+                          <div className="mr-2 text-green-400">🔒</div>
+                          <span className="text-gray-300">Submission specialist: <span className="font-medium text-white">{fighter.sub_avg.toFixed(1)} per fight</span></span>
+                        </div>
+                      </div>
+                    )}
+                    
+                    {fighter.td_def > 0.8 && (
+                      <div className="bg-gray-700/30 p-3 rounded-lg">
+                        <div className="flex items-center">
+                          <div className="mr-2 text-purple-400">🛡️</div>
+                          <span className="text-gray-300">Exceptional takedown defense: <span className="font-medium text-white">{(fighter.td_def * 100).toFixed(0)}%</span></span>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                  
+                  {/* Fighting Style */}
+                  <div className="bg-gray-700/30 p-3 rounded-lg">
+                    <div className="flex items-center">
+                      <div className="mr-2 text-yellow-400">📊</div>
+                      <span className="text-gray-300">
+                        {fighter.SLpM > (fighter.SApM || 0) ? 
+                          `Offensive fighter who lands more strikes (${(fighter.SLpM || 0).toFixed(1)}) than absorbed (${(fighter.SApM || 0).toFixed(1)})` : 
+                          `Takes more strikes (${(fighter.SApM || 0).toFixed(1)}) than lands (${(fighter.SLpM || 0).toFixed(1)})`
+                        }
+                      </span>
+                    </div>
+                  </div>
+                  
+                  {/* Record Summary */}
+                  <div className="bg-gray-700/30 p-3 rounded-lg">
+                    <div className="flex items-center">
+                      <div className="mr-2 text-green-400">🏆</div>
+                      <span className="text-gray-300">
+                        Professional record of {fighter.wins || 0} wins and {fighter.losses || 0} losses
+                        {fighter.draws > 0 ? ` with ${fighter.draws} draws` : ''}
+                      </span>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>

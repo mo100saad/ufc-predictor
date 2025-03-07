@@ -51,6 +51,15 @@ def format_fighter_for_prediction(fighter_data):
         'td_acc': 'takedown_accuracy',
         'td_def': 'takedown_defense',
         'sub_avg': 'sub_avg',
+        # New mappings for enhanced data
+        'win_by_ko': 'win_by_ko',
+        'win_by_sub': 'win_by_sub',
+        'win_by_dec': 'win_by_dec',
+        'current_win_streak': 'current_win_streak',
+        'current_lose_streak': 'current_lose_streak',
+        'longest_win_streak': 'longest_win_streak',
+        'weight_class_rank': 'weight_class_rank',
+        'p4p_rank': 'p4p_rank',
         # Add frontend-specific mappings
         'sig_strikes_per_min': 'sig_strikes_per_min',
         'sig_strike_accuracy': 'sig_strike_accuracy',
@@ -77,17 +86,15 @@ def format_fighter_for_prediction(fighter_data):
             
             prediction_data[pred_col] = value
     
-    # Set defaults for critical missing fields
-    if 'name' not in prediction_data and 'id' in fighter_data:
-        prediction_data['name'] = f"Fighter {fighter_data['id']}"
-    elif 'name' not in prediction_data:
-        prediction_data['name'] = "Unknown Fighter"
+    # Add aliases for win breakdown columns to ensure compatibility with UI
+    if 'win_by_ko' in fighter_data and 'win_by_KO_TKO' not in prediction_data:
+        prediction_data['win_by_KO_TKO'] = fighter_data['win_by_ko']
     
-    # Ensure minimum required fields have values
-    required_fields = ['wins', 'losses', 'sig_strikes_per_min', 'takedown_avg']
-    for field in required_fields:
-        if field not in prediction_data:
-            prediction_data[field] = 0
+    if 'win_by_sub' in fighter_data and 'win_by_SUB' not in prediction_data:
+        prediction_data['win_by_SUB'] = fighter_data['win_by_sub']
+    
+    if 'win_by_dec' in fighter_data and 'win_by_DEC' not in prediction_data:
+        prediction_data['win_by_DEC'] = fighter_data['win_by_dec']
     
     logger.info(f"Formatted prediction data: {prediction_data}")
     return prediction_data
@@ -166,8 +173,25 @@ def health_check():
 def get_fighters():
     """Get all fighters endpoint"""
     try:
-        fighters = get_all_fighters()
-        return jsonify({"fighters": fighters})
+        fighters_data = get_all_fighters()
+        
+        # Clean fighters data to ensure JSON serializable
+        cleaned_fighters = []
+        for fighter in fighters_data:
+            cleaned_fighter = {}
+            for key, value in fighter.items():
+                # Handle binary data
+                if isinstance(value, bytes):
+                    try:
+                        # Try to decode, or set to None if not possible
+                        cleaned_fighter[key] = value.decode('utf-8', errors='ignore') or None
+                    except:
+                        cleaned_fighter[key] = None
+                else:
+                    cleaned_fighter[key] = value
+            cleaned_fighters.append(cleaned_fighter)
+            
+        return jsonify({"fighters": cleaned_fighters})
     except Exception as e:
         logger.error(f"Error getting fighters: {e}")
         return jsonify({"error": str(e)}), 500
@@ -212,8 +236,7 @@ def get_fighter_endpoint(fighter_id):
     except Exception as e:
         logger.error(f"Error getting fighter {fighter_id}: {e}")
         return jsonify({"error": str(e)}), 500
-
-@api_bp.route('/fighter/<string:fighter_name>', methods=['GET'])
+@api_bp.route('/fighters/<string:fighter_name>', methods=['GET'])
 def get_fighter_by_name_endpoint(fighter_name):
     try:
         # Enhanced logging
@@ -224,19 +247,12 @@ def get_fighter_by_name_endpoint(fighter_name):
         conn = get_db_connection()
         cursor = conn.cursor()
         
-        # Log all fighter names to help debug
-        cursor.execute('SELECT name FROM fighters LIMIT 50')
-        all_names = [row[0] for row in cursor.fetchall()]
-        print("First 50 fighter names in database:")
-        for name in all_names:
-            print(name)
-        
         # Search strategies
         search_queries = [
             f'%{fighter_name}%',      # Contains the name
-            fighter_name,              # Exact match
-            fighter_name.lower(),      # Case-insensitive match
-            fighter_name.strip(),      # Remove any leading/trailing spaces
+            fighter_name,             # Exact match
+            fighter_name.lower(),     # Case-insensitive match
+            fighter_name.strip(),     # Remove any leading/trailing spaces
         ]
         
         fighter = None
@@ -248,14 +264,23 @@ def get_fighter_by_name_endpoint(fighter_name):
                 break
         
         if fighter:
-            # Convert row to dict
+            # Convert row to dict and ensure all values are JSON-serializable
             fighter_dict = {}
             for idx, col in enumerate(cursor.description):
-                fighter_dict[col[0]] = fighter[idx]
+                column_name = col[0]
+                value = fighter[idx]
+                
+                # Process binary data
+                if isinstance(value, bytes):
+                    try:
+                        # Try to decode as string, or set to None
+                        fighter_dict[column_name] = value.decode('utf-8', errors='ignore') or None
+                    except:
+                        fighter_dict[column_name] = None
+                else:
+                    fighter_dict[column_name] = value
             
             print(f"=== FIGHTER FOUND ===")
-            print(json.dumps(fighter_dict, indent=2))
-            
             conn.close()
             return jsonify({"fighter": fighter_dict})
         else:

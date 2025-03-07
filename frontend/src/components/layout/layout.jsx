@@ -1,7 +1,7 @@
 import React from 'react';
 import { Outlet } from 'react-router-dom';
-import Navbar from './Navbar';
-import Footer from './Footer';
+import Navbar from './navbar';
+import Footer from './footer';
 import { AnimatePresence, motion } from 'framer-motion';
 
 // This Layout component will ensure the proper spacing around your content

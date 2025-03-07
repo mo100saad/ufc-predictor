@@ -20,19 +20,20 @@ const FighterCard = ({ fighter }) => {
     return "Balanced";
   };
   
-  // Determine fighter's weight class
-  const getWeightClass = (weight) => {
-    if (!weight) return "Unknown";
-    
-    if (weight <= 125) return "Flyweight";
-    if (weight <= 135) return "Bantamweight";
-    if (weight <= 145) return "Featherweight";
-    if (weight <= 155) return "Lightweight";
-    if (weight <= 170) return "Welterweight";
-    if (weight <= 185) return "Middleweight";
-    if (weight <= 205) return "Light Heavyweight";
-    return "Heavyweight";
-  };
+  // Determine fighter's weight class based on kilograms with slight adjustments for borderline decimals
+const getWeightClass = (weightInKg) => {
+  if (!weightInKg) return "Unknown";
+
+  // Adjusted thresholds (all slightly increased)
+  if (weightInKg <= 56.8)  return "Flyweight";         // originally 56.7 kg (~125 lbs)
+  if (weightInKg <= 61.3)  return "Bantamweight";      // originally 61.2 kg (~135 lbs)
+  if (weightInKg <= 65.9)  return "Featherweight";     // originally 65.8 kg (~145 lbs)
+  if (weightInKg <= 70.32) return "Lightweight";       // originally 70.31 kg (~155 lbs)
+  if (weightInKg <= 77.2)  return "Welterweight";      // originally 77.1 kg (~170 lbs)
+  if (weightInKg <= 84.0)  return "Middleweight";      // originally 83.9 kg (~185 lbs)
+  if (weightInKg <= 93.1)  return "Light Heavyweight"; // originally 93.0 kg (~205 lbs)
+  return "Heavyweight";                                // >93.1 kg
+};
 
   return (
     <motion.div 

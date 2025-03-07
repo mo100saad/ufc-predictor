@@ -18,7 +18,7 @@ export const fighterService = {
   getFighterByName: async (name) => {
     try {
       console.log(`Requesting fighter: ${name}`);
-      const response = await api.get(`/fighter/${encodeURIComponent(name)}`);
+      const response = await api.get(`/fighters/${encodeURIComponent(name)}`);
       console.log('API Response:', response.data);
       return response.data.fighter;
     } catch (error) {
