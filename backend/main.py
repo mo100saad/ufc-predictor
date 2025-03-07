@@ -327,6 +327,10 @@ def create_app():
     """Create and configure the Flask application"""
     app = Flask(__name__)
     
+    @app.route("/")
+    def home():
+        return "UFC Fight Predictor API is Running! Try /api/health"
+
     # Register API routes
     register_api(app)
     
