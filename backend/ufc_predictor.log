@@ -26,3 +26,245 @@ Log start2025-03-07 03:07:34,381 - werkzeug - INFO - 127.0.0.1 - - [07/Mar/2025 
 2025-03-07 03:08:07,342 - werkzeug - INFO - 127.0.0.1 - - [07/Mar/2025 03:08:07] "GET /api/fighters HTTP/1.1" 200 -
 2025-03-07 03:08:11,660 - werkzeug - INFO - 127.0.0.1 - - [07/Mar/2025 03:08:11] "GET /api/fighters HTTP/1.1" 200 -
 2025-03-07 03:08:11,919 - werkzeug - INFO - 127.0.0.1 - - [07/Mar/2025 03:08:11] "GET /api/fighters HTTP/1.1" 200 -
+2025-03-09 15:00:28,890 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.2.190:5000
+2025-03-09 15:00:28,890 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-03-09 15:00:35,659 - werkzeug - INFO - 127.0.0.1 - - [09/Mar/2025 15:00:35] "GET /api/fighters HTTP/1.1" 200 -
+2025-03-09 15:00:35,892 - werkzeug - INFO - 127.0.0.1 - - [09/Mar/2025 15:00:35] "GET /api/fighters HTTP/1.1" 200 -
+2025-03-09 15:00:48,330 - werkzeug - INFO - 127.0.0.1 - - [09/Mar/2025 15:00:48] "GET /api/fighters/Khabib%20Nurmagomedov HTTP/1.1" 200 -
+2025-03-09 15:00:48,642 - werkzeug - INFO - 127.0.0.1 - - [09/Mar/2025 15:00:48] "GET /api/fighters/Khabib%20Nurmagomedov HTTP/1.1" 200 -
+2025-03-09 15:01:06,837 - werkzeug - INFO - 127.0.0.1 - - [09/Mar/2025 15:01:06] "GET /api/fighters HTTP/1.1" 200 -
+2025-03-09 15:01:07,089 - werkzeug - INFO - 127.0.0.1 - - [09/Mar/2025 15:01:07] "GET /api/fighters HTTP/1.1" 200 -
+2025-03-09 15:01:12,278 - werkzeug - INFO - 127.0.0.1 - - [09/Mar/2025 15:01:12] "GET /api/fighters/Khabib%20Nurmagomedov HTTP/1.1" 200 -
+2025-03-09 15:01:12,626 - werkzeug - INFO - 127.0.0.1 - - [09/Mar/2025 15:01:12] "GET /api/fighters/Conor%20McGregor HTTP/1.1" 200 -
+2025-03-09 15:01:12,872 - werkzeug - INFO - 127.0.0.1 - - [09/Mar/2025 15:01:12] "OPTIONS /api/predict HTTP/1.1" 200 -
+2025-03-09 15:01:12,932 - ufc_api - INFO - Received prediction request: {'fighter1': {'SApM': 1.75, 'SLpM': 4.1, 'draws': 0, 'height': 177.8, 'id': 946, 'losses': 0, 'name': 'Khabib Nurmagomedov', 'reach': 177.8, 'sig_str_acc': 0.48, 'stance': 'Orthodox', 'str_def': 0.65, 'sub_avg': 0.8, 'td_acc': 0.48, 'td_avg': 5.32, 'td_def': 0.84, 'weight': 70.31, 'wins': 29}, 'fighter2': {'SApM': 4.66, 'SLpM': 5.32, 'draws': 0, 'height': 175.26, 'id': 874, 'losses': 6, 'name': 'Conor McGregor', 'reach': 187.96, 'sig_str_acc': 0.49, 'stance': 'Southpaw', 'str_def': 0.54, 'sub_avg': 0.1, 'td_acc': 0.55, 'td_avg': 0.67, 'td_def': 0.66, 'weight': 70.31, 'wins': 22}}
+2025-03-09 15:01:12,933 - ufc_api - INFO - Formatting fighter data for prediction: {'SApM': 1.75, 'SLpM': 4.1, 'draws': 0, 'height': 177.8, 'id': 946, 'losses': 0, 'name': 'Khabib Nurmagomedov', 'reach': 177.8, 'sig_str_acc': 0.48, 'stance': 'Orthodox', 'str_def': 0.65, 'sub_avg': 0.8, 'td_acc': 0.48, 'td_avg': 5.32, 'td_def': 0.84, 'weight': 70.31, 'wins': 29}
+2025-03-09 15:01:12,933 - ufc_api - INFO - Formatted prediction data: {'name': 'Khabib Nurmagomedov', 'height': 177.8, 'weight': 70.31, 'reach': 177.8, 'stance': 'Orthodox', 'wins': 29, 'losses': 0, 'sig_strikes_per_min': 4.1, 'sig_strike_accuracy': 0.48, 'sig_strikes_absorbed_per_min': 1.75, 'sig_strike_defense': 0.65, 'takedown_avg': 5.32, 'takedown_accuracy': 0.48, 'takedown_defense': 0.84, 'sub_avg': 0.8}
+2025-03-09 15:01:12,934 - ufc_api - INFO - Formatting fighter data for prediction: {'SApM': 4.66, 'SLpM': 5.32, 'draws': 0, 'height': 175.26, 'id': 874, 'losses': 6, 'name': 'Conor McGregor', 'reach': 187.96, 'sig_str_acc': 0.49, 'stance': 'Southpaw', 'str_def': 0.54, 'sub_avg': 0.1, 'td_acc': 0.55, 'td_avg': 0.67, 'td_def': 0.66, 'weight': 70.31, 'wins': 22}
+2025-03-09 15:01:12,934 - ufc_api - INFO - Formatted prediction data: {'name': 'Conor McGregor', 'height': 175.26, 'weight': 70.31, 'reach': 187.96, 'stance': 'Southpaw', 'wins': 22, 'losses': 6, 'sig_strikes_per_min': 5.32, 'sig_strike_accuracy': 0.49, 'sig_strikes_absorbed_per_min': 4.66, 'sig_strike_defense': 0.54, 'takedown_avg': 0.67, 'takedown_accuracy': 0.55, 'takedown_defense': 0.66, 'sub_avg': 0.1}
+2025-03-09 15:01:12,934 - ufc_api - INFO - Using fighter1 data: {'name': 'Khabib Nurmagomedov', 'height': 177.8, 'weight': 70.31, 'reach': 177.8, 'stance': 'Orthodox', 'wins': 29, 'losses': 0, 'sig_strikes_per_min': 4.1, 'sig_strike_accuracy': 0.48, 'sig_strikes_absorbed_per_min': 1.75, 'sig_strike_defense': 0.65, 'takedown_avg': 5.32, 'takedown_accuracy': 0.48, 'takedown_defense': 0.84, 'sub_avg': 0.8}
+2025-03-09 15:01:12,934 - ufc_api - INFO - Using fighter2 data: {'name': 'Conor McGregor', 'height': 175.26, 'weight': 70.31, 'reach': 187.96, 'stance': 'Southpaw', 'wins': 22, 'losses': 6, 'sig_strikes_per_min': 5.32, 'sig_strike_accuracy': 0.49, 'sig_strikes_absorbed_per_min': 4.66, 'sig_strike_defense': 0.54, 'takedown_avg': 0.67, 'takedown_accuracy': 0.55, 'takedown_defense': 0.66, 'sub_avg': 0.1}
+2025-03-09 15:01:12,942 - ufc_api - INFO - Loading ensemble model from models\ensemble_model.joblib
+2025-03-09 15:01:12,942 - ufc_model - INFO - Loading model from models\ensemble_model.joblib
+2025-03-09 15:01:13,016 - ufc_model - INFO - Model loaded successfully with 47 features
+2025-03-09 15:01:13,016 - ufc_model - INFO - predict_fight called with fighter1: Khabib Nurmagomedov
+2025-03-09 15:01:13,016 - ufc_model - INFO - predict_fight called with fighter2: Conor McGregor
+2025-03-09 15:01:13,017 - ufc_model - WARNING - Error setting PyTorch model to eval mode: 'RandomForestClassifier' object has no attribute 'parameters'
+2025-03-09 15:01:13,042 - ufc_model - INFO - Prediction result: {'probability_fighter1_wins': 0.68, 'probability_fighter2_wins': 0.31999999999999995, 'predicted_winner': 'fighter1', 'confidence_level': 'Medium'}
+2025-03-09 15:01:13,045 - werkzeug - INFO - 127.0.0.1 - - [09/Mar/2025 15:01:13] "POST /api/predict HTTP/1.1" 200 -
+2025-03-09 15:01:23,104 - werkzeug - INFO - 127.0.0.1 - - [09/Mar/2025 15:01:23] "GET /api/fighters HTTP/1.1" 200 -
+2025-03-09 15:01:23,453 - werkzeug - INFO - 127.0.0.1 - - [09/Mar/2025 15:01:23] "GET /api/fighters HTTP/1.1" 200 -
+2025-03-09 15:01:23,982 - werkzeug - INFO - 127.0.0.1 - - [09/Mar/2025 15:01:23] "GET /api/fighters HTTP/1.1" 200 -
+2025-03-09 15:01:24,249 - werkzeug - INFO - 127.0.0.1 - - [09/Mar/2025 15:01:24] "GET /api/fighters HTTP/1.1" 200 -
+2025-03-09 15:01:24,909 - werkzeug - INFO - 127.0.0.1 - - [09/Mar/2025 15:01:24] "GET /api/fighters HTTP/1.1" 200 -
+2025-03-09 15:01:25,257 - werkzeug - INFO - 127.0.0.1 - - [09/Mar/2025 15:01:25] "GET /api/fighters HTTP/1.1" 200 -
+2025-03-09 15:41:03,744 - werkzeug - INFO - 127.0.0.1 - - [09/Mar/2025 15:41:03] "GET /api/fighters/Jon%20Jones HTTP/1.1" 200 -
+2025-03-09 15:41:04,003 - werkzeug - INFO - 127.0.0.1 - - [09/Mar/2025 15:41:04] "GET /api/fighters/Abubakar%20Nurmagomedov HTTP/1.1" 200 -
+2025-03-09 15:41:04,061 - werkzeug - INFO - 127.0.0.1 - - [09/Mar/2025 15:41:04] "OPTIONS /api/predict HTTP/1.1" 200 -
+2025-03-09 15:41:04,326 - ufc_api - INFO - Received prediction request: {'fighter1': {'SApM': 2.22, 'SLpM': 4.29, 'draws': 0, 'height': 193.04, 'id': 640, 'losses': 1, 'name': 'Jon Jones', 'reach': 213.36, 'sig_str_acc': 0.57, 'stance': 'Orthodox', 'str_def': 0.64, 'sub_avg': 0.5, 'td_acc': 0.45, 'td_avg': 1.93, 'td_def': 0.95, 'weight': 112.49, 'wins': 27}, 'fighter2': {'SApM': 2.61, 'SLpM': 2.78, 'draws': 0, 'height': 180.34, 'id': 577, 'losses': 4, 'name': 'Abubakar Nurmagomedov', 'reach': 182.88, 'sig_str_acc': 0.53, 'stance': 'Orthodox', 'str_def': 0.65, 'sub_avg': 0, 'td_acc': 0.22, 'td_avg': 1.25, 'td_def': 0.88, 'weight': 77.11, 'wins': 17}}
+2025-03-09 15:41:04,327 - ufc_api - INFO - Formatting fighter data for prediction: {'SApM': 2.22, 'SLpM': 4.29, 'draws': 0, 'height': 193.04, 'id': 640, 'losses': 1, 'name': 'Jon Jones', 'reach': 213.36, 'sig_str_acc': 0.57, 'stance': 'Orthodox', 'str_def': 0.64, 'sub_avg': 0.5, 'td_acc': 0.45, 'td_avg': 1.93, 'td_def': 0.95, 'weight': 112.49, 'wins': 27}
+2025-03-09 15:41:04,327 - ufc_api - INFO - Formatted prediction data: {'name': 'Jon Jones', 'height': 193.04, 'weight': 112.49, 'reach': 213.36, 'stance': 'Orthodox', 'wins': 27, 'losses': 1, 'sig_strikes_per_min': 4.29, 'sig_strike_accuracy': 0.57, 'sig_strikes_absorbed_per_min': 2.22, 'sig_strike_defense': 0.64, 'takedown_avg': 1.93, 'takedown_accuracy': 0.45, 'takedown_defense': 0.95, 'sub_avg': 0.5}
+2025-03-09 15:41:04,328 - ufc_api - INFO - Formatting fighter data for prediction: {'SApM': 2.61, 'SLpM': 2.78, 'draws': 0, 'height': 180.34, 'id': 577, 'losses': 4, 'name': 'Abubakar Nurmagomedov', 'reach': 182.88, 'sig_str_acc': 0.53, 'stance': 'Orthodox', 'str_def': 0.65, 'sub_avg': 0, 'td_acc': 0.22, 'td_avg': 1.25, 'td_def': 0.88, 'weight': 77.11, 'wins': 17}
+2025-03-09 15:41:04,328 - ufc_api - INFO - Formatted prediction data: {'name': 'Abubakar Nurmagomedov', 'height': 180.34, 'weight': 77.11, 'reach': 182.88, 'stance': 'Orthodox', 'wins': 17, 'losses': 4, 'sig_strikes_per_min': 2.78, 'sig_strike_accuracy': 0.53, 'sig_strikes_absorbed_per_min': 2.61, 'sig_strike_defense': 0.65, 'takedown_avg': 1.25, 'takedown_accuracy': 0.22, 'takedown_defense': 0.88, 'sub_avg': 0}
+2025-03-09 15:41:04,328 - ufc_api - INFO - Using fighter1 data: {'name': 'Jon Jones', 'height': 193.04, 'weight': 112.49, 'reach': 213.36, 'stance': 'Orthodox', 'wins': 27, 'losses': 1, 'sig_strikes_per_min': 4.29, 'sig_strike_accuracy': 0.57, 'sig_strikes_absorbed_per_min': 2.22, 'sig_strike_defense': 0.64, 'takedown_avg': 1.93, 'takedown_accuracy': 0.45, 'takedown_defense': 0.95, 'sub_avg': 0.5}
+2025-03-09 15:41:04,329 - ufc_api - INFO - Using fighter2 data: {'name': 'Abubakar Nurmagomedov', 'height': 180.34, 'weight': 77.11, 'reach': 182.88, 'stance': 'Orthodox', 'wins': 17, 'losses': 4, 'sig_strikes_per_min': 2.78, 'sig_strike_accuracy': 0.53, 'sig_strikes_absorbed_per_min': 2.61, 'sig_strike_defense': 0.65, 'takedown_avg': 1.25, 'takedown_accuracy': 0.22, 'takedown_defense': 0.88, 'sub_avg': 0}
+2025-03-09 15:41:04,329 - ufc_api - INFO - Loading ensemble model from models\ensemble_model.joblib
+2025-03-09 15:41:04,330 - ufc_model - INFO - Loading model from models\ensemble_model.joblib
+2025-03-09 15:41:04,408 - ufc_model - INFO - Model loaded successfully with 47 features
+2025-03-09 15:41:04,409 - ufc_model - INFO - predict_fight called with fighter1: Jon Jones
+2025-03-09 15:41:04,409 - ufc_model - INFO - predict_fight called with fighter2: Abubakar Nurmagomedov
+2025-03-09 15:41:04,410 - ufc_model - WARNING - Error setting PyTorch model to eval mode: 'RandomForestClassifier' object has no attribute 'parameters'
+2025-03-09 15:41:04,433 - ufc_model - INFO - Prediction result: {'probability_fighter1_wins': 0.41, 'probability_fighter2_wins': 0.5900000000000001, 'predicted_winner': 'fighter2', 'confidence_level': 'Low'}
+2025-03-09 15:41:04,437 - werkzeug - INFO - 127.0.0.1 - - [09/Mar/2025 15:41:04] "POST /api/predict HTTP/1.1" 200 -
+2025-03-09 15:41:25,332 - werkzeug - INFO - 127.0.0.1 - - [09/Mar/2025 15:41:25] "GET /api/fighters/Jon%20Jones HTTP/1.1" 200 -
+2025-03-09 15:41:25,668 - werkzeug - INFO - 127.0.0.1 - - [09/Mar/2025 15:41:25] "GET /api/fighters/Anthony%20Lapsley HTTP/1.1" 200 -
+2025-03-09 15:41:25,930 - werkzeug - INFO - 127.0.0.1 - - [09/Mar/2025 15:41:25] "OPTIONS /api/predict HTTP/1.1" 200 -
+2025-03-09 15:41:25,978 - ufc_api - INFO - Received prediction request: {'fighter1': {'SApM': 2.22, 'SLpM': 4.29, 'draws': 0, 'height': 193.04, 'id': 640, 'losses': 1, 'name': 'Jon Jones', 'reach': 213.36, 'sig_str_acc': 0.57, 'stance': 'Orthodox', 'str_def': 0.64, 'sub_avg': 0.5, 'td_acc': 0.45, 'td_avg': 1.93, 'td_def': 0.95, 'weight': 112.49, 'wins': 27}, 'fighter2': {'SApM': 0.58, 'SLpM': 0.53, 'draws': 0, 'height': 175.26, 'id': 1656, 'losses': 7, 'name': 'Anthony Lapsley', 'reach': None, 'sig_str_acc': 0.34, 'stance': 'Southpaw', 'str_def': 0.66, 'sub_avg': 0, 'td_acc': 0, 'td_avg': 0, 'td_def': 0.2, 'weight': 77.11, 'wins': 23}}
+2025-03-09 15:41:25,978 - ufc_api - INFO - Formatting fighter data for prediction: {'SApM': 2.22, 'SLpM': 4.29, 'draws': 0, 'height': 193.04, 'id': 640, 'losses': 1, 'name': 'Jon Jones', 'reach': 213.36, 'sig_str_acc': 0.57, 'stance': 'Orthodox', 'str_def': 0.64, 'sub_avg': 0.5, 'td_acc': 0.45, 'td_avg': 1.93, 'td_def': 0.95, 'weight': 112.49, 'wins': 27}
+2025-03-09 15:41:25,979 - ufc_api - INFO - Formatted prediction data: {'name': 'Jon Jones', 'height': 193.04, 'weight': 112.49, 'reach': 213.36, 'stance': 'Orthodox', 'wins': 27, 'losses': 1, 'sig_strikes_per_min': 4.29, 'sig_strike_accuracy': 0.57, 'sig_strikes_absorbed_per_min': 2.22, 'sig_strike_defense': 0.64, 'takedown_avg': 1.93, 'takedown_accuracy': 0.45, 'takedown_defense': 0.95, 'sub_avg': 0.5}
+2025-03-09 15:41:25,979 - ufc_api - INFO - Formatting fighter data for prediction: {'SApM': 0.58, 'SLpM': 0.53, 'draws': 0, 'height': 175.26, 'id': 1656, 'losses': 7, 'name': 'Anthony Lapsley', 'reach': None, 'sig_str_acc': 0.34, 'stance': 'Southpaw', 'str_def': 0.66, 'sub_avg': 0, 'td_acc': 0, 'td_avg': 0, 'td_def': 0.2, 'weight': 77.11, 'wins': 23}
+2025-03-09 15:41:25,980 - ufc_api - INFO - Formatted prediction data: {'name': 'Anthony Lapsley', 'height': 175.26, 'weight': 77.11, 'stance': 'Southpaw', 'wins': 23, 'losses': 7, 'sig_strikes_per_min': 0.53, 'sig_strike_accuracy': 0.34, 'sig_strikes_absorbed_per_min': 0.58, 'sig_strike_defense': 0.66, 'takedown_avg': 0, 'takedown_accuracy': 0, 'takedown_defense': 0.2, 'sub_avg': 0}
+2025-03-09 15:41:25,980 - ufc_api - INFO - Using fighter1 data: {'name': 'Jon Jones', 'height': 193.04, 'weight': 112.49, 'reach': 213.36, 'stance': 'Orthodox', 'wins': 27, 'losses': 1, 'sig_strikes_per_min': 4.29, 'sig_strike_accuracy': 0.57, 'sig_strikes_absorbed_per_min': 2.22, 'sig_strike_defense': 0.64, 'takedown_avg': 1.93, 'takedown_accuracy': 0.45, 'takedown_defense': 0.95, 'sub_avg': 0.5}
+2025-03-09 15:41:25,981 - ufc_api - INFO - Using fighter2 data: {'name': 'Anthony Lapsley', 'height': 175.26, 'weight': 77.11, 'stance': 'Southpaw', 'wins': 23, 'losses': 7, 'sig_strikes_per_min': 0.53, 'sig_strike_accuracy': 0.34, 'sig_strikes_absorbed_per_min': 0.58, 'sig_strike_defense': 0.66, 'takedown_avg': 0, 'takedown_accuracy': 0, 'takedown_defense': 0.2, 'sub_avg': 0}
+2025-03-09 15:41:25,981 - ufc_api - INFO - Loading ensemble model from models\ensemble_model.joblib
+2025-03-09 15:41:25,981 - ufc_model - INFO - Loading model from models\ensemble_model.joblib
+2025-03-09 15:41:26,044 - ufc_model - INFO - Model loaded successfully with 47 features
+2025-03-09 15:41:26,045 - ufc_model - INFO - predict_fight called with fighter1: Jon Jones
+2025-03-09 15:41:26,045 - ufc_model - INFO - predict_fight called with fighter2: Anthony Lapsley
+2025-03-09 15:41:26,046 - ufc_model - WARNING - Error setting PyTorch model to eval mode: 'RandomForestClassifier' object has no attribute 'parameters'
+2025-03-09 15:41:26,057 - ufc_model - INFO - Prediction result: {'probability_fighter1_wins': 0.44, 'probability_fighter2_wins': 0.56, 'predicted_winner': 'fighter2', 'confidence_level': 'Low'}
+2025-03-09 15:41:26,061 - werkzeug - INFO - 127.0.0.1 - - [09/Mar/2025 15:41:26] "POST /api/predict HTTP/1.1" 200 -
+2025-03-09 15:41:45,119 - werkzeug - INFO - 127.0.0.1 - - [09/Mar/2025 15:41:45] "GET /api/fighters/Jon%20Jones HTTP/1.1" 200 -
+2025-03-09 15:41:45,451 - werkzeug - INFO - 127.0.0.1 - - [09/Mar/2025 15:41:45] "GET /api/fighters/Askar%20Mozharov HTTP/1.1" 200 -
+2025-03-09 15:41:45,715 - werkzeug - INFO - 127.0.0.1 - - [09/Mar/2025 15:41:45] "OPTIONS /api/predict HTTP/1.1" 200 -
+2025-03-09 15:41:45,759 - ufc_api - INFO - Received prediction request: {'fighter1': {'SApM': 2.22, 'SLpM': 4.29, 'draws': 0, 'height': 193.04, 'id': 640, 'losses': 1, 'name': 'Jon Jones', 'reach': 213.36, 'sig_str_acc': 0.57, 'stance': 'Orthodox', 'str_def': 0.64, 'sub_avg': 0.5, 'td_acc': 0.45, 'td_avg': 1.93, 'td_def': 0.95, 'weight': 112.49, 'wins': 27}, 'fighter2': {'SApM': 4.07, 'SLpM': 0.43, 'draws': 0, 'height': 190.5, 'id': 769, 'losses': 13, 'name': 'Askar Mozharov', 'reach': 187.96, 'sig_str_acc': 0.18, 'stance': 'Orthodox', 'str_def': 0.13, 'sub_avg': 0, 'td_acc': 0, 'td_avg': 0, 'td_def': 0.33, 'weight': 92.99, 'wins': 19}}
+2025-03-09 15:41:45,763 - ufc_api - INFO - Formatting fighter data for prediction: {'SApM': 2.22, 'SLpM': 4.29, 'draws': 0, 'height': 193.04, 'id': 640, 'losses': 1, 'name': 'Jon Jones', 'reach': 213.36, 'sig_str_acc': 0.57, 'stance': 'Orthodox', 'str_def': 0.64, 'sub_avg': 0.5, 'td_acc': 0.45, 'td_avg': 1.93, 'td_def': 0.95, 'weight': 112.49, 'wins': 27}
+2025-03-09 15:41:45,763 - ufc_api - INFO - Formatted prediction data: {'name': 'Jon Jones', 'height': 193.04, 'weight': 112.49, 'reach': 213.36, 'stance': 'Orthodox', 'wins': 27, 'losses': 1, 'sig_strikes_per_min': 4.29, 'sig_strike_accuracy': 0.57, 'sig_strikes_absorbed_per_min': 2.22, 'sig_strike_defense': 0.64, 'takedown_avg': 1.93, 'takedown_accuracy': 0.45, 'takedown_defense': 0.95, 'sub_avg': 0.5}
+2025-03-09 15:41:45,763 - ufc_api - INFO - Formatting fighter data for prediction: {'SApM': 4.07, 'SLpM': 0.43, 'draws': 0, 'height': 190.5, 'id': 769, 'losses': 13, 'name': 'Askar Mozharov', 'reach': 187.96, 'sig_str_acc': 0.18, 'stance': 'Orthodox', 'str_def': 0.13, 'sub_avg': 0, 'td_acc': 0, 'td_avg': 0, 'td_def': 0.33, 'weight': 92.99, 'wins': 19}
+2025-03-09 15:41:45,763 - ufc_api - INFO - Formatted prediction data: {'name': 'Askar Mozharov', 'height': 190.5, 'weight': 92.99, 'reach': 187.96, 'stance': 'Orthodox', 'wins': 19, 'losses': 13, 'sig_strikes_per_min': 0.43, 'sig_strike_accuracy': 0.18, 'sig_strikes_absorbed_per_min': 4.07, 'sig_strike_defense': 0.13, 'takedown_avg': 0, 'takedown_accuracy': 0, 'takedown_defense': 0.33, 'sub_avg': 0}
+2025-03-09 15:41:45,763 - ufc_api - INFO - Using fighter1 data: {'name': 'Jon Jones', 'height': 193.04, 'weight': 112.49, 'reach': 213.36, 'stance': 'Orthodox', 'wins': 27, 'losses': 1, 'sig_strikes_per_min': 4.29, 'sig_strike_accuracy': 0.57, 'sig_strikes_absorbed_per_min': 2.22, 'sig_strike_defense': 0.64, 'takedown_avg': 1.93, 'takedown_accuracy': 0.45, 'takedown_defense': 0.95, 'sub_avg': 0.5}
+2025-03-09 15:41:45,763 - ufc_api - INFO - Using fighter2 data: {'name': 'Askar Mozharov', 'height': 190.5, 'weight': 92.99, 'reach': 187.96, 'stance': 'Orthodox', 'wins': 19, 'losses': 13, 'sig_strikes_per_min': 0.43, 'sig_strike_accuracy': 0.18, 'sig_strikes_absorbed_per_min': 4.07, 'sig_strike_defense': 0.13, 'takedown_avg': 0, 'takedown_accuracy': 0, 'takedown_defense': 0.33, 'sub_avg': 0}
+2025-03-09 15:41:45,763 - ufc_api - INFO - Loading ensemble model from models\ensemble_model.joblib
+2025-03-09 15:41:45,763 - ufc_model - INFO - Loading model from models\ensemble_model.joblib
+2025-03-09 15:41:45,827 - ufc_model - INFO - Model loaded successfully with 47 features
+2025-03-09 15:41:45,830 - ufc_model - INFO - predict_fight called with fighter1: Jon Jones
+2025-03-09 15:41:45,830 - ufc_model - INFO - predict_fight called with fighter2: Askar Mozharov
+2025-03-09 15:41:45,830 - ufc_model - WARNING - Error setting PyTorch model to eval mode: 'RandomForestClassifier' object has no attribute 'parameters'
+2025-03-09 15:41:45,843 - ufc_model - INFO - Prediction result: {'probability_fighter1_wins': 0.64, 'probability_fighter2_wins': 0.36, 'predicted_winner': 'fighter1', 'confidence_level': 'Low'}
+2025-03-09 15:41:45,846 - werkzeug - INFO - 127.0.0.1 - - [09/Mar/2025 15:41:45] "POST /api/predict HTTP/1.1" 200 -
+2025-03-09 15:42:06,669 - werkzeug - INFO - 127.0.0.1 - - [09/Mar/2025 15:42:06] "GET /api/fighters/Jon%20Jones HTTP/1.1" 200 -
+2025-03-09 15:42:07,000 - werkzeug - INFO - 127.0.0.1 - - [09/Mar/2025 15:42:07] "GET /api/fighters/Daniel%20Cormier HTTP/1.1" 200 -
+2025-03-09 15:42:07,266 - werkzeug - INFO - 127.0.0.1 - - [09/Mar/2025 15:42:07] "OPTIONS /api/predict HTTP/1.1" 200 -
+2025-03-09 15:42:07,312 - ufc_api - INFO - Received prediction request: {'fighter1': {'SApM': 2.22, 'SLpM': 4.29, 'draws': 0, 'height': 193.04, 'id': 640, 'losses': 1, 'name': 'Jon Jones', 'reach': 213.36, 'sig_str_acc': 0.57, 'stance': 'Orthodox', 'str_def': 0.64, 'sub_avg': 0.5, 'td_acc': 0.45, 'td_avg': 1.93, 'td_def': 0.95, 'weight': 112.49, 'wins': 27}, 'fighter2': {'SApM': 2.92, 'SLpM': 4.25, 'draws': 0, 'height': 180.34, 'id': 970, 'losses': 3, 'name': 'Daniel Cormier', 'reach': 182.88, 'sig_str_acc': 0.52, 'stance': 'Orthodox', 'str_def': 0.54, 'sub_avg': 0.4, 'td_acc': 0.44, 'td_avg': 1.83, 'td_def': 0.8, 'weight': 106.59, 'wins': 22}}
+2025-03-09 15:42:07,312 - ufc_api - INFO - Formatting fighter data for prediction: {'SApM': 2.22, 'SLpM': 4.29, 'draws': 0, 'height': 193.04, 'id': 640, 'losses': 1, 'name': 'Jon Jones', 'reach': 213.36, 'sig_str_acc': 0.57, 'stance': 'Orthodox', 'str_def': 0.64, 'sub_avg': 0.5, 'td_acc': 0.45, 'td_avg': 1.93, 'td_def': 0.95, 'weight': 112.49, 'wins': 27}
+2025-03-09 15:42:07,312 - ufc_api - INFO - Formatted prediction data: {'name': 'Jon Jones', 'height': 193.04, 'weight': 112.49, 'reach': 213.36, 'stance': 'Orthodox', 'wins': 27, 'losses': 1, 'sig_strikes_per_min': 4.29, 'sig_strike_accuracy': 0.57, 'sig_strikes_absorbed_per_min': 2.22, 'sig_strike_defense': 0.64, 'takedown_avg': 1.93, 'takedown_accuracy': 0.45, 'takedown_defense': 0.95, 'sub_avg': 0.5}
+2025-03-09 15:42:07,312 - ufc_api - INFO - Formatting fighter data for prediction: {'SApM': 2.92, 'SLpM': 4.25, 'draws': 0, 'height': 180.34, 'id': 970, 'losses': 3, 'name': 'Daniel Cormier', 'reach': 182.88, 'sig_str_acc': 0.52, 'stance': 'Orthodox', 'str_def': 0.54, 'sub_avg': 0.4, 'td_acc': 0.44, 'td_avg': 1.83, 'td_def': 0.8, 'weight': 106.59, 'wins': 22}
+2025-03-09 15:42:07,315 - ufc_api - INFO - Formatted prediction data: {'name': 'Daniel Cormier', 'height': 180.34, 'weight': 106.59, 'reach': 182.88, 'stance': 'Orthodox', 'wins': 22, 'losses': 3, 'sig_strikes_per_min': 4.25, 'sig_strike_accuracy': 0.52, 'sig_strikes_absorbed_per_min': 2.92, 'sig_strike_defense': 0.54, 'takedown_avg': 1.83, 'takedown_accuracy': 0.44, 'takedown_defense': 0.8, 'sub_avg': 0.4}
+2025-03-09 15:42:07,315 - ufc_api - INFO - Using fighter1 data: {'name': 'Jon Jones', 'height': 193.04, 'weight': 112.49, 'reach': 213.36, 'stance': 'Orthodox', 'wins': 27, 'losses': 1, 'sig_strikes_per_min': 4.29, 'sig_strike_accuracy': 0.57, 'sig_strikes_absorbed_per_min': 2.22, 'sig_strike_defense': 0.64, 'takedown_avg': 1.93, 'takedown_accuracy': 0.45, 'takedown_defense': 0.95, 'sub_avg': 0.5}
+2025-03-09 15:42:07,315 - ufc_api - INFO - Using fighter2 data: {'name': 'Daniel Cormier', 'height': 180.34, 'weight': 106.59, 'reach': 182.88, 'stance': 'Orthodox', 'wins': 22, 'losses': 3, 'sig_strikes_per_min': 4.25, 'sig_strike_accuracy': 0.52, 'sig_strikes_absorbed_per_min': 2.92, 'sig_strike_defense': 0.54, 'takedown_avg': 1.83, 'takedown_accuracy': 0.44, 'takedown_defense': 0.8, 'sub_avg': 0.4}
+2025-03-09 15:42:07,315 - ufc_api - INFO - Loading ensemble model from models\ensemble_model.joblib
+2025-03-09 15:42:07,315 - ufc_model - INFO - Loading model from models\ensemble_model.joblib
+2025-03-09 15:42:07,382 - ufc_model - INFO - Model loaded successfully with 47 features
+2025-03-09 15:42:07,382 - ufc_model - INFO - predict_fight called with fighter1: Jon Jones
+2025-03-09 15:42:07,382 - ufc_model - INFO - predict_fight called with fighter2: Daniel Cormier
+2025-03-09 15:42:07,382 - ufc_model - WARNING - Error setting PyTorch model to eval mode: 'RandomForestClassifier' object has no attribute 'parameters'
+2025-03-09 15:42:07,395 - ufc_model - INFO - Prediction result: {'probability_fighter1_wins': 0.42, 'probability_fighter2_wins': 0.5800000000000001, 'predicted_winner': 'fighter2', 'confidence_level': 'Low'}
+2025-03-09 15:42:07,398 - werkzeug - INFO - 127.0.0.1 - - [09/Mar/2025 15:42:07] "POST /api/predict HTTP/1.1" 200 -
+2025-03-09 15:42:11,451 - werkzeug - INFO - 127.0.0.1 - - [09/Mar/2025 15:42:11] "GET /api/fighters HTTP/1.1" 200 -
+2025-03-09 15:42:11,803 - werkzeug - INFO - 127.0.0.1 - - [09/Mar/2025 15:42:11] "GET /api/fighters HTTP/1.1" 200 -
+2025-03-09 15:42:26,957 - werkzeug - INFO - 127.0.0.1 - - [09/Mar/2025 15:42:26] "GET /api/fighters/Khamzat%20Chimaev HTTP/1.1" 200 -
+2025-03-09 15:42:27,215 - werkzeug - INFO - 127.0.0.1 - - [09/Mar/2025 15:42:27] "GET /api/fighters/Khamzat%20Chimaev HTTP/1.1" 200 -
+2025-03-09 15:52:14,489 - werkzeug - INFO - 127.0.0.1 - - [09/Mar/2025 15:52:14] "GET /api/fighters HTTP/1.1" 200 -
+2025-03-09 15:52:14,737 - werkzeug - INFO - 127.0.0.1 - - [09/Mar/2025 15:52:14] "GET /api/fighters HTTP/1.1" 200 -
+2025-03-09 15:52:27,490 - werkzeug - INFO - 127.0.0.1 - - [09/Mar/2025 15:52:27] "GET /api/fighters HTTP/1.1" 200 -
+2025-03-09 15:52:27,839 - werkzeug - INFO - 127.0.0.1 - - [09/Mar/2025 15:52:27] "GET /api/fighters HTTP/1.1" 200 -
+2025-03-09 15:54:19,191 - werkzeug - INFO - 127.0.0.1 - - [09/Mar/2025 15:54:19] "GET /api/fighters HTTP/1.1" 200 -
+2025-03-09 15:54:19,462 - werkzeug - INFO - 127.0.0.1 - - [09/Mar/2025 15:54:19] "GET /api/fighters HTTP/1.1" 200 -
+2025-03-09 15:54:21,617 - werkzeug - INFO - 127.0.0.1 - - [09/Mar/2025 15:54:21] "GET /api/fighters HTTP/1.1" 200 -
+2025-03-09 15:54:21,974 - werkzeug - INFO - 127.0.0.1 - - [09/Mar/2025 15:54:21] "GET /api/fighters HTTP/1.1" 200 -
+2025-03-09 16:25:12,098 - werkzeug - INFO - 127.0.0.1 - - [09/Mar/2025 16:25:12] "GET /api/fighters HTTP/1.1" 200 -
+2025-03-09 16:25:12,352 - werkzeug - INFO - 127.0.0.1 - - [09/Mar/2025 16:25:12] "GET /api/fighters HTTP/1.1" 200 -
+2025-03-09 16:25:16,255 - werkzeug - INFO - 127.0.0.1 - - [09/Mar/2025 16:25:16] "GET /api/fighters HTTP/1.1" 200 -
+2025-03-09 16:25:16,597 - werkzeug - INFO - 127.0.0.1 - - [09/Mar/2025 16:25:16] "GET /api/fighters HTTP/1.1" 200 -
+2025-03-09 16:25:21,836 - werkzeug - INFO - 127.0.0.1 - - [09/Mar/2025 16:25:21] "GET /api/fighters HTTP/1.1" 200 -
+2025-03-09 16:25:22,099 - werkzeug - INFO - 127.0.0.1 - - [09/Mar/2025 16:25:22] "GET /api/fighters HTTP/1.1" 200 -
+2025-03-09 16:25:23,260 - werkzeug - INFO - 127.0.0.1 - - [09/Mar/2025 16:25:23] "GET /api/fighters HTTP/1.1" 200 -
+2025-03-09 16:25:23,600 - werkzeug - INFO - 127.0.0.1 - - [09/Mar/2025 16:25:23] "GET /api/fighters HTTP/1.1" 200 -
+2025-03-09 16:28:47,759 - werkzeug - INFO - 127.0.0.1 - - [09/Mar/2025 16:28:47] "GET /api/fighters HTTP/1.1" 200 -
+2025-03-09 16:28:48,026 - werkzeug - INFO - 127.0.0.1 - - [09/Mar/2025 16:28:48] "GET /api/fighters HTTP/1.1" 200 -
+2025-03-09 16:29:09,234 - werkzeug - INFO - 127.0.0.1 - - [09/Mar/2025 16:29:09] "GET /api/fighters HTTP/1.1" 200 -
+2025-03-09 16:29:09,586 - werkzeug - INFO - 127.0.0.1 - - [09/Mar/2025 16:29:09] "GET /api/fighters HTTP/1.1" 200 -
+2025-03-09 16:29:11,668 - werkzeug - INFO - 127.0.0.1 - - [09/Mar/2025 16:29:11] "GET /api/fighters HTTP/1.1" 200 -
+2025-03-09 16:29:11,933 - werkzeug - INFO - 127.0.0.1 - - [09/Mar/2025 16:29:11] "GET /api/fighters HTTP/1.1" 200 -
+2025-03-09 16:29:14,050 - werkzeug - INFO - 127.0.0.1 - - [09/Mar/2025 16:29:14] "GET /api/fighters HTTP/1.1" 200 -
+2025-03-09 16:29:14,610 - werkzeug - INFO - 127.0.0.1 - - [09/Mar/2025 16:29:14] "GET /api/fighters HTTP/1.1" 200 -
+2025-03-09 16:29:21,682 - werkzeug - INFO - 127.0.0.1 - - [09/Mar/2025 16:29:21] "GET /api/fighters HTTP/1.1" 200 -
+2025-03-09 16:29:21,942 - werkzeug - INFO - 127.0.0.1 - - [09/Mar/2025 16:29:21] "GET /api/fighters HTTP/1.1" 200 -
+2025-03-09 16:29:33,402 - werkzeug - INFO - 127.0.0.1 - - [09/Mar/2025 16:29:33] "GET /api/fighters HTTP/1.1" 200 -
+2025-03-09 16:29:33,742 - werkzeug - INFO - 127.0.0.1 - - [09/Mar/2025 16:29:33] "GET /api/fighters HTTP/1.1" 200 -
+2025-03-09 16:30:37,567 - werkzeug - INFO - 127.0.0.1 - - [09/Mar/2025 16:30:37] "GET /api/fighters HTTP/1.1" 200 -
+2025-03-09 16:30:37,834 - werkzeug - INFO - 127.0.0.1 - - [09/Mar/2025 16:30:37] "GET /api/fighters HTTP/1.1" 200 -
+2025-03-09 16:31:27,218 - werkzeug - INFO - 127.0.0.1 - - [09/Mar/2025 16:31:27] "GET /api/fighters HTTP/1.1" 200 -
+2025-03-09 16:31:27,555 - werkzeug - INFO - 127.0.0.1 - - [09/Mar/2025 16:31:27] "GET /api/fighters HTTP/1.1" 200 -
+2025-03-09 16:33:11,420 - werkzeug - INFO - 127.0.0.1 - - [09/Mar/2025 16:33:11] "GET /api/fighters HTTP/1.1" 200 -
+2025-03-09 16:33:11,674 - werkzeug - INFO - 127.0.0.1 - - [09/Mar/2025 16:33:11] "GET /api/fighters HTTP/1.1" 200 -
+2025-03-09 16:33:14,542 - werkzeug - INFO - 127.0.0.1 - - [09/Mar/2025 16:33:14] "GET /api/fighters HTTP/1.1" 200 -
+2025-03-09 16:33:14,887 - werkzeug - INFO - 127.0.0.1 - - [09/Mar/2025 16:33:14] "GET /api/fighters HTTP/1.1" 200 -
+2025-03-09 16:33:23,486 - werkzeug - INFO - 127.0.0.1 - - [09/Mar/2025 16:33:23] "GET /api/fighters HTTP/1.1" 200 -
+2025-03-09 16:33:23,745 - werkzeug - INFO - 127.0.0.1 - - [09/Mar/2025 16:33:23] "GET /api/fighters HTTP/1.1" 200 -
+2025-03-09 16:33:24,624 - werkzeug - INFO - 127.0.0.1 - - [09/Mar/2025 16:33:24] "GET /api/fighters HTTP/1.1" 200 -
+2025-03-09 16:33:24,968 - werkzeug - INFO - 127.0.0.1 - - [09/Mar/2025 16:33:24] "GET /api/fighters HTTP/1.1" 200 -
+2025-03-09 16:33:31,877 - werkzeug - INFO - 127.0.0.1 - - [09/Mar/2025 16:33:31] "GET /api/fighters HTTP/1.1" 200 -
+2025-03-09 16:33:32,143 - werkzeug - INFO - 127.0.0.1 - - [09/Mar/2025 16:33:32] "GET /api/fighters HTTP/1.1" 200 -
+2025-03-09 16:33:46,777 - werkzeug - INFO - 127.0.0.1 - - [09/Mar/2025 16:33:46] "GET /api/fighters HTTP/1.1" 200 -
+2025-03-09 16:33:47,125 - werkzeug - INFO - 127.0.0.1 - - [09/Mar/2025 16:33:47] "GET /api/fighters HTTP/1.1" 200 -
+2025-03-09 16:33:51,049 - werkzeug - INFO - 127.0.0.1 - - [09/Mar/2025 16:33:51] "GET /api/fighters HTTP/1.1" 200 -
+2025-03-09 16:33:51,299 - werkzeug - INFO - 127.0.0.1 - - [09/Mar/2025 16:33:51] "GET /api/fighters HTTP/1.1" 200 -
+2025-03-09 16:33:53,479 - werkzeug - INFO - 127.0.0.1 - - [09/Mar/2025 16:33:53] "GET /api/fighters HTTP/1.1" 200 -
+2025-03-09 16:33:53,822 - werkzeug - INFO - 127.0.0.1 - - [09/Mar/2025 16:33:53] "GET /api/fighters HTTP/1.1" 200 -
+2025-03-09 16:35:01,454 - werkzeug - INFO - 127.0.0.1 - - [09/Mar/2025 16:35:01] "GET /api/fighters HTTP/1.1" 200 -
+2025-03-09 16:35:01,709 - werkzeug - INFO - 127.0.0.1 - - [09/Mar/2025 16:35:01] "GET /api/fighters HTTP/1.1" 200 -
+2025-03-09 16:35:01,845 - werkzeug - INFO - 127.0.0.1 - - [09/Mar/2025 16:35:01] "GET /api/fighters HTTP/1.1" 200 -
+2025-03-09 16:35:02,182 - werkzeug - INFO - 127.0.0.1 - - [09/Mar/2025 16:35:02] "GET /api/fighters HTTP/1.1" 200 -
+2025-03-09 16:35:02,745 - werkzeug - INFO - 127.0.0.1 - - [09/Mar/2025 16:35:02] "GET /api/fighters HTTP/1.1" 200 -
+2025-03-09 16:35:03,035 - werkzeug - INFO - 127.0.0.1 - - [09/Mar/2025 16:35:03] "GET /api/fighters HTTP/1.1" 200 -
+2025-03-09 16:35:03,085 - werkzeug - INFO - 127.0.0.1 - - [09/Mar/2025 16:35:03] "GET /api/fighters HTTP/1.1" 200 -
+2025-03-09 16:35:03,282 - werkzeug - INFO - 127.0.0.1 - - [09/Mar/2025 16:35:03] "GET /api/fighters HTTP/1.1" 200 -
+2025-03-09 16:35:03,375 - werkzeug - INFO - 127.0.0.1 - - [09/Mar/2025 16:35:03] "GET /api/fighters HTTP/1.1" 200 -
+2025-03-09 16:35:03,621 - werkzeug - INFO - 127.0.0.1 - - [09/Mar/2025 16:35:03] "GET /api/fighters HTTP/1.1" 200 -
+2025-03-09 16:35:03,960 - werkzeug - INFO - 127.0.0.1 - - [09/Mar/2025 16:35:03] "GET /api/fighters HTTP/1.1" 200 -
+2025-03-09 16:35:04,659 - werkzeug - INFO - 127.0.0.1 - - [09/Mar/2025 16:35:04] "GET /api/fighters HTTP/1.1" 200 -
+2025-03-09 16:35:04,920 - werkzeug - INFO - 127.0.0.1 - - [09/Mar/2025 16:35:04] "GET /api/fighters HTTP/1.1" 200 -
+2025-03-09 16:35:05,011 - werkzeug - INFO - 127.0.0.1 - - [09/Mar/2025 16:35:05] "GET /api/fighters HTTP/1.1" 200 -
+2025-03-09 16:35:05,187 - werkzeug - INFO - 127.0.0.1 - - [09/Mar/2025 16:35:05] "GET /api/fighters HTTP/1.1" 200 -
+2025-03-09 16:35:05,254 - werkzeug - INFO - 127.0.0.1 - - [09/Mar/2025 16:35:05] "GET /api/fighters HTTP/1.1" 200 -
+2025-03-09 16:35:05,484 - werkzeug - INFO - 127.0.0.1 - - [09/Mar/2025 16:35:05] "GET /api/fighters HTTP/1.1" 200 -
+2025-03-09 16:35:05,528 - werkzeug - INFO - 127.0.0.1 - - [09/Mar/2025 16:35:05] "GET /api/fighters HTTP/1.1" 200 -
+2025-03-09 16:35:05,689 - werkzeug - INFO - 127.0.0.1 - - [09/Mar/2025 16:35:05] "GET /api/fighters HTTP/1.1" 200 -
+2025-03-09 16:35:05,873 - werkzeug - INFO - 127.0.0.1 - - [09/Mar/2025 16:35:05] "GET /api/fighters HTTP/1.1" 200 -
+2025-03-09 16:35:05,959 - werkzeug - INFO - 127.0.0.1 - - [09/Mar/2025 16:35:05] "GET /api/fighters HTTP/1.1" 200 -
+2025-03-09 16:35:06,142 - werkzeug - INFO - 127.0.0.1 - - [09/Mar/2025 16:35:06] "GET /api/fighters HTTP/1.1" 200 -
+2025-03-09 16:35:06,223 - werkzeug - INFO - 127.0.0.1 - - [09/Mar/2025 16:35:06] "GET /api/fighters HTTP/1.1" 200 -
+2025-03-09 16:35:06,672 - werkzeug - INFO - 127.0.0.1 - - [09/Mar/2025 16:35:06] "GET /api/fighters HTTP/1.1" 200 -
+2025-03-09 16:35:07,138 - werkzeug - INFO - 127.0.0.1 - - [09/Mar/2025 16:35:07] "GET /api/fighters HTTP/1.1" 200 -
+2025-03-09 16:35:07,544 - werkzeug - INFO - 127.0.0.1 - - [09/Mar/2025 16:35:07] "GET /api/fighters HTTP/1.1" 200 -
+2025-03-09 16:35:07,796 - werkzeug - INFO - 127.0.0.1 - - [09/Mar/2025 16:35:07] "GET /api/fighters HTTP/1.1" 200 -
+2025-03-09 16:35:07,876 - werkzeug - INFO - 127.0.0.1 - - [09/Mar/2025 16:35:07] "GET /api/fighters HTTP/1.1" 200 -
+2025-03-09 16:35:08,181 - werkzeug - INFO - 127.0.0.1 - - [09/Mar/2025 16:35:08] "GET /api/fighters HTTP/1.1" 200 -
+2025-03-09 16:35:08,373 - werkzeug - INFO - 127.0.0.1 - - [09/Mar/2025 16:35:08] "GET /api/fighters HTTP/1.1" 200 -
+2025-03-09 16:35:08,709 - werkzeug - INFO - 127.0.0.1 - - [09/Mar/2025 16:35:08] "GET /api/fighters HTTP/1.1" 200 -
+2025-03-09 16:35:09,011 - werkzeug - INFO - 127.0.0.1 - - [09/Mar/2025 16:35:09] "GET /api/fighters HTTP/1.1" 200 -
+2025-03-09 16:35:09,047 - werkzeug - INFO - 127.0.0.1 - - [09/Mar/2025 16:35:09] "GET /api/fighters HTTP/1.1" 200 -
+2025-03-09 16:35:09,269 - werkzeug - INFO - 127.0.0.1 - - [09/Mar/2025 16:35:09] "GET /api/fighters HTTP/1.1" 200 -
+2025-03-09 16:35:09,350 - werkzeug - INFO - 127.0.0.1 - - [09/Mar/2025 16:35:09] "GET /api/fighters HTTP/1.1" 200 -
+2025-03-09 16:35:09,617 - werkzeug - INFO - 127.0.0.1 - - [09/Mar/2025 16:35:09] "GET /api/fighters HTTP/1.1" 200 -
+2025-03-09 16:35:09,853 - werkzeug - INFO - 127.0.0.1 - - [09/Mar/2025 16:35:09] "GET /api/fighters HTTP/1.1" 200 -
+2025-03-09 16:35:09,990 - werkzeug - INFO - 127.0.0.1 - - [09/Mar/2025 16:35:09] "GET /api/fighters HTTP/1.1" 200 -
+2025-03-09 16:35:10,327 - werkzeug - INFO - 127.0.0.1 - - [09/Mar/2025 16:35:10] "GET /api/fighters HTTP/1.1" 200 -
+2025-03-09 16:35:10,847 - werkzeug - INFO - 127.0.0.1 - - [09/Mar/2025 16:35:10] "GET /api/fighters HTTP/1.1" 200 -
+2025-03-09 16:35:11,113 - werkzeug - INFO - 127.0.0.1 - - [09/Mar/2025 16:35:11] "GET /api/fighters HTTP/1.1" 200 -
+2025-03-09 16:35:13,099 - werkzeug - INFO - 127.0.0.1 - - [09/Mar/2025 16:35:13] "GET /api/fighters HTTP/1.1" 200 -
+2025-03-09 16:35:13,440 - werkzeug - INFO - 127.0.0.1 - - [09/Mar/2025 16:35:13] "GET /api/fighters HTTP/1.1" 200 -
+2025-03-09 16:35:13,940 - werkzeug - INFO - 127.0.0.1 - - [09/Mar/2025 16:35:13] "GET /api/fighters HTTP/1.1" 200 -
+2025-03-09 16:35:14,127 - werkzeug - INFO - 127.0.0.1 - - [09/Mar/2025 16:35:14] "GET /api/fighters HTTP/1.1" 200 -
+2025-03-09 16:35:14,345 - werkzeug - INFO - 127.0.0.1 - - [09/Mar/2025 16:35:14] "GET /api/fighters HTTP/1.1" 200 -
+2025-03-09 16:35:14,460 - werkzeug - INFO - 127.0.0.1 - - [09/Mar/2025 16:35:14] "GET /api/fighters HTTP/1.1" 200 -
+2025-03-09 16:35:14,714 - werkzeug - INFO - 127.0.0.1 - - [09/Mar/2025 16:35:14] "GET /api/fighters HTTP/1.1" 200 -
+2025-03-09 16:35:14,755 - werkzeug - INFO - 127.0.0.1 - - [09/Mar/2025 16:35:14] "GET /api/fighters HTTP/1.1" 200 -
+2025-03-09 16:35:15,316 - werkzeug - INFO - 127.0.0.1 - - [09/Mar/2025 16:35:15] "GET /api/fighters HTTP/1.1" 200 -
+2025-03-09 16:35:15,581 - werkzeug - INFO - 127.0.0.1 - - [09/Mar/2025 16:35:15] "GET /api/fighters HTTP/1.1" 200 -
+2025-03-09 16:35:16,169 - werkzeug - INFO - 127.0.0.1 - - [09/Mar/2025 16:35:16] "GET /api/fighters HTTP/1.1" 200 -
+2025-03-09 16:35:16,506 - werkzeug - INFO - 127.0.0.1 - - [09/Mar/2025 16:35:16] "GET /api/fighters HTTP/1.1" 200 -
+2025-03-09 16:35:17,011 - werkzeug - INFO - 127.0.0.1 - - [09/Mar/2025 16:35:17] "GET /api/fighters HTTP/1.1" 200 -
+2025-03-09 16:35:17,163 - werkzeug - INFO - 127.0.0.1 - - [09/Mar/2025 16:35:17] "GET /api/fighters HTTP/1.1" 200 -
+2025-03-09 16:35:19,314 - werkzeug - INFO - 127.0.0.1 - - [09/Mar/2025 16:35:19] "GET /api/fighters HTTP/1.1" 200 -
+2025-03-09 16:35:19,654 - werkzeug - INFO - 127.0.0.1 - - [09/Mar/2025 16:35:19] "GET /api/fighters HTTP/1.1" 200 -
+2025-03-09 17:20:18,572 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.2.190:5000
+2025-03-09 17:20:18,572 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-03-09 17:20:29,518 - werkzeug - INFO - 127.0.0.1 - - [09/Mar/2025 17:20:29] "GET / HTTP/1.1" 200 -
+2025-03-09 17:20:29,696 - werkzeug - INFO - 127.0.0.1 - - [09/Mar/2025 17:20:29] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2025-03-09 17:20:30,709 - werkzeug - INFO - 127.0.0.1 - - [09/Mar/2025 17:20:30] "GET / HTTP/1.1" 200 -
+2025-03-09 17:20:31,289 - werkzeug - INFO - 127.0.0.1 - - [09/Mar/2025 17:20:31] "GET / HTTP/1.1" 200 -
+2025-03-09 17:20:39,708 - werkzeug - INFO - 127.0.0.1 - - [09/Mar/2025 17:20:39] "GET /api/health HTTP/1.1" 200 -
+2025-03-09 17:20:47,169 - werkzeug - INFO - 192.168.2.190 - - [09/Mar/2025 17:20:47] "GET / HTTP/1.1" 200 -
+2025-03-09 17:20:47,301 - werkzeug - INFO - 192.168.2.190 - - [09/Mar/2025 17:20:47] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2025-03-09 17:21:18,072 - werkzeug - INFO - 127.0.0.1 - - [09/Mar/2025 17:21:18] "GET /api/fighters HTTP/1.1" 200 -
+2025-03-09 17:21:18,327 - werkzeug - INFO - 127.0.0.1 - - [09/Mar/2025 17:21:18] "GET /api/fighters HTTP/1.1" 200 -
+2025-03-09 17:21:19,086 - werkzeug - INFO - 127.0.0.1 - - [09/Mar/2025 17:21:19] "GET /api/fighters HTTP/1.1" 200 -
+2025-03-09 17:21:19,433 - werkzeug - INFO - 127.0.0.1 - - [09/Mar/2025 17:21:19] "GET /api/fighters HTTP/1.1" 200 -
+2025-03-09 17:21:21,829 - werkzeug - INFO - 127.0.0.1 - - [09/Mar/2025 17:21:21] "GET /api/fighters HTTP/1.1" 200 -
+2025-03-09 17:21:22,096 - werkzeug - INFO - 127.0.0.1 - - [09/Mar/2025 17:21:22] "GET /api/fighters HTTP/1.1" 200 -
+2025-03-09 17:21:34,631 - werkzeug - INFO - 127.0.0.1 - - [09/Mar/2025 17:21:34] "GET /api/fighters HTTP/1.1" 200 -
+2025-03-09 17:21:34,965 - werkzeug - INFO - 127.0.0.1 - - [09/Mar/2025 17:21:34] "GET /api/fighters HTTP/1.1" 200 -
+2025-03-09 17:21:38,502 - werkzeug - INFO - 127.0.0.1 - - [09/Mar/2025 17:21:38] "GET /api/fighters HTTP/1.1" 200 -
+2025-03-09 17:21:38,751 - werkzeug - INFO - 127.0.0.1 - - [09/Mar/2025 17:21:38] "GET /api/fighters HTTP/1.1" 200 -
+2025-03-09 17:21:43,135 - werkzeug - INFO - 127.0.0.1 - - [09/Mar/2025 17:21:43] "GET /api/fighters HTTP/1.1" 200 -
+2025-03-09 17:21:43,473 - werkzeug - INFO - 127.0.0.1 - - [09/Mar/2025 17:21:43] "GET /api/fighters HTTP/1.1" 200 -
+2025-03-09 17:21:50,639 - werkzeug - INFO - 127.0.0.1 - - [09/Mar/2025 17:21:50] "GET /api/fighters HTTP/1.1" 200 -
+2025-03-09 17:21:50,898 - werkzeug - INFO - 127.0.0.1 - - [09/Mar/2025 17:21:50] "GET /api/fighters HTTP/1.1" 200 -
