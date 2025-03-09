@@ -2,18 +2,75 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
+    <link rel="icon" href="%PUBLIC_URL%/mslogo.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#000000" />
     <meta
       name="description"
-      content="UFC Fight Predictor Application"
+      content="UFC Predictor - AI-powered fight outcome predictions"
     />
+    <link rel="apple-touch-icon" href="%PUBLIC_URL%/mslogo.png" />
+    <!--
+      manifest.json provides metadata used when your web app is installed on a
+      user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
+    -->
     <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
-    <title>UFC Fight Predictor</title>
+  
+    <title>Mo's UFC Predictor</title>
+    <meta name="description" content="AI-powered UFC fight outcome predictions using advanced machine learning" />
+    <meta name="keywords" content="UFC, MMA, fight predictions, machine learning, AI, sports analytics" />
+    <meta property="og:title" content="Mo's UFC Predictor" />
+    <meta property="og:description" content="AI-powered UFC fight outcome predictions" />
+    <meta property="og:image" content="%PUBLIC_URL%/mslogo.png" />
+    <meta property="og:url" content="https://ufcpredictor.com" />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Mo's UFC Predictor" />
+    <meta name="twitter:description" content="AI-powered UFC fight outcome predictions" />
+    <meta name="twitter:image" content="%PUBLIC_URL%/mslogo.png" />
   </head>
   <body>
-    <noscript>You need to enable JavaScript to run this app.</noscript>
-    <div id="root"></div>
+    <noscript>
+      <div style="text-align: center; padding: 2rem; font-family: Arial, sans-serif;">
+        <img src="%PUBLIC_URL%/mslogo.png" alt="UFC Predictor Logo" style="max-width: 150px; margin-bottom: 1rem;" />
+        <h1>Mo's UFC Predictor</h1>
+        <p>You need to enable JavaScript to run this app.</p>
+      </div>
+    </noscript>
+    
+    <div id="root">
+      <!-- Loading state that will show while React loads -->
+      <div id="loader" style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; background-color: #1a1a2e; color: white; font-family: Arial, sans-serif;">
+        <img src="%PUBLIC_URL%/mslogo.png" alt="UFC Predictor Logo" style="max-width: 180px; margin-bottom: 1.5rem;" />
+        <h1 style="margin-bottom: 1rem; font-size: 2rem; color: #e94560;">Mo's UFC Predictor</h1>
+        <p style="margin-bottom: 2rem; color: #dddddd; max-width: 600px; text-align: center;">
+          Loading the AI-powered UFC fight predictor... Please wait.
+        </p>
+        <div style="width: 50px; height: 50px; border: 5px solid rgba(233, 69, 96, 0.3); border-radius: 50%; border-top-color: #e94560; animation: spin 1s ease-in-out infinite;"></div>
+      </div>
+    </div>
+
+    <!-- Inline loading spinner animation -->
+    <style>
+      @keyframes spin {
+        to { transform: rotate(360deg); }
+      }
+      body {
+        margin: 0;
+        padding: 0;
+        background-color: #1a1a2e;
+      }
+    </style>
+
+    <!-- Google Analytics (uncomment and add your GA tag when ready) -->
+    <!-- 
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-XXXXXXXXXX');
+    </script>
+    -->
   </body>
 </html>
