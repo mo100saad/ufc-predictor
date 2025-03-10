@@ -14,7 +14,7 @@ from model import (UFCPredictor, FocalLoss, EnsemblePredictor,
                   evaluate_model, predict_fight, save_model, load_model)
 from api import register_api
 import torch
-
+from flask import CORS
 # Set up logging
 logging.basicConfig(
     level=logging.INFO,
@@ -326,7 +326,7 @@ def test_position_bias(model_path=None, is_pytorch=None, num_tests=5):
 def create_app():
     """Create and configure the Flask application"""
     app = Flask(__name__)
-    
+    CORS(app)
     @app.route("/")
     def home():
         return "UFC Fight Predictor API is Running! Try /api/health"
