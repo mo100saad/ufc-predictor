@@ -151,26 +151,9 @@ vercel deploy
 
 ---
 
-## 🤝 Contributing
-
-Contributions are **welcome**! Please feel free to **submit a Pull Request**.
-
-```bash
-# Fork the repository
-# Create your feature branch
-git checkout -b feature/amazing-feature
-# Commit your changes
-git commit -m 'Add some amazing feature'
-# Push to the branch
-git push origin feature/amazing-feature
-# Open a Pull Request
-```
-
----
-
 ## 📜 License
 
-This project is **Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International** license.  
+This project is **Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International** license. **YOU MAY NOT** use, take or sell anything from this project without specific permission and/or attribution from me, Mohammad Saad. 
 See the **[LICENSE](LICENSE)** file for details.
 
 ---
