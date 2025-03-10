@@ -14,7 +14,7 @@ from model import (UFCPredictor, FocalLoss, EnsemblePredictor,
                   evaluate_model, predict_fight, save_model, load_model)
 from api import register_api
 import torch
-from flask import CORS
+from flask_cors import CORS
 # Set up logging
 logging.basicConfig(
     level=logging.INFO,
