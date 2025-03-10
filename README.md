@@ -9,7 +9,8 @@
 
 UFC Predictor is a machine learning-powered web application that predicts fight outcomes in the Ultimate Fighting Championship (UFC). Using advanced neural networks and a comprehensive database of fighter statistics, this tool provides data-driven predictions for upcoming UFC matchups with detailed probability analysis.
 
-### Live Demo: COMING SOON
+### Live Demo: [UFC Predictor](https://ufcpredictor.vercel.app/)
+
 
 ## Application Screenshots
 
