@@ -368,6 +368,5 @@ function generateFallbackNews() {
     }
   ];
 }
-};
 
 export default api;
