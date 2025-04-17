@@ -34,6 +34,11 @@ const FighterImage = ({
   // Placeholder image (fighter silhouette SVG)
   const placeholderImage = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjNkI3MjgwIiBzdHJva2Utd2lkdGg9IjEuNSIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIiBjbGFzcz0ibHVjaWRlIGx1Y2lkZS11c2VyIj48cGF0aCBkPSJNMTkgMjFhNyA3IDAgMCAwLTE0IDAiLz48Y2lyY2xlIGN4PSIxMiIgY3k9IjEwIiByPSI0Ii8+PC9zdmc+';
 
+  // Set placeholder immediately on first render
+  useEffect(() => {
+    setImageSrc(placeholderImage);
+  }, []);
+
   // Set up intersection observer for lazy loading
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -101,14 +106,7 @@ const FighterImage = ({
       // If no src is provided or it's a placeholder, try to fetch it
       else if (alt) {
         fetchFighterImage();
-      } 
-      // If neither src nor alt is provided, use placeholder
-      else {
-        setImageSrc(placeholderImage);
       }
-    } else {
-      // When not visible, show the placeholder immediately
-      setImageSrc(placeholderImage);
     }
   }, [src, alt, isVisible]);
   
@@ -135,7 +133,7 @@ const FighterImage = ({
   };
   
   // Display spinner if image is still loading or being fetched when visible
-  const isLoading = isVisible && (loading || fetchingImage || !imageSrc);
+  const isLoading = isVisible && (loading || fetchingImage);
   
   // Compose CSS classes
   const imageClasses = `
@@ -145,7 +143,7 @@ const FighterImage = ({
     overflow-hidden
     object-cover
     transition-opacity duration-300
-    ${isLoading ? 'opacity-0' : 'opacity-100'}
+    ${isLoading ? 'opacity-50' : 'opacity-100'}
     ${className}
   `;
   
@@ -163,7 +161,7 @@ const FighterImage = ({
       
       {/* Image placeholder immediately or actual image when loaded */}
       <img
-        src={!isVisible || error ? placeholderImage : (imageSrc || placeholderImage)}
+        src={imageSrc || placeholderImage}
         alt={alt || "Fighter"}
         className={imageClasses}
         onLoad={handleLoad}

@@ -470,7 +470,7 @@ def create_app():
     app = Flask(__name__)
     CORS(app)
     
-    # Initialize image cache
+    # Initialize image cache but don't preload any images
     from utils import load_image_cache
     load_image_cache()  # Just load the cache, don't fetch any images
     
@@ -480,6 +480,11 @@ def create_app():
 
     # Register API routes
     register_api(app)
+    
+    # Configure static folder for placeholder images
+    app.static_folder = 'static'
+    import os
+    os.makedirs('static', exist_ok=True)
     
     # Add CORS headers
     @app.after_request

@@ -104,7 +104,7 @@ def get_fighter_image_url(name, fetch_if_missing=False):
     
     # Not in cache and we're not supposed to fetch it
     if not fetch_if_missing:
-        return None
+        return "/static/placeholder.png"
     
     # Not in cache, need to scrape from UFC website
     try:
