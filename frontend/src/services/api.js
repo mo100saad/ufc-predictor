@@ -1,6 +1,8 @@
 import axios from 'axios';
 
+// Define API URL with fallback for news API
 const API_URL = '/api';
+const NEWS_URL = process.env.NODE_ENV === 'development' ? 'http://localhost:5050' : '/api';
 
 const api = axios.create({
   baseURL: API_URL,
@@ -197,14 +199,72 @@ export const csvService = {
   },
 };
 
+// Create a separate news API instance
+const newsApi = axios.create({
+  baseURL: NEWS_URL,
+  headers: {
+    'Content-Type': 'application/json',
+  }
+});
+
 export const newsService = {
   getUFCNews: async () => {
     try {
-      const response = await api.get('/news');
+      console.log(`Attempting to fetch news from ${NEWS_URL}/news`);
+      const response = await newsApi.get('/news');
+      console.log("News API response:", response.data);
       return response.data.news || [];
     } catch (error) {
-      console.error("Error fetching UFC news:", error.response?.data || error.message);
-      return [];
+      console.error("Error fetching UFC news:", error);
+      // More detailed error logging
+      if (error.response) {
+        console.error("Response data:", error.response.data);
+        console.error("Response status:", error.response.status);
+        console.error("Response headers:", error.response.headers);
+      } else if (error.request) {
+        console.error("Request made but no response received:", error.request);
+      } else {
+        console.error("Error message:", error.message);
+      }
+      
+      // Try direct NewsAPI call as a last resort
+      try {
+        console.log("Attempting direct NewsAPI call");
+        const encodedQuery = encodeURIComponent('UFC OR "Ultimate Fighting Championship" OR MMA');
+        const newsApiUrl = `https://newsapi.org/v2/everything?q=${encodedQuery}&sortBy=publishedAt&language=en&pageSize=6&apiKey=2acdddf3b04e491d8b9056002aaf579f`;
+        
+        const directResponse = await axios.get(newsApiUrl);
+        if (directResponse.data && directResponse.data.status === 'ok') {
+          console.log("Direct NewsAPI call successful");
+          const articles = directResponse.data.articles || [];
+          
+          // Process articles similar to server-side
+          return articles.map(article => ({
+            id: article.url,
+            title: article.title,
+            description: article.description,
+            url: article.url,
+            imageUrl: article.urlToImage || '/static/placeholder.png',
+            source: article.source?.name || 'News Source',
+            publishedAt: article.publishedAt || new Date().toISOString()
+          }));
+        }
+      } catch (directError) {
+        console.error("Direct NewsAPI call also failed:", directError);
+      }
+      
+      // Fallback to static content as a last resort
+      return [
+        {
+          id: 1,
+          title: "UFC News Temporarily Unavailable",
+          description: "We're working to restore the latest UFC news feed. Check back soon!",
+          url: "https://ufc.com/news",
+          imageUrl: "/static/placeholder.png",
+          source: "System",
+          publishedAt: new Date().toISOString()
+        }
+      ];
     }
   }
 };
