@@ -17,6 +17,9 @@ os.makedirs(DATA_DIR, exist_ok=True)
 os.makedirs(MODEL_DIR, exist_ok=True)
 os.makedirs(LOG_DIR, exist_ok=True)
 
+# Database path
+DATABASE_PATH = os.path.join(DATA_DIR, 'ufc_fighters.db')
+
 # Dataset paths
 RAW_DATASET_PATH = os.path.join(DATA_DIR, 'ufc_dataset.csv')
 PROCESSED_DATASET_PATH = os.path.join(DATA_DIR, 'ufc_processed.csv')
