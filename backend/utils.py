@@ -121,7 +121,7 @@ def get_fighter_image_url(name, fetch_if_missing=False, source=None):
         sources_to_try = [source]
     else:
         # Try all sources in sequence
-        sources_to_try = ['ufc', 'sherdog', 'wikipedia']
+        sources_to_try = ['ufc', 'sherdog', 'wikipedia', 'google']
     
     # Try each source
     for src in sources_to_try:
@@ -197,6 +197,48 @@ def get_fighter_image_url(name, fetch_if_missing=False, source=None):
                                 'thumbnail' in content_data['query']['pages'][str(page_id)]):
                                 image_url = content_data['query']['pages'][str(page_id)]['thumbnail']['source']
                                 image_logger.info(f"Found image for {name} on Wikipedia")
+
+            # Google Images (last resort)
+            elif src == 'google':
+                image_logger.info(f"Trying Google Images for {name}")
+                search_term = f"{name} UFC fighter"
+                google_url = f"https://www.google.com/search?q={search_term.replace(' ', '+')}&tbm=isch"
+                
+                try:
+                    response = requests.get(google_url, headers=headers, timeout=10)
+                    
+                    if response.status_code == 200:
+                        soup = BeautifulSoup(response.content, 'html.parser')
+                        
+                        # Try to find image tags
+                        # First attempt: data-src attribute in img tags
+                        img_tags = soup.find_all('img')
+                        
+                        # Skip first image (usually Google logo)
+                        for img in img_tags[1:5]:  # Try first few results
+                            # Try src, data-src, and other possible attributes
+                            potential_url = img.get('src') or img.get('data-src')
+                            
+                            if potential_url and not potential_url.startswith('data:'):  # Skip base64 encoded images
+                                # Make sure it's a full URL
+                                if potential_url.startswith('//'):
+                                    potential_url = 'https:' + potential_url
+                                
+                                # Verify this is a valid image URL
+                                try:
+                                    img_response = requests.head(potential_url, timeout=5)
+                                    content_type = img_response.headers.get('Content-Type', '')
+                                    
+                                    if 'image' in content_type:
+                                        image_url = potential_url
+                                        image_logger.info(f"Found image for {name} on Google Images")
+                                        break
+                                except Exception as e:
+                                    image_logger.warning(f"Failed to validate image URL {potential_url}: {e}")
+                                    continue
+                except Exception as e:
+                    image_logger.error(f"Error in Google Images scraping: {e}")
+                    pass
             
             # If we found an image from this source, save and return it
             if image_url:

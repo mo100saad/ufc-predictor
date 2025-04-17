@@ -603,8 +603,10 @@ def run_cli():
     
     elif args.command == 'server':
         # Run the API server
+        from config import PORT
+        # Use port from config first, then command-line args as a fallback
         app = create_app()
-        app.run(host='0.0.0.0', port=args.port, debug=args.debug)
+        app.run(host='0.0.0.0', port=PORT if args.port == 5000 else args.port, debug=args.debug)
     
     else:
         # No command or invalid command

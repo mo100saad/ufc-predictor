@@ -46,7 +46,7 @@ export const fighterService = {
       console.log(`Primary image source failed for ${name}, trying fallbacks...`);
       
       // Try fallback sequence - implemented on backend, pass source parameter
-      const fallbacks = ['wikipedia', 'sherdog'];
+      const fallbacks = ['wikipedia', 'sherdog', 'google'];
       
       // Try each fallback source in sequence
       for (const source of fallbacks) {
