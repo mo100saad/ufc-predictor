@@ -65,7 +65,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 # Copy backend from backend stage
 COPY --from=backend /app/backend/ /app/backend/
 COPY --from=backend /usr/local/lib/python3.9/site-packages/ /usr/local/lib/python3.9/site-packages/
-
+COPY --from=backend /usr/local/bin/ /usr/local/bin/
 # Copy built frontend from frontend-build stage
 COPY --from=frontend-build /app/frontend/build/ /app/frontend/build/
 
