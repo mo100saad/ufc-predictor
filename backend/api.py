@@ -531,30 +531,53 @@ def compare_fighters_endpoint():
 
 @api_bp.route('/fighters/<string:fighter_name>/image', methods=['GET'])
 def get_fighter_image_endpoint(fighter_name):
-    """Fetch a fighter's image on demand - optimized to check cache first and avoid web scraping when possible"""
+    """Fetch a fighter's image on demand with multi-source support (UFC, Sherdog, Wikipedia)"""
     try:
         from utils import get_fighter_image_url, load_image_cache, slugify_name
         
-        # First check if it's in the image cache
-        cache = load_image_cache()
-        slug = slugify_name(fighter_name)
+        # Check if a specific source is requested
+        source = request.args.get('source', None)
+        logger.info(f"Image request for {fighter_name}, source={source}")
         
-        if slug in cache and cache[slug] != "not_found":
-            # Return from cache immediately if available
-            logger.info(f"Returning cached image for {fighter_name}")
-            return jsonify({
-                "name": fighter_name,
-                "image_url": cache[slug],
-                "status": "from_cache"
-            })
+        # If no specific source is requested, check cache first
+        if not source:
+            cache = load_image_cache()
+            slug = slugify_name(fighter_name)
+            
+            if slug in cache and cache[slug] != "not_found":
+                # Return from cache immediately if available
+                logger.info(f"Returning cached image for {fighter_name}")
+                return jsonify({
+                    "name": fighter_name,
+                    "image_url": cache[slug],
+                    "source": "cache",
+                    "status": "from_cache"
+                })
         
-        # If not in cache, fetch from web
-        image_url = get_fighter_image_url(fighter_name, fetch_if_missing=True)
+        # If not in cache or specific source requested, fetch from web
+        image_url = get_fighter_image_url(fighter_name, fetch_if_missing=True, source=source)
+        
+        # Determine status and actual source
+        status = "not_found"
+        if image_url and image_url != "/static/placeholder.png":
+            status = "fetched"
+            # Try to determine the source from the URL
+            if "ufc.com" in image_url:
+                actual_source = "ufc"
+            elif "sherdog.com" in image_url:
+                actual_source = "sherdog"
+            elif "wikipedia.org" in image_url:
+                actual_source = "wikipedia"
+            else:
+                actual_source = "unknown"
+        else:
+            actual_source = "none"
         
         return jsonify({
             "name": fighter_name,
             "image_url": image_url,
-            "status": "fetched" if image_url and image_url != "/static/placeholder.png" else "not_found"
+            "source": actual_source,
+            "status": status
         })
         
     except Exception as e:

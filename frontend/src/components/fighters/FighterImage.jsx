@@ -126,19 +126,19 @@ const FighterImage = ({
 
   // Enhanced size class mapping with larger size options
   const sizeClasses = {
-    'xs': 'w-10 h-10',
-    'sm': 'w-16 h-16', 
-    'md': 'w-24 h-24',
-    'lg': 'w-32 h-32',
-    'xl': 'w-48 h-48',
-    '2xl': 'w-64 h-64'
+    'xs': 'w-12 h-12',
+    'sm': 'w-24 h-24', 
+    'md': 'w-36 h-36',
+    'lg': 'w-48 h-48',
+    'xl': 'w-64 h-64',
+    '2xl': 'w-80 h-80'
   };
   
   // Display spinner if image is still loading or being fetched when visible
   const isLoading = isVisible && (loading || fetchingImage);
   
   // Determine if we should use rounded styling
-  // If rounded prop is undefined, use circular only for placeholders
+  // For valid fighter images: no rounding, for placeholders: use circular shape
   const shouldBeRounded = rounded !== undefined 
     ? rounded 
     : (!imageSrc || imageSrc === placeholderImage || error);

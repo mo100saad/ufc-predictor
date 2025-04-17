@@ -186,7 +186,7 @@ const PredictionResult = ({ result, fighter1, fighter2 }) => {
             <FighterImage 
               src={fighter1_image_url} 
               alt={fighter1_name}
-              size="md"
+              size="lg"
               borderColor={finalWinner === 'fighter1' ? 'border-red-500' : 'border-gray-600'}
             />
           </div>
@@ -198,7 +198,7 @@ const PredictionResult = ({ result, fighter1, fighter2 }) => {
           </div>
         </motion.div>
 
-        <motion.div variants={item} className="text-xl px-6 py-2 bg-gray-800/60 rounded-full text-gray-300 font-medium">
+        <motion.div variants={item} className="text-xl px-8 py-2 bg-gray-800/60 rounded-full text-gray-300 font-medium mx-4">
           VS
         </motion.div>
 
@@ -207,7 +207,7 @@ const PredictionResult = ({ result, fighter1, fighter2 }) => {
             <FighterImage 
               src={fighter2_image_url} 
               alt={fighter2_name}
-              size="md"
+              size="lg"
               borderColor={finalWinner === 'fighter2' ? 'border-blue-500' : 'border-gray-600'}
             />
           </div>
@@ -220,8 +220,8 @@ const PredictionResult = ({ result, fighter1, fighter2 }) => {
         </motion.div>
       </motion.div>
 
-      {/* Main Content Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      {/* Main Content Grid - Increased vertical spacing to accommodate larger fighter images */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-8">
         {/* Left Column - Stat Comparison */}
         <motion.div 
           className="bg-gray-800/50 rounded-lg p-4"

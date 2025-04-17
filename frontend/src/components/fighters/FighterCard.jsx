@@ -110,44 +110,34 @@ const FighterCard = ({ fighter }) => {
               </div>
               
               {/* Right column - Fighter image */}
-              <div className="flex-shrink-0 bg-gray-800/50 rounded-full">
+              <div className="flex-shrink-0">
                 <FighterImage 
                   src={fighter.image_url} 
                   alt={fighter.name}
                   size="sm" 
-                  className="opacity-80 group-hover:opacity-100 transition-opacity duration-300"
+                  className="opacity-90 group-hover:opacity-100 transition-opacity duration-300"
                 />
               </div>
             </div>
             
-            {/* Fighter Stats - mini grid */}
-            <div className="grid grid-cols-2 gap-2 mb-4">
-              <div className="text-center p-2 bg-gray-800/70 backdrop-blur-sm rounded-lg transition-all duration-300 hover:bg-gray-800/90">
-                <div className="text-lg font-bold text-red-500">{fighter.SLpM?.toFixed(1) || 'N/A'}</div>
-                <div className="text-xs text-gray-400">Strikes/Min</div>
+            {/* Fighter Stats - vertical stack on left side */}
+            <div className="flex mt-4 mb-4">
+              {/* Left side - Stat metrics in vertical stack */}
+              <div className="flex flex-col gap-2 w-1/3">
+                <div className="text-center p-2 bg-gray-800/70 backdrop-blur-sm rounded-lg transition-all duration-300 hover:bg-gray-800/90">
+                  <div className="text-lg font-bold text-red-500">{fighter.SLpM?.toFixed(1) || 'N/A'}</div>
+                  <div className="text-xs text-gray-400">Strikes/Min</div>
+                </div>
+                
+                <div className="text-center p-2 bg-gray-800/70 backdrop-blur-sm rounded-lg transition-all duration-300 hover:bg-gray-800/90">
+                  <div className="text-lg font-bold text-blue-500">{fighter.td_avg?.toFixed(1) || 'N/A'}</div>
+                  <div className="text-xs text-gray-400">Takedowns/Fight</div>
+                </div>
               </div>
               
-              <div className="text-center p-2 bg-gray-800/70 backdrop-blur-sm rounded-lg transition-all duration-300 hover:bg-gray-800/90">
-                <div className="text-lg font-bold text-blue-500">{fighter.td_avg?.toFixed(1) || 'N/A'}</div>
-                <div className="text-xs text-gray-400">Takedowns/Fight</div>
-              </div>
-            </div>
-            
-            {/* Additional stats in smaller grid */}
-            <div className="grid grid-cols-3 gap-1 mb-4">
-              <div className="text-center p-1 rounded-md">
-                <div className="text-sm font-semibold text-gray-300">{fighter.sig_str_acc ? (fighter.sig_str_acc * 100).toFixed(0) : 'N/A'}%</div>
-                <div className="text-xs text-gray-500">Accuracy</div>
-              </div>
-              
-              <div className="text-center p-1 rounded-md">
-                <div className="text-sm font-semibold text-gray-300">{fighter.reach || 'N/A'}</div>
-                <div className="text-xs text-gray-500">Reach</div>
-              </div>
-              
-              <div className="text-center p-1 rounded-md">
-                <div className="text-sm font-semibold text-gray-300">{fighter.str_def ? (fighter.str_def * 100).toFixed(0) : 'N/A'}%</div>
-                <div className="text-xs text-gray-500">Defense</div>
+              {/* Right side - Extra space for larger image */}
+              <div className="flex justify-center items-center w-2/3 pl-2">
+                {/* This area intentionally left empty for larger fighter image display in the card */}
               </div>
             </div>
             

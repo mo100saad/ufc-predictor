@@ -77,13 +77,14 @@ def save_image_cache(cache):
     except Exception as e:
         image_logger.error(f"Error saving image cache: {e}")
 
-def get_fighter_image_url(name, fetch_if_missing=False):
+def get_fighter_image_url(name, fetch_if_missing=False, source=None):
     """
-    Get the image URL for a fighter
+    Get the image URL for a fighter with enhanced multi-source support
     
     Args:
         name (str): Fighter name
         fetch_if_missing (bool): Whether to fetch the image if it's not in the cache
+        source (str, optional): Specific source to try ('ufc', 'sherdog', 'wikipedia'). Default is None (try all sources).
         
     Returns:
         str: URL to the fighter's image, or fallback image URL if not found
@@ -94,59 +95,128 @@ def get_fighter_image_url(name, fetch_if_missing=False):
     # Create slug for URL
     slug = slugify_name(name)
     
-    # Check cache first
-    cache = load_image_cache()
-    if slug in cache:
-        # Return cached URL (or fallback if "not_found" is stored)
-        if cache[slug] == "not_found":
-            return "/static/placeholder.png"
-        return cache[slug]
+    # Check cache first (if no specific source is requested)
+    if not source:
+        cache = load_image_cache()
+        if slug in cache:
+            # Return cached URL (or fallback if "not_found" is stored)
+            if cache[slug] == "not_found":
+                return "/static/placeholder.png"
+            return cache[slug]
     
-    # Not in cache and we're not supposed to fetch it
+    # Return placeholder if we're not supposed to fetch
     if not fetch_if_missing:
         return "/static/placeholder.png"
     
-    # Not in cache, need to scrape from UFC website
-    try:
-        ufc_url = f"https://ufc.com/athlete/{slug}"
-        image_logger.info(f"Fetching image for {name} from {ufc_url}")
-        
-        headers = {
-            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
-        }
-        
-        response = requests.get(ufc_url, headers=headers, timeout=10)
-        
-        if response.status_code == 200:
-            soup = BeautifulSoup(response.content, 'html.parser')
+    # Prepare scraping
+    headers = {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
+    }
+    cache = load_image_cache()
+    
+    # Define sources to try
+    sources_to_try = []
+    if source:
+        # If a specific source is requested, only try that one
+        sources_to_try = [source]
+    else:
+        # Try all sources in sequence
+        sources_to_try = ['ufc', 'sherdog', 'wikipedia']
+    
+    # Try each source
+    for src in sources_to_try:
+        try:
+            image_url = None
             
-            # Find the image with class "hero-profile__image"
-            img_tag = soup.find('img', class_='hero-profile__image')
-            
-            if img_tag and 'src' in img_tag.attrs:
-                image_url = img_tag['src']
+            # UFC.com
+            if src == 'ufc':
+                image_logger.info(f"Trying UFC.com for {name}")
+                ufc_url = f"https://ufc.com/athlete/{slug}"
+                response = requests.get(ufc_url, headers=headers, timeout=10)
                 
-                # Save to cache
-                cache[slug] = image_url
-                save_image_cache(cache)
+                if response.status_code == 200:
+                    soup = BeautifulSoup(response.content, 'html.parser')
+                    img_tag = soup.find('img', class_='hero-profile__image')
+                    
+                    if img_tag and 'src' in img_tag.attrs:
+                        image_url = img_tag['src']
+                        image_logger.info(f"Found image for {name} on UFC.com")
+            
+            # Sherdog.com
+            elif src == 'sherdog':
+                image_logger.info(f"Trying Sherdog for {name}")
+                
+                # Convert name for Sherdog URL format
+                sherdog_name = name.lower().replace(' ', '-')
+                
+                # Try direct name-based URL first
+                sherdog_url = f"https://www.sherdog.com/image_crop/200/300/_images/fighter/{sherdog_name}.jpg"
+                response = requests.head(sherdog_url, headers=headers, timeout=5)
+                
+                if response.status_code == 200:
+                    image_url = sherdog_url
+                    image_logger.info(f"Found image for {name} on Sherdog")
+                else:
+                    # Try a search on Sherdog as fallback
+                    search_url = f"https://www.sherdog.com/stats/fightfinder?SearchTxt={name.replace(' ', '+')}"
+                    response = requests.get(search_url, headers=headers, timeout=10)
+                    
+                    if response.status_code == 200:
+                        soup = BeautifulSoup(response.content, 'html.parser')
+                        fighter_link = soup.select_one('table.fightfinder_result td a')
+                        
+                        if fighter_link and 'href' in fighter_link.attrs:
+                            fighter_page = requests.get(fighter_link['href'], headers=headers, timeout=10)
+                            if fighter_page.status_code == 200:
+                                soup = BeautifulSoup(fighter_page.content, 'html.parser')
+                                img = soup.select_one('img.profile_image')
+                                if img and 'src' in img.attrs:
+                                    image_url = "https://www.sherdog.com" + img['src']
+                                    image_logger.info(f"Found image for {name} on Sherdog via search")
+            
+            # Wikipedia
+            elif src == 'wikipedia':
+                image_logger.info(f"Trying Wikipedia for {name}")
+                wiki_search_url = f"https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch={name}+UFC+fighter&format=json"
+                response = requests.get(wiki_search_url, headers=headers, timeout=10)
+                
+                if response.status_code == 200:
+                    search_data = response.json()
+                    if 'query' in search_data and 'search' in search_data['query'] and search_data['query']['search']:
+                        # Get first result
+                        page_id = search_data['query']['search'][0]['pageid']
+                        
+                        # Get page content
+                        wiki_content_url = f"https://en.wikipedia.org/w/api.php?action=query&prop=pageimages&format=json&pithumbsize=500&pageids={page_id}"
+                        content_response = requests.get(wiki_content_url, headers=headers, timeout=10)
+                        
+                        if content_response.status_code == 200:
+                            content_data = content_response.json()
+                            if ('query' in content_data and 'pages' in content_data['query'] and 
+                                str(page_id) in content_data['query']['pages'] and 
+                                'thumbnail' in content_data['query']['pages'][str(page_id)]):
+                                image_url = content_data['query']['pages'][str(page_id)]['thumbnail']['source']
+                                image_logger.info(f"Found image for {name} on Wikipedia")
+            
+            # If we found an image from this source, save and return it
+            if image_url:
+                # Save to cache (if not source-specific request)
+                if not source:
+                    cache[slug] = image_url
+                    save_image_cache(cache)
                 
                 return image_url
-        
-        # If we couldn't find the image, cache the failure
-        image_logger.warning(f"Could not find image for {name}")
+                
+        except Exception as e:
+            image_logger.error(f"Error fetching image for {name} from {src}: {e}")
+    
+    # If we get here, we tried all sources and couldn't find an image
+    if not source:
+        image_logger.warning(f"Could not find image for {name} from any source")
         cache[slug] = "not_found"
         save_image_cache(cache)
-        
-        return "/static/placeholder.png"
-        
-    except Exception as e:
-        image_logger.error(f"Error fetching image for {name}: {e}")
-        
-        # Cache the error so we don't try again
-        cache[slug] = "not_found"
-        save_image_cache(cache)
-        
-        return "/static/placeholder.png"
+    
+    return "/static/placeholder.png"
 
 def validate_dataset(df):
     essential_columns = ['R_fighter', 'B_fighter', 'Winner']
