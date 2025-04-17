@@ -29,44 +29,58 @@ export const fighterService = {
     }
   },
   
-  // Enhanced fighter image service with better fallback sequence
-  getFighterImage: async (name) => {
+  // Enhanced fighter image service with improved multi-source fallback
+  getFighterImage: async (name, source = null) => {
     try {
-      // First try to get the image from our API (which tries UFC.com)
-      const response = await api.get(`/fighters/${encodeURIComponent(name)}/image`);
+      // Check if we have name
+      if (!name) {
+        return "/static/placeholder.png";
+      }
+      
+      // Cache check to avoid unnecessary network requests
+      const cacheKey = `fighter_image_${name.toLowerCase().replace(/\s+/g, '_')}`;
+      const cachedImage = localStorage.getItem(cacheKey);
+      
+      // Return cached image if it exists and is not the placeholder
+      // (but skip cache if specific source is requested)
+      if (!source && cachedImage && cachedImage !== "/static/placeholder.png") {
+        console.log(`Using cached image for ${name}`);
+        return cachedImage;
+      }
+      
+      // If specific source is requested or no valid cache, fetch from API
+      let endpoint = `/fighters/${encodeURIComponent(name)}/image`;
+      if (source) {
+        endpoint += `?source=${source}`;
+      }
+      
+      const response = await api.get(endpoint);
       const imageUrl = response.data.image_url;
       
-      // If we got a valid image, return it
+      // If we got a valid image, save to cache and return it
       if (imageUrl && imageUrl !== "/static/placeholder.png") {
-        console.log(`Found image for ${name} from primary source`);
+        console.log(`Found image for ${name}${source ? ` from ${source}` : ''}`);
+        
+        // Store in localStorage cache (unless it's a source-specific request)
+        if (!source) {
+          try {
+            localStorage.setItem(cacheKey, imageUrl);
+          } catch (cacheErr) {
+            console.warn('Failed to cache fighter image:', cacheErr);
+          }
+        }
+        
         return imageUrl;
       }
       
-      // If we didn't get a valid image, try fallback sources
-      console.log(`Primary image source failed for ${name}, trying fallbacks...`);
-      
-      // Try fallback sequence - implemented on backend, pass source parameter
-      const fallbacks = ['wikipedia', 'sherdog', 'google'];
-      
-      // Try each fallback source in sequence
-      for (const source of fallbacks) {
-        try {
-          const fallbackResponse = await api.get(
-            `/fighters/${encodeURIComponent(name)}/image?source=${source}`
-          );
-          const fallbackUrl = fallbackResponse.data.image_url;
-          
-          // If we got a valid image from fallback, return it
-          if (fallbackUrl && fallbackUrl !== "/static/placeholder.png") {
-            console.log(`Found image for ${name} from ${source}`);
-            return fallbackUrl;
-          }
-        } catch (fallbackError) {
-          console.log(`Failed to get image from ${source} for ${name}`);
-        }
+      // If no image found and no specific source requested, we already tried all sources
+      if (!source) {
+        console.warn(`All image sources failed for ${name}`);
+        return "/static/placeholder.png";
       }
       
-      // If all fallbacks failed, return placeholder
+      // If specific source request failed, return placeholder
+      console.warn(`Failed to get image from ${source} for ${name}`);
       return "/static/placeholder.png";
     } catch (error) {
       console.error('Error fetching fighter image:', error.response?.data || error.message);
@@ -211,64 +225,149 @@ export const newsService = {
   getUFCNews: async () => {
     try {
       console.log(`Attempting to fetch news from ${NEWS_URL}/news`);
+      
+      // First try the main API endpoint
       const response = await newsApi.get('/news');
       console.log("News API response:", response.data);
-      return response.data.news || [];
+      
+      if (response.data && response.data.news && response.data.news.length > 0) {
+        // Initialize all articles with imageLoaded = false to handle image loading state
+        const articles = response.data.news.map(article => ({
+          ...article,
+          id: article.id || article.url || Math.random().toString(36).substr(2, 9),
+          imageUrl: article.imageUrl || article.urlToImage || '/static/placeholder.png',
+          source: article.source?.name || article.source || 'MMA News',
+          publishedAt: article.publishedAt || article.date || new Date().toISOString(),
+          imageLoaded: false
+        }));
+        
+        console.log(`Retrieved ${articles.length} news articles from primary source`);
+        return articles;
+      }
+      
+      // If primary source returned no articles, try the backup endpoint
+      console.log("Primary news endpoint returned no articles, trying backup...");
+      const backupResponse = await api.get('/news');
+      
+      if (backupResponse.data && backupResponse.data.news && backupResponse.data.news.length > 0) {
+        const articles = backupResponse.data.news.map(article => ({
+          id: article.url || Math.random().toString(36).substr(2, 9),
+          title: article.title || "UFC News",
+          description: article.description || "Latest UFC news and updates",
+          url: article.url || "https://www.ufc.com/news",
+          imageUrl: article.urlToImage || '/static/placeholder.png',
+          source: article.source?.name || 'MMA News',
+          publishedAt: article.publishedAt || new Date().toISOString(),
+          imageLoaded: false
+        }));
+        
+        console.log(`Retrieved ${articles.length} news articles from backup source`);
+        return articles;
+      }
+      
+      // If both sources failed but didn't throw errors, return fallback content
+      console.warn("Both news sources returned empty results");
+      return generateFallbackNews();
+      
     } catch (error) {
       console.error("Error fetching UFC news:", error);
-      // More detailed error logging
+      // Detailed error logging
       if (error.response) {
-        console.error("Response data:", error.response.data);
-        console.error("Response status:", error.response.status);
-        console.error("Response headers:", error.response.headers);
+        console.error("Response data:", error.response?.data);
+        console.error("Response status:", error.response?.status);
       } else if (error.request) {
-        console.error("Request made but no response received:", error.request);
+        console.error("Request made but no response received");
       } else {
         console.error("Error message:", error.message);
       }
       
-      // Try direct NewsAPI call as a last resort
+      // Try direct API call as last resort
       try {
-        console.log("Attempting direct NewsAPI call - this may not work in production due to CORS");
-        const encodedQuery = encodeURIComponent('UFC OR "Ultimate Fighting Championship" OR MMA');
-        // Note: Direct API calls no longer recommended - using backend proxy is better
-        // API key has been removed from client code for security
+        console.log("Attempting direct API call as last resort");
         const backendProxyUrl = `/api/news`;
         
         const directResponse = await axios.get(backendProxyUrl);
         if (directResponse.data && directResponse.data.news) {
-          console.log("Backend news API call successful");
-          const articles = directResponse.data.news || [];
-          
-          // Process articles similar to server-side
-          return articles.map(article => ({
-            id: article.url,
-            title: article.title,
-            description: article.description,
-            url: article.url,
+          console.log("Direct API call successful");
+          const articles = directResponse.data.news.map(article => ({
+            id: article.url || Math.random().toString(36).substr(2, 9),
+            title: article.title || "UFC News",
+            description: article.description || "Latest UFC news and updates",
+            url: article.url || "https://www.ufc.com/news",
             imageUrl: article.urlToImage || '/static/placeholder.png',
-            source: article.source?.name || 'News Source',
-            publishedAt: article.publishedAt || new Date().toISOString()
+            source: article.source?.name || 'MMA News',
+            publishedAt: article.publishedAt || new Date().toISOString(),
+            imageLoaded: false
           }));
+          
+          return articles;
         }
       } catch (directError) {
-        console.error("Direct NewsAPI call also failed:", directError);
+        console.error("Direct API call also failed:", directError);
       }
       
-      // Fallback to static content as a last resort
-      return [
-        {
-          id: 1,
-          title: "UFC News Temporarily Unavailable",
-          description: "We're working to restore the latest UFC news feed. Check back soon!",
-          url: "https://ufc.com/news",
-          imageUrl: "/static/placeholder.png",
-          source: "System",
-          publishedAt: new Date().toISOString()
-        }
-      ];
+      // Return fallback content as absolute last resort
+      return generateFallbackNews();
     }
   }
+};
+
+// Helper function to generate fallback news items when all sources fail
+function generateFallbackNews() {
+  // Create at least 5 static news items as fallback
+  return [
+    {
+      id: "fallback-1",
+      title: "UFC News Currently Unavailable",
+      description: "We're working to restore the latest UFC news feed. Please check back later or visit UFC.com for the latest updates.",
+      url: "https://www.ufc.com/news",
+      imageUrl: "/static/placeholder.png",
+      source: "UFC Predictor",
+      publishedAt: new Date().toISOString(),
+      imageLoaded: true
+    },
+    {
+      id: "fallback-2",
+      title: "Explore Fighter Statistics",
+      description: "While we restore the news feed, explore fighter statistics and make your own fight predictions!",
+      url: "/fighters",
+      imageUrl: "/static/placeholder.png",
+      source: "UFC Predictor",
+      publishedAt: new Date().toISOString(),
+      imageLoaded: true
+    },
+    {
+      id: "fallback-3",
+      title: "Try Our Fight Predictor",
+      description: "Use our advanced machine learning model to predict the outcome of UFC matchups.",
+      url: "/predict",
+      imageUrl: "/static/placeholder.png",
+      source: "UFC Predictor",
+      publishedAt: new Date().toISOString(),
+      imageLoaded: true
+    },
+    {
+      id: "fallback-4",
+      title: "Visit Official UFC Website",
+      description: "For the latest official UFC news, event schedules, and fighter information.",
+      url: "https://www.ufc.com",
+      imageUrl: "/static/placeholder.png",
+      source: "UFC Predictor",
+      publishedAt: new Date().toISOString(),
+      imageLoaded: true
+    },
+    {
+      id: "fallback-5",
+      title: "Check Back Soon",
+      description: "Our live news feed will be back shortly with the latest UFC updates and fight news.",
+      url: "https://www.ufc.com/news",
+      imageUrl: "/static/placeholder.png",
+      source: "UFC Predictor",
+      publishedAt: new Date().toISOString(),
+      imageLoaded: true
+    }
+  ];
+}
 };
 
 export default api;

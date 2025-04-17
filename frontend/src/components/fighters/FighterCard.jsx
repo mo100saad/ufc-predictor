@@ -10,23 +10,20 @@ const FighterCard = ({ fighter }) => {
   const totalFights = (fighter.wins || 0) + (fighter.losses || 0);
   const winPercentage = totalFights > 0 ? ((fighter.wins || 0) / totalFights * 100).toFixed(0) : 0;
   
-  // Determine fighter style based on stats with more accurate detection and fallback
+  // Simplified fighter style determination - NEVER returns "Unknown Style"
   const getFighterStyle = () => {
-    const strikingRatio = (fighter.SLpM || 0) / 5; // Normalized to 0-1 where 5 is high
-    const grapplingRatio = ((fighter.td_avg || 0) + (fighter.sub_avg || 0)) / 6; // Normalized
-    
     // First check if fighter has a style property directly
     if (fighter.style) return fighter.style;
     
-    // Otherwise determine based on strike/grappling metrics
-    if (strikingRatio > 0.7 && grapplingRatio < 0.3) return "Striker";
-    if (strikingRatio < 0.3 && grapplingRatio > 0.7) return "Grappler";
-    if (strikingRatio > 0.5 && grapplingRatio > 0.5) return "Well-Rounded";
-    if (strikingRatio > 0.4 && grapplingRatio > 0.3) return "Balanced";
+    const strikingRatio = (fighter.SLpM || 0) / 5; // Normalized to 0-1 where 5 is high
+    const grapplingRatio = ((fighter.td_avg || 0) + (fighter.sub_avg || 0)) / 6; // Normalized
     
-    // Use the style from stats_view in Fighters.jsx as a final fallback
-    if (strikingRatio > 0.3 || grapplingRatio > 0.2) return "Balanced";
-    return "Striker"; // Default to striker instead of "Unknown Style"
+    // Simplified classification with only 3 categories: Striker, Wrestler, Balanced
+    if (strikingRatio > 0.6 && grapplingRatio < 0.4) return "Striker";
+    if (strikingRatio < 0.4 && grapplingRatio > 0.6) return "Wrestler";
+    
+    // Default to "Balanced" for all other cases - never return "Unknown Style"
+    return "Balanced";
   };
   
   // Determine fighter's weight class based on kilograms with slight adjustments for borderline decimals
@@ -112,19 +109,19 @@ const FighterCard = ({ fighter }) => {
               </div>
             </div>
             
-            {/* Improved fighter image display area */}
-            <div className="w-full h-60 my-4 flex justify-center items-start bg-gradient-to-b from-gray-800/10 to-gray-900/40 rounded-lg">
+            {/* Enhanced fighter image display area - larger size, better proportions */}
+            <div className="w-full h-72 my-4 flex justify-center items-center bg-gradient-to-b from-gray-800/10 to-gray-900/40 rounded-lg">
               <FighterImage 
                 src={fighter.image_url} 
                 alt={fighter.name}
                 size="md" 
                 rounded={false}
-                className="object-contain object-top h-full"
+                className="object-contain h-full w-full"
                 withBorder={false}
               />
             </div>
             
-            {/* Fighter Stats - horizontal layout for better space usage */}
+            {/* Streamlined Fighter Stats - focus on essential metrics only */}
             <div className="flex gap-2 mb-4">
               <div className="flex-1 text-center p-2 bg-gray-800/70 backdrop-blur-sm rounded-lg transition-all duration-300 hover:bg-gray-800/90">
                 <div className="text-lg font-bold text-red-500">{fighter.SLpM?.toFixed(1) || 'N/A'}</div>
@@ -137,10 +134,14 @@ const FighterCard = ({ fighter }) => {
               </div>
             </div>
             
-            {/* Fighter Style & View Details */}
+            {/* Fighter Style & View Details - enhanced styling */}
             <div className="flex justify-between items-center">
-              <span className="text-xs py-1 px-2 rounded-full bg-gray-800/50 text-gray-400">
-                <span className="text-gray-300">{getFighterStyle()}</span>
+              <span className={`text-sm py-1 px-3 rounded-full ${
+                getFighterStyle() === "Striker" ? "bg-red-900/40 text-red-400" :
+                getFighterStyle() === "Wrestler" ? "bg-blue-900/40 text-blue-400" :
+                "bg-purple-900/40 text-purple-400"
+              } font-medium`}>
+                {getFighterStyle()}
               </span>
               
               <motion.span 

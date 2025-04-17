@@ -68,16 +68,33 @@ const FighterImage = ({
       return;
     }
     
-    // No src or placeholder src - need to fetch
+    // No src or placeholder src - need to fetch with multi-source fallback
     try {
       setFetchingImage(true);
-      const imageUrl = await fighterService.getFighterImage(alt);
-      if (imageUrl && imageUrl !== "/static/placeholder.png") {
-        setImageSrc(imageUrl);
-      } else {
-        setImageSrc(placeholderImage);
-        setError(true);
+      
+      // Try each source in sequence until we find a working image
+      for (const source of ['ufc', 'sherdog', 'wikipedia', 'google']) {
+        try {
+          console.log(`Trying to fetch ${alt} image from ${source}...`);
+          const imageUrl = await fighterService.getFighterImage(alt, source);
+          
+          if (imageUrl && imageUrl !== "/static/placeholder.png") {
+            console.log(`Successfully fetched ${alt} image from ${source}`);
+            setImageSrc(imageUrl);
+            setLoading(false);
+            setFetchingImage(false);
+            return;
+          }
+        } catch (sourceErr) {
+          console.warn(`Failed to fetch from ${source}:`, sourceErr);
+          // Continue to next source
+        }
       }
+      
+      // If we get here, all sources failed
+      console.warn(`All image sources failed for ${alt}, using placeholder`);
+      setImageSrc(placeholderImage);
+      setError(true);
     } catch (err) {
       console.error("Error fetching fighter image:", err);
       setImageSrc(placeholderImage);
@@ -114,33 +131,34 @@ const FighterImage = ({
     setImageSrc(placeholderImage);
   };
 
-  // Enhanced size class mapping with MUCH larger size options and fixed height-to-width ratio for fighter images
-  // Using a taller aspect ratio (460x700 ~= 2:3) to ensure heads are not cut off
+  // Enhanced size class mapping with MUCH larger size options 
+  // Using proper aspect ratio (460x700 ~= 2:3) to ensure heads are not cut off
   const sizeClasses = {
-    'xs': 'w-16 h-24',     // 1:1.5 ratio - better for profile pictures
-    'sm': 'w-32 h-48',     // 1:1.5 ratio - for fighter cards
-    'md': 'w-48 h-72',     // 1:1.5 ratio - good general size
-    'lg': 'w-64 h-96',     // 1:1.5 ratio - for prediction display
-    'xl': 'w-80 h-120',    // 1:1.5 ratio - extra large display
-    '2xl': 'w-96 h-144'    // 1:1.5 ratio - max size for headers
+    'xs': 'w-16 h-24',      // Small thumbnails
+    'sm': 'w-32 h-48',      // Small cards
+    'md': 'w-60 h-80',      // Standard card size - INCREASED for better visibility
+    'lg': 'w-72 h-96',      // Large displays - INCREASED
+    'xl': 'w-80 h-120',     // Extra large displays
+    '2xl': 'w-96 h-144'     // Maximum size for headers
   };
   
   // Display spinner if image is still loading or being fetched when visible
   const isLoading = isVisible && (loading || fetchingImage);
   
   // Determine if we should use rounded styling
-  // For valid fighter images: no rounding, for placeholders: use circular shape
+  // Only use circular styling for placeholders, NEVER for real fighter images
   const shouldBeRounded = rounded !== undefined 
     ? rounded 
     : (!imageSrc || imageSrc === placeholderImage || error);
   
-  // Compose CSS classes with conditional rounded styling and improved sizing for large images
+  // Compose CSS classes with proper object-fit settings
+  // object-contain ensures the entire fighter is visible without cropping
   const imageClasses = `
     ${sizeClasses[size] || sizeClasses.md}
     ${shouldBeRounded ? 'rounded-full' : 'rounded-md'}
     ${withBorder ? `border-2 ${borderColor}` : ''}
     object-contain
-    !object-top
+    object-top
     max-h-full
     max-w-full
     transition-all duration-300
