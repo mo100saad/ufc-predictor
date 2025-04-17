@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import LoadingSpinner from '../common/LoadingSpinner';
+import { fighterService } from '../../services/api';
 
 /**
  * Reusable fighter image component with loading state and fallback
@@ -24,12 +25,56 @@ const FighterImage = ({
 }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
+  const [imageSrc, setImageSrc] = useState(null);
+  const [fetchingImage, setFetchingImage] = useState(false);
   
   // Placeholder image (fighter silhouette SVG)
   const placeholderImage = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjNkI3MjgwIiBzdHJva2Utd2lkdGg9IjEuNSIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIiBjbGFzcz0ibHVjaWRlIGx1Y2lkZS11c2VyIj48cGF0aCBkPSJNMTkgMjFhNyA3IDAgMCAwLTE0IDAiLz48Y2lyY2xlIGN4PSIxMiIgY3k9IjEwIiByPSI0Ii8+PC9zdmc+';
 
-  // Determine actual source - use provided source or fallback
-  const imageSrc = (!src || src === "/static/placeholder.png") ? placeholderImage : src;
+  // Function to fetch fighter image if needed
+  const fetchFighterImage = async () => {
+    if (!alt || fetchingImage) return;
+    
+    // Already have source from props
+    if (src && src !== "/static/placeholder.png") {
+      setImageSrc(src);
+      return;
+    }
+    
+    // No src or placeholder src - need to fetch
+    try {
+      setFetchingImage(true);
+      const imageUrl = await fighterService.getFighterImage(alt);
+      if (imageUrl && imageUrl !== "/static/placeholder.png") {
+        setImageSrc(imageUrl);
+      } else {
+        setImageSrc(placeholderImage);
+        setError(true);
+      }
+    } catch (err) {
+      console.error("Error fetching fighter image:", err);
+      setImageSrc(placeholderImage);
+      setError(true);
+    } finally {
+      setFetchingImage(false);
+    }
+  };
+  
+  // Determine image source when component mounts or props change
+  useEffect(() => {
+    // If src is provided and valid, use it directly
+    if (src && src !== "/static/placeholder.png") {
+      setImageSrc(src);
+    } 
+    // If no src is provided or it's a placeholder, try to fetch it
+    else if (alt) {
+      fetchFighterImage();
+    } 
+    // If neither src nor alt is provided, use placeholder
+    else {
+      setImageSrc(placeholderImage);
+    }
+  }, [src, alt]);
   
   // Handle image loading success
   const handleLoad = () => {
@@ -41,6 +86,7 @@ const FighterImage = ({
   const handleError = () => {
     setLoading(false);
     setError(true);
+    setImageSrc(placeholderImage);
   };
 
   // Size class mapping
@@ -52,6 +98,9 @@ const FighterImage = ({
     'xl': 'w-32 h-32'
   };
   
+  // Display spinner if image is still loading or being fetched
+  const isLoading = loading || fetchingImage || !imageSrc;
+  
   // Compose CSS classes
   const imageClasses = `
     ${sizeClasses[size] || sizeClasses.md}
@@ -60,27 +109,29 @@ const FighterImage = ({
     overflow-hidden
     object-cover
     transition-opacity duration-300
-    ${loading ? 'opacity-0' : 'opacity-100'}
+    ${isLoading ? 'opacity-0' : 'opacity-100'}
     ${className}
   `;
   
   return (
     <div className={`relative ${sizeClasses[size] || sizeClasses.md} overflow-hidden ${rounded ? 'rounded-full' : ''}`}>
       {/* Loading indicator */}
-      {loading && (
+      {isLoading && (
         <div className="absolute inset-0 flex items-center justify-center bg-gray-800/50">
           <LoadingSpinner size="sm" />
         </div>
       )}
       
       {/* Actual image */}
-      <img
-        src={error ? placeholderImage : imageSrc}
-        alt={alt || "Fighter"}
-        className={imageClasses}
-        onLoad={handleLoad}
-        onError={handleError}
-      />
+      {imageSrc && (
+        <img
+          src={error ? placeholderImage : imageSrc}
+          alt={alt || "Fighter"}
+          className={imageClasses}
+          onLoad={handleLoad}
+          onError={handleError}
+        />
+      )}
     </div>
   );
 };

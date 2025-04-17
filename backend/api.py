@@ -280,10 +280,10 @@ def get_fighter_by_name_endpoint(fighter_name):
                 else:
                     fighter_dict[column_name] = value
             
-            # Add fighter image URL
+            # Add fighter image URL - For detailed view, actively fetch if missing
             from utils import get_fighter_image_url
             if 'name' in fighter_dict and fighter_dict['name']:
-                fighter_dict['image_url'] = get_fighter_image_url(fighter_dict['name'])
+                fighter_dict['image_url'] = get_fighter_image_url(fighter_dict['name'], fetch_if_missing=True)
             
             print(f"=== FIGHTER FOUND ===")
             conn.close()
@@ -379,9 +379,9 @@ def predict_fight_endpoint():
         # Import image URL utility
         from utils import get_fighter_image_url
         
-        # Get fighter image URLs
-        fighter1_image = fighter1.get('image_url') or get_fighter_image_url(fighter1.get('name', ''))
-        fighter2_image = fighter2.get('image_url') or get_fighter_image_url(fighter2.get('name', ''))
+        # Get fighter image URLs (only from cache, don't fetch if missing)
+        fighter1_image = fighter1.get('image_url') or get_fighter_image_url(fighter1.get('name', ''), fetch_if_missing=False)
+        fighter2_image = fighter2.get('image_url') or get_fighter_image_url(fighter2.get('name', ''), fetch_if_missing=False)
         
         # Format prediction results (support both camelCase and snake_case)
         result = {
@@ -490,9 +490,9 @@ def compare_fighters_endpoint():
                     # Import image URL utility
                     from utils import get_fighter_image_url
                     
-                    # Get fighter image URLs
-                    fighter1_image = fighter1.get('image_url') or get_fighter_image_url(fighter1.get('name', ''))
-                    fighter2_image = fighter2.get('image_url') or get_fighter_image_url(fighter2.get('name', ''))
+                    # Get fighter image URLs (only from cache, don't fetch if missing)
+                    fighter1_image = fighter1.get('image_url') or get_fighter_image_url(fighter1.get('name', ''), fetch_if_missing=False)
+                    fighter2_image = fighter2.get('image_url') or get_fighter_image_url(fighter2.get('name', ''), fetch_if_missing=False)
                     
                     prediction = {
                         "fighter1WinProbability": float(pred_result['probability_fighter1_wins']),
@@ -525,6 +525,25 @@ def compare_fighters_endpoint():
     
     except Exception as e:
         logger.error(f"Error comparing fighters: {e}")
+        return jsonify({"error": str(e)}), 500
+
+@api_bp.route('/fighters/<string:fighter_name>/image', methods=['GET'])
+def get_fighter_image_endpoint(fighter_name):
+    """Fetch a fighter's image on demand"""
+    try:
+        from utils import get_fighter_image_url
+        
+        # Force fetch from web if not in cache
+        image_url = get_fighter_image_url(fighter_name, fetch_if_missing=True)
+        
+        return jsonify({
+            "name": fighter_name,
+            "image_url": image_url,
+            "status": "fetched" if image_url and image_url != "/static/placeholder.png" else "not_found"
+        })
+        
+    except Exception as e:
+        logger.error(f"Error fetching image for {fighter_name}: {e}")
         return jsonify({"error": str(e)}), 500
 
 @api_bp.route('/admin/stats', methods=['GET'])

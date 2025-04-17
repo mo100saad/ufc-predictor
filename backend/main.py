@@ -469,6 +469,11 @@ def create_app():
     """Create and configure the Flask application"""
     app = Flask(__name__)
     CORS(app)
+    
+    # Initialize image cache
+    from utils import load_image_cache
+    load_image_cache()  # Just load the cache, don't fetch any images
+    
     @app.route("/")
     def home():
         return "UFC Fight Predictor API is Running! Try /api/health"

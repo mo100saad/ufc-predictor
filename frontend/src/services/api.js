@@ -26,6 +26,16 @@ export const fighterService = {
       throw error;
     }
   },
+  
+  getFighterImage: async (name) => {
+    try {
+      const response = await api.get(`/fighters/${encodeURIComponent(name)}/image`);
+      return response.data.image_url;
+    } catch (error) {
+      console.error('Error fetching fighter image:', error.response?.data || error.message);
+      return null;
+    }
+  }
 };
 
 export const fightService = {

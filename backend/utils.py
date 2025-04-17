@@ -77,12 +77,13 @@ def save_image_cache(cache):
     except Exception as e:
         image_logger.error(f"Error saving image cache: {e}")
 
-def get_fighter_image_url(name):
+def get_fighter_image_url(name, fetch_if_missing=False):
     """
     Get the image URL for a fighter
     
     Args:
         name (str): Fighter name
+        fetch_if_missing (bool): Whether to fetch the image if it's not in the cache
         
     Returns:
         str: URL to the fighter's image, or fallback image URL if not found
@@ -100,6 +101,10 @@ def get_fighter_image_url(name):
         if cache[slug] == "not_found":
             return "/static/placeholder.png"
         return cache[slug]
+    
+    # Not in cache and we're not supposed to fetch it
+    if not fetch_if_missing:
+        return None
     
     # Not in cache, need to scrape from UFC website
     try:

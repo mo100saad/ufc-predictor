@@ -193,7 +193,7 @@ def get_all_fighters():
     Get a list of all fighters in the database
     
     Returns:
-        list: List of fighter dictionaries with image URLs
+        list: List of fighter dictionaries with image URLs from cache only (no fetching)
     """
     conn = get_db_connection()
     cursor = conn.cursor()
@@ -218,9 +218,9 @@ def get_all_fighters():
             else:
                 fighter[col[0]] = value
         
-        # Add image URL for the fighter from cache
+        # Add image URL for the fighter from cache, don't fetch if missing
         if 'name' in fighter and fighter['name']:
-            fighter['image_url'] = get_fighter_image_url(fighter['name'])
+            fighter['image_url'] = get_fighter_image_url(fighter['name'], fetch_if_missing=False)
         
         fighters.append(fighter)
     
@@ -235,7 +235,7 @@ def search_fighters(query):
         query (str): Search query
         
     Returns:
-        list: List of matching fighters with image URLs
+        list: List of matching fighters with image URLs from cache only (no fetching)
     """
     conn = get_db_connection()
     cursor = conn.cursor()
@@ -263,9 +263,9 @@ def search_fighters(query):
             else:
                 fighter[col[0]] = value
         
-        # Add image URL for the fighter
+        # Add image URL for the fighter from cache, don't fetch if missing
         if 'name' in fighter and fighter['name']:
-            fighter['image_url'] = get_fighter_image_url(fighter['name'])
+            fighter['image_url'] = get_fighter_image_url(fighter['name'], fetch_if_missing=False)
             
         fighters.append(fighter)
     
@@ -309,9 +309,10 @@ def get_fighter_details(fighter_id):
         else:
             fighter[col[0]] = value
     
-    # Add image URL for the fighter
+    # Add image URL for the fighter - For detailed view, we can try to fetch if missing
+    # since this is a focused request for a single fighter
     if 'name' in fighter and fighter['name']:
-        fighter['image_url'] = get_fighter_image_url(fighter['name'])
+        fighter['image_url'] = get_fighter_image_url(fighter['name'], fetch_if_missing=True)
     
     conn.close()
     return fighter
