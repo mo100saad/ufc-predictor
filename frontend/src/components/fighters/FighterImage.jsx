@@ -64,6 +64,7 @@ const FighterImage = ({
     
     // Already have source from props and it's not a placeholder
     if (src && src !== "/static/placeholder.png") {
+      console.log(`Using provided image source for ${alt}`);
       setImageSrc(src);
       return;
     }
@@ -72,14 +73,38 @@ const FighterImage = ({
     try {
       setFetchingImage(true);
       
-      // Try each source in sequence until we find a working image
-      for (const source of ['ufc', 'sherdog', 'wikipedia', 'google']) {
+      // First try to get image without specifying a source
+      // This will first check cache and then try all sources if needed
+      console.log(`Fetching image for ${alt} with automatic source selection`);
+      let imageUrl = await fighterService.getFighterImage(alt);
+      
+      if (imageUrl && imageUrl !== "/static/placeholder.png") {
+        console.log(`Found image for ${alt} from automatic source selection`);
+        setImageSrc(imageUrl);
+        setLoading(false);
+        setFetchingImage(false);
+        return;
+      }
+      
+      // If the automatic selection didn't work, try each source specifically
+      // This will bypass any cached "not found" results
+      const sources = ['wikipedia', 'sherdog', 'ufc', 'google'];
+      for (const source of sources) {
         try {
-          console.log(`Trying to fetch ${alt} image from ${source}...`);
-          const imageUrl = await fighterService.getFighterImage(alt, source);
+          console.log(`Explicitly trying ${source} for ${alt} image...`);
+          imageUrl = await fighterService.getFighterImage(alt, source);
           
           if (imageUrl && imageUrl !== "/static/placeholder.png") {
             console.log(`Successfully fetched ${alt} image from ${source}`);
+            
+            // Force clear any localStorage cache since we found an image after a failure
+            const cacheKey = `fighter_image_${alt.toLowerCase().replace(/\s+/g, '_')}`;
+            try {
+              localStorage.setItem(cacheKey, imageUrl);
+            } catch (e) {
+              // Ignore errors setting cache
+            }
+            
             setImageSrc(imageUrl);
             setLoading(false);
             setFetchingImage(false);
@@ -91,7 +116,7 @@ const FighterImage = ({
         }
       }
       
-      // If we get here, all sources failed
+      // If we get here, all sources truly failed
       console.warn(`All image sources failed for ${alt}, using placeholder`);
       setImageSrc(placeholderImage);
       setError(true);

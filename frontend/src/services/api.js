@@ -39,32 +39,39 @@ export const fighterService = {
       
       // Cache check to avoid unnecessary network requests
       const cacheKey = `fighter_image_${name.toLowerCase().replace(/\s+/g, '_')}`;
-      const cachedImage = localStorage.getItem(cacheKey);
       
-      // Return cached image if it exists and is not the placeholder
-      // (but skip cache if specific source is requested)
-      if (!source && cachedImage && cachedImage !== "/static/placeholder.png") {
-        console.log(`Using cached image for ${name}`);
-        return cachedImage;
+      // If a specific source is requested, bypass the cache completely
+      if (source) {
+        console.log(`Bypassing cache for ${name}, source=${source}`);
+      } else {
+        // Check for cached image if no specific source is requested
+        const cachedImage = localStorage.getItem(cacheKey);
+        if (cachedImage && cachedImage !== "/static/placeholder.png") {
+          console.log(`Using cached image for ${name}`);
+          return cachedImage;
+        }
       }
       
-      // If specific source is requested or no valid cache, fetch from API
+      // Build API endpoint
       let endpoint = `/fighters/${encodeURIComponent(name)}/image`;
       if (source) {
         endpoint += `?source=${source}`;
       }
       
+      console.log(`Requesting image for ${name} from endpoint: ${endpoint}`);
       const response = await api.get(endpoint);
       const imageUrl = response.data.image_url;
+      const actualSource = response.data.source || "unknown";
       
       // If we got a valid image, save to cache and return it
       if (imageUrl && imageUrl !== "/static/placeholder.png") {
-        console.log(`Found image for ${name}${source ? ` from ${source}` : ''}`);
+        console.log(`Found image for ${name} from ${actualSource}`);
         
         // Store in localStorage cache (unless it's a source-specific request)
         if (!source) {
           try {
             localStorage.setItem(cacheKey, imageUrl);
+            console.log(`Saved image for ${name} to local cache`);
           } catch (cacheErr) {
             console.warn('Failed to cache fighter image:', cacheErr);
           }
@@ -226,13 +233,21 @@ export const newsService = {
     try {
       console.log(`Attempting to fetch news from ${NEWS_URL}/news`);
       
-      // First try the main API endpoint
-      const response = await newsApi.get('/news');
-      console.log("News API response:", response.data);
+      // Try both endpoints in parallel to get the most articles
+      const [mainResponse, backupResponse] = await Promise.allSettled([
+        newsApi.get('/news'),
+        api.get('/news')
+      ]);
       
-      if (response.data && response.data.news && response.data.news.length > 0) {
-        // Initialize all articles with imageLoaded = false to handle image loading state
-        const articles = response.data.news.map(article => ({
+      let allArticles = [];
+      
+      // Process main API response if successful
+      if (mainResponse.status === 'fulfilled' && 
+          mainResponse.value.data && 
+          mainResponse.value.data.news && 
+          mainResponse.value.data.news.length > 0) {
+        
+        const mainArticles = mainResponse.value.data.news.map(article => ({
           ...article,
           id: article.id || article.url || Math.random().toString(36).substr(2, 9),
           imageUrl: article.imageUrl || article.urlToImage || '/static/placeholder.png',
@@ -241,69 +256,110 @@ export const newsService = {
           imageLoaded: false
         }));
         
-        console.log(`Retrieved ${articles.length} news articles from primary source`);
-        return articles;
+        console.log(`Retrieved ${mainArticles.length} news articles from primary source`);
+        allArticles = [...mainArticles];
       }
       
-      // If primary source returned no articles, try the backup endpoint
-      console.log("Primary news endpoint returned no articles, trying backup...");
-      const backupResponse = await api.get('/news');
-      
-      if (backupResponse.data && backupResponse.data.news && backupResponse.data.news.length > 0) {
-        const articles = backupResponse.data.news.map(article => ({
+      // Process backup API response if successful
+      if (backupResponse.status === 'fulfilled' && 
+          backupResponse.value.data && 
+          backupResponse.value.data.news && 
+          backupResponse.value.data.news.length > 0) {
+        
+        const backupArticles = backupResponse.value.data.news.map(article => ({
           id: article.url || Math.random().toString(36).substr(2, 9),
           title: article.title || "UFC News",
           description: article.description || "Latest UFC news and updates",
           url: article.url || "https://www.ufc.com/news",
-          imageUrl: article.urlToImage || '/static/placeholder.png',
-          source: article.source?.name || 'MMA News',
-          publishedAt: article.publishedAt || new Date().toISOString(),
+          imageUrl: article.urlToImage || article.imageUrl || '/static/placeholder.png',
+          source: article.source?.name || article.source || 'MMA News',
+          publishedAt: article.publishedAt || article.date || new Date().toISOString(),
           imageLoaded: false
         }));
         
-        console.log(`Retrieved ${articles.length} news articles from backup source`);
-        return articles;
-      }
-      
-      // If both sources failed but didn't throw errors, return fallback content
-      console.warn("Both news sources returned empty results");
-      return generateFallbackNews();
-      
-    } catch (error) {
-      console.error("Error fetching UFC news:", error);
-      // Detailed error logging
-      if (error.response) {
-        console.error("Response data:", error.response?.data);
-        console.error("Response status:", error.response?.status);
-      } else if (error.request) {
-        console.error("Request made but no response received");
-      } else {
-        console.error("Error message:", error.message);
-      }
-      
-      // Try direct API call as last resort
-      try {
-        console.log("Attempting direct API call as last resort");
-        const backendProxyUrl = `/api/news`;
+        console.log(`Retrieved ${backupArticles.length} news articles from backup source`);
         
-        const directResponse = await axios.get(backendProxyUrl);
-        if (directResponse.data && directResponse.data.news) {
-          console.log("Direct API call successful");
-          const articles = directResponse.data.news.map(article => ({
+        // Merge articles, avoiding duplicates by URL
+        const existingUrls = new Set(allArticles.map(a => a.url));
+        const uniqueBackupArticles = backupArticles.filter(a => !existingUrls.has(a.url));
+        
+        allArticles = [...allArticles, ...uniqueBackupArticles];
+      }
+      
+      // If we have articles after trying both sources, return them
+      if (allArticles.length > 0) {
+        // Sort by date (newest first) but don't filter by date
+        return allArticles.sort((a, b) => {
+          const dateA = new Date(a.publishedAt || a.date || 0);
+          const dateB = new Date(b.publishedAt || b.date || 0);
+          return dateB - dateA;
+        });
+      }
+      
+      // If no articles at all, try direct API call
+      console.log("No articles from primary sources, trying direct API call");
+      try {
+        const directResponse = await axios.get(`/api/news`);
+        if (directResponse.data && directResponse.data.news && directResponse.data.news.length > 0) {
+          console.log(`Got ${directResponse.data.news.length} articles from direct API call`);
+          
+          const directArticles = directResponse.data.news.map(article => ({
             id: article.url || Math.random().toString(36).substr(2, 9),
             title: article.title || "UFC News",
             description: article.description || "Latest UFC news and updates",
             url: article.url || "https://www.ufc.com/news",
-            imageUrl: article.urlToImage || '/static/placeholder.png',
-            source: article.source?.name || 'MMA News',
-            publishedAt: article.publishedAt || new Date().toISOString(),
+            imageUrl: article.urlToImage || article.imageUrl || '/static/placeholder.png',
+            source: article.source?.name || article.source || 'MMA News',
+            publishedAt: article.publishedAt || article.date || new Date().toISOString(),
             imageLoaded: false
           }));
           
-          return articles;
+          return directArticles;
         }
       } catch (directError) {
-        console.error("Direct API call also failed:", directError);
+        console.error("Direct API call failed:", directError);
+      }
+      
+      // If all else fails, return fallback content
+      console.warn("All news sources failed, using fallback content");
+      return generateFallbackNews();
+      
+    } catch (error) {
+      console.error("Error fetching UFC news:", error);
+      
+      // Try direct fetch as last resort
+      try {
+        const proxyUrl = "https://api.allorigins.win/raw?url=" + 
+          encodeURIComponent("https://www.ufc.com/news");
+        
+        const response = await fetch(proxyUrl);
+        if (response.ok) {
+          const html = await response.text();
+          
+          // Extract some basic article info from HTML
+          const titles = html.match(/<h2[^>]*>(.*?)<\/h2>/g) || [];
+          const scraped = titles.slice(0, 10).map((title, i) => {
+            // Extract text from title
+            const text = title.replace(/<[^>]*>/g, '');
+            return {
+              id: `scraped-${i}`,
+              title: text.trim(),
+              description: "Latest UFC news from ufc.com",
+              url: "https://www.ufc.com/news",
+              imageUrl: '/static/placeholder.png',
+              source: "UFC.com",
+              publishedAt: new Date().toISOString(),
+              imageLoaded: true
+            };
+          });
+          
+          if (scraped.length > 0) {
+            console.log(`Extracted ${scraped.length} articles from UFC.com`);
+            return scraped;
+          }
+        }
+      } catch (scrapeError) {
+        console.error("Scraping fallback failed:", scrapeError);
       }
       
       // Return fallback content as absolute last resort

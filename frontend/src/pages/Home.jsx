@@ -28,7 +28,7 @@ const Home = () => {
     return wins / totalFights;
   };
   
-  // Improved UFC news loading with robust filtering and error handling
+  // Enhanced UFC news loading with more lenient filtering to show available content
   const loadUFCNews = async () => {
     try {
       setNewsLoading(true);
@@ -37,38 +37,76 @@ const Home = () => {
       const news = await newsService.getUFCNews();
       
       if (news && news.length > 0) {
-        // UFC-relevant keywords for better filtering - using exact required keywords from the task
-        const ufcKeywords = [
-          'ufc', 'mma', 'fighter', 'fight', 'wrestling', 
-          'grappling', 'bjj', 'muay thai',
-          // Additional relevant keywords 
-          'knockout', 'dana white', 'octagon', 'submission', 
-          'champion', 'belt', 'title', 'martial arts', 'bout'
-        ];
+        console.log(`Received ${news.length} news articles from API`);
         
-        // Filter news to ensure they contain UFC-relevant terms
-        const filteredNews = news.filter(item => {
+        // UFC-relevant keywords from spec + related fighting terms
+        const primaryKeywords = ['ufc', 'mma', 'fighter', 'fight', 'wrestling', 'grappling', 'bjj', 'muay thai'];
+        const secondaryKeywords = ['knockout', 'martial arts', 'dana white', 'octagon', 'submission', 'champion', 'belt', 'title', 'bout'];
+        
+        // First try to filter using only the primary (required) keywords
+        let filteredNews = news.filter(item => {
           // Convert to lowercase for case-insensitive matching
           const lowerTitle = (item.title || '').toLowerCase();
           const lowerDesc = (item.description || '').toLowerCase();
           const lowerSource = (item.source || '').toLowerCase();
           
-          // Check if any of our keywords are present
-          return ufcKeywords.some(keyword => 
+          // Check if any primary keywords are present
+          return primaryKeywords.some(keyword => 
             lowerTitle.includes(keyword) || 
             lowerDesc.includes(keyword) || 
             lowerSource.includes(keyword)
           );
         });
         
-        console.log(`Filtered news items: ${filteredNews.length} / ${news.length}`);
+        console.log(`Articles matching primary keywords: ${filteredNews.length}`);
         
-        // Use filtered news if we have enough, otherwise fall back to all news
-        // Ensure we have at least 5 items for a proper carousel
-        const selectedNews = filteredNews.length >= 5 ? filteredNews : news;
+        // If we don't have enough articles with primary keywords, include secondary ones
+        if (filteredNews.length < 5) {
+          console.log("Not enough articles with primary keywords, including secondary keywords");
+          
+          filteredNews = news.filter(item => {
+            const lowerTitle = (item.title || '').toLowerCase();
+            const lowerDesc = (item.description || '').toLowerCase();
+            const lowerSource = (item.source || '').toLowerCase();
+            
+            // Check for any primary or secondary keyword
+            const allKeywords = [...primaryKeywords, ...secondaryKeywords];
+            return allKeywords.some(keyword => 
+              lowerTitle.includes(keyword) || 
+              lowerDesc.includes(keyword) || 
+              lowerSource.includes(keyword)
+            );
+          });
+          
+          console.log(`Articles after including secondary keywords: ${filteredNews.length}`);
+        }
+        
+        // If still not enough articles, be even more permissive
+        // Just use all articles, sorting by relevance (placing UFC/MMA-related at top)
+        if (filteredNews.length < 5) {
+          console.log("Using all articles due to insufficient keyword matches");
+          
+          // Score each article by relevance to UFC/MMA
+          const scoredArticles = news.map(item => {
+            const lowerTitle = (item.title || '').toLowerCase();
+            const lowerDesc = (item.description || '').toLowerCase();
+            
+            // Calculate relevance score
+            let score = 0;
+            [...primaryKeywords, ...secondaryKeywords].forEach(keyword => {
+              if (lowerTitle.includes(keyword)) score += 2;
+              if (lowerDesc.includes(keyword)) score += 1;
+            });
+            
+            return { ...item, relevanceScore: score };
+          });
+          
+          // Sort by relevance score (highest first)
+          filteredNews = scoredArticles.sort((a, b) => b.relevanceScore - a.relevanceScore);
+        }
         
         // Format and process the selected news items
-        const processedNews = selectedNews.map(item => ({
+        const processedNews = filteredNews.map(item => ({
           ...item,
           // Ensure all required fields are present
           id: item.id || item.url || Math.random().toString(36).substring(2, 9),
@@ -85,9 +123,9 @@ const Home = () => {
         
         // Take up to 10 articles for the carousel
         setNewsItems(processedNews.slice(0, 10));
+        console.log(`Final news carousel will display ${Math.min(processedNews.length, 10)} articles`);
       } else {
-        // No news found - fall back to empty array
-        // The service should already provide fallback items if needed
+        console.warn("No news articles returned from API");
         setNewsItems([]);
       }
       
@@ -95,7 +133,6 @@ const Home = () => {
     } catch (err) {
       console.error("Failed to load UFC news:", err);
       setNewsLoading(false);
-      // Don't set error state - we want the rest of the page to work even if news fails
       setNewsItems([]);
     }
   };
