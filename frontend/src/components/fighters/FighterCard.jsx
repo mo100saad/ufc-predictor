@@ -110,17 +110,6 @@ const FighterCard = ({ fighter }) => {
                   </span>
                 </div>
               </div>
-              
-              {/* Right column - Fighter image with proper container */}
-              <div className="flex-shrink-0 ml-auto">
-                <FighterImage 
-                  src={fighter.image_url} 
-                  alt={fighter.name}
-                  size="sm" 
-                  rounded={false}
-                  className="opacity-90 group-hover:opacity-100 transition-opacity duration-300 object-contain"
-                />
-              </div>
             </div>
             
             {/* Improved fighter image display area */}

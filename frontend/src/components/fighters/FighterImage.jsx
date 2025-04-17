@@ -3,17 +3,7 @@ import LoadingSpinner from '../common/LoadingSpinner';
 import { fighterService } from '../../services/api';
 
 /**
- * Reusable fighter image component with lazy loading, intersection observer,
- * and on-demand image fetching. Enhanced to display larger, properly scaled images.
- * 
- * @param {Object} props Component properties
- * @param {string} props.src The source URL of the fighter image
- * @param {string} props.alt The alt text for the image
- * @param {string} props.className Additional CSS classes for styling
- * @param {string} props.size Size variant: 'xs', 'sm', 'md', 'lg', 'xl', '2xl' (default: 'md')
- * @param {boolean} props.rounded Whether to apply rounded styling (default: false for valid images, true for placeholders)
- * @param {boolean} props.withBorder Whether to apply border styling (default: true)
- * @param {string} props.borderColor CSS color for the border (default: 'border-gray-600')
+ * Fighter image component with lazy loading, intersection observer, and multi-source image fetching
  */
 const FighterImage = ({ 
   src, 

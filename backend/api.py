@@ -132,6 +132,18 @@ def fetch_ufc_news():
                 if any(keyword in title_lower or keyword in desc_lower for keyword in keywords):
                     processed_articles.append(processed_article)
             
+            # Make sure we have at least 5 articles for the carousel
+            # If we don't have enough, duplicate some existing ones with modified IDs
+            if 0 < len(processed_articles) < 5:
+                original_count = len(processed_articles)
+                for i in range(5 - original_count):
+                    # Clone an article from the existing ones (cycling through them)
+                    clone_idx = i % original_count
+                    cloned_article = dict(processed_articles[clone_idx])
+                    # Modify the ID to ensure uniqueness
+                    cloned_article['id'] = cloned_article['id'] + (i + 1) * 1000
+                    processed_articles.append(cloned_article)
+            
             # Take up to 10 articles - this ensures we have enough for the carousel
             processed_articles = processed_articles[:10]
             
