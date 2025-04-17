@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { fighterService, newsService } from '../services/api';
 import LoadingSpinner from '../components/common/LoadingSpinner';
@@ -13,6 +13,9 @@ const Home = () => {
   const [error, setError] = useState(null);
   const [newsItems, setNewsItems] = useState([]);
   const [newsLoading, setNewsLoading] = useState(true);
+  
+  // Ref for news slider container
+  const newsSliderRef = useRef(null);
   
   // Calculate win percentage with minimum fight requirement
   const calculateWinPercentage = (fighter) => {
@@ -184,7 +187,7 @@ const Home = () => {
                   UFC Latest News
                 </motion.h2>
                 <motion.a
-                  href="https://www.ufc.com/news"
+                  href="https://www.ufc.com/trending/all"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-sm text-blue-400 hover:text-blue-300"
@@ -205,7 +208,11 @@ const Home = () => {
               ) : (
                 <div className="relative">
                   {/* Horizontal scrolling container */}
-                  <div className="flex overflow-x-auto pb-4 -mx-2 px-2 scrollbar-hide">
+                  <div 
+                    ref={newsSliderRef} 
+                    className="flex overflow-x-auto pb-4 -mx-2 px-2 scroll-smooth"
+                    style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+                  >
                     {newsItems.map((newsItem) => (
                       <motion.div
                         key={newsItem.id}
@@ -261,16 +268,32 @@ const Home = () => {
                     ))}
                   </div>
 
-                  {/* Left/Right scroll indicators */}
-                  <div className="absolute left-0 top-1/2 transform -translate-y-1/2 hidden md:block">
-                    <button className="bg-gray-800/80 hover:bg-gray-700 text-white p-2 rounded-full shadow-lg">
+                  {/* Left/Right scroll indicators with actual functionality */}
+                  <div className="absolute left-2 top-1/2 transform -translate-y-1/2 z-10 block">
+                    <button 
+                      className="bg-gray-800/90 hover:bg-gray-700 text-white p-2 rounded-full shadow-lg hover:scale-110 transition-all duration-200"
+                      onClick={() => {
+                        if (newsSliderRef.current) {
+                          newsSliderRef.current.scrollBy({ left: -400, behavior: 'smooth' });
+                        }
+                      }}
+                      aria-label="Scroll left"
+                    >
                       <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
                       </svg>
                     </button>
                   </div>
-                  <div className="absolute right-0 top-1/2 transform -translate-y-1/2 hidden md:block">
-                    <button className="bg-gray-800/80 hover:bg-gray-700 text-white p-2 rounded-full shadow-lg">
+                  <div className="absolute right-2 top-1/2 transform -translate-y-1/2 z-10 block">
+                    <button 
+                      className="bg-gray-800/90 hover:bg-gray-700 text-white p-2 rounded-full shadow-lg hover:scale-110 transition-all duration-200"
+                      onClick={() => {
+                        if (newsSliderRef.current) {
+                          newsSliderRef.current.scrollBy({ left: 400, behavior: 'smooth' });
+                        }
+                      }}
+                      aria-label="Scroll right"
+                    >
                       <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                       </svg>

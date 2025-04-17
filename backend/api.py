@@ -81,19 +81,19 @@ def save_news_cache(articles):
         logger.error(f"Error saving news cache: {e}")
 
 def fetch_ufc_news():
-    """Fetch UFC news from NewsAPI"""
+    """Fetch UFC news from NewsAPI with expanded UFC/MMA-related keywords"""
     # First check if we have valid cached news
     cached_news = get_cached_news()
     if cached_news:
         return cached_news
     
     try:
-        # Fetch fresh news
+        # Fetch fresh news with broader search terms to get more relevant results
         params = {
-            'q': 'UFC OR "Ultimate Fighting Championship" OR MMA',
+            'q': 'UFC OR "Ultimate Fighting Championship" OR MMA OR Fighter OR Fight OR Wrestling OR "Muay Thai" OR BJJ OR Grappling OR Knockout OR "Mixed Martial Arts"',
             'sortBy': 'publishedAt',
             'language': 'en',
-            'pageSize': 12,  # Get more articles to filter for quality
+            'pageSize': 20,  # Get more articles to filter for quality
             'apiKey': NEWS_API_KEY
         }
         
@@ -121,16 +121,19 @@ def fetch_ufc_news():
                     'publishedAt': article.get('publishedAt', '')
                 }
                 
-                # Only add good quality news about UFC
-                if (
-                    'ufc' in processed_article['title'].lower() or 
-                    'mma' in processed_article['title'].lower() or
-                    'ultimate fighting championship' in processed_article['title'].lower()
-                ):
+                # Use expanded keyword matching to include more relevant articles
+                keywords = ['ufc', 'mma', 'fight', 'fighter', 'wrestling', 'muay thai', 
+                            'bjj', 'grappling', 'knockout', 'martial arts', 'bout']
+                
+                title_lower = processed_article['title'].lower()
+                desc_lower = processed_article['description'].lower() if processed_article['description'] else ""
+                
+                # Check if any of our keywords are in the title or description
+                if any(keyword in title_lower or keyword in desc_lower for keyword in keywords):
                     processed_articles.append(processed_article)
             
-            # Take up to 8 articles
-            processed_articles = processed_articles[:8]
+            # Take up to 10 articles - this ensures we have enough for the carousel
+            processed_articles = processed_articles[:10]
             
             # Save to cache
             save_news_cache(processed_articles)
