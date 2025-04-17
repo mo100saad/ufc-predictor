@@ -203,7 +203,6 @@ const Home = () => {
                   No news available at the moment
                 </div>
               ) : (
-                {/* Enhanced news display with larger images and horizontal scrolling */}
                 <div className="relative">
                   {/* Horizontal scrolling container */}
                   <div className="flex overflow-x-auto pb-4 -mx-2 px-2 scrollbar-hide">

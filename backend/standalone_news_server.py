@@ -7,8 +7,10 @@ from datetime import datetime
 
 app = Flask(__name__)
 
+# Import configuration with environment variables
+from config import NEWS_API_KEY
+
 # News API settings
-NEWS_API_KEY = "2acdddf3b04e491d8b9056002aaf579f"
 NEWS_API_URL = "https://newsapi.org/v2/everything"
 NEWS_CACHE_FILE = os.path.join(os.path.dirname(__file__), 'news/news_cache.json')
 NEWS_CACHE_DURATION = 3600  # Cache news for 1 hour

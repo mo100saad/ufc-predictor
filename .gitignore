@@ -26,4 +26,10 @@ frontend/build/
 # Ignore environment files
 *.env
 .env
+.env.*
 CLAUDE.md
+
+# Ignore secrets and config files containing API keys
+backend/config/secrets.py
+backend/.env
+backend/news/news_cache.json

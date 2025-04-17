@@ -229,14 +229,16 @@ export const newsService = {
       
       // Try direct NewsAPI call as a last resort
       try {
-        console.log("Attempting direct NewsAPI call");
+        console.log("Attempting direct NewsAPI call - this may not work in production due to CORS");
         const encodedQuery = encodeURIComponent('UFC OR "Ultimate Fighting Championship" OR MMA');
-        const newsApiUrl = `https://newsapi.org/v2/everything?q=${encodedQuery}&sortBy=publishedAt&language=en&pageSize=6&apiKey=2acdddf3b04e491d8b9056002aaf579f`;
+        // Note: Direct API calls no longer recommended - using backend proxy is better
+        // API key has been removed from client code for security
+        const backendProxyUrl = `/api/news`;
         
-        const directResponse = await axios.get(newsApiUrl);
-        if (directResponse.data && directResponse.data.status === 'ok') {
-          console.log("Direct NewsAPI call successful");
-          const articles = directResponse.data.articles || [];
+        const directResponse = await axios.get(backendProxyUrl);
+        if (directResponse.data && directResponse.data.news) {
+          console.log("Backend news API call successful");
+          const articles = directResponse.data.news || [];
           
           // Process articles similar to server-side
           return articles.map(article => ({
