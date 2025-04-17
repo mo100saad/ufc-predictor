@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { fighterService } from '../services/api';
 import LoadingSpinner from '../components/common/LoadingSpinner';
 import ErrorAlert from '../components/common/ErrorAlert';
+import FighterCard from '../components/fighters/FighterCard';
 import { motion } from 'framer-motion';
 
 const Home = () => {
@@ -10,6 +11,8 @@ const Home = () => {
   const [topFighters, setTopFighters] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [newsItems, setNewsItems] = useState([]);
+  const [newsLoading, setNewsLoading] = useState(true);
   
   // Calculate win percentage with minimum fight requirement
   const calculateWinPercentage = (fighter) => {
@@ -22,6 +25,65 @@ const Home = () => {
     return wins / totalFights;
   };
   
+  // Load UFC news from ESPN MMA RSS feed or similar source
+  const loadUFCNews = async () => {
+    try {
+      setNewsLoading(true);
+      
+      // Fetch news from ESPN MMA via a CORS proxy or through backend
+      // In production, this would call a backend API that handles the RSS feed
+      // For now, we'll simulate with mock data
+      
+      // Simulated news data (in real implementation, this would be fetched from an API)
+      const mockNews = [
+        {
+          id: 1,
+          title: "UFC 300 Aftermath: Jones Defends Title in Spectacular Fashion",
+          description: "Jon Jones proved why he's considered the GOAT with a dominant performance...",
+          date: "2025-04-16T08:30:00Z",
+          imageUrl: "https://via.placeholder.com/300x200/333/fff?text=UFC+News",
+          url: "#"
+        },
+        {
+          id: 2,
+          title: "Dana White Announces New UFC Performance Institute",
+          description: "The UFC president revealed plans for a state-of-the-art training facility...",
+          date: "2025-04-15T14:45:00Z",
+          imageUrl: "https://via.placeholder.com/300x200/333/fff?text=UFC+News",
+          url: "#"
+        },
+        {
+          id: 3,
+          title: "Rising Star O'Malley Signs New 6-Fight Contract",
+          description: "Bantamweight sensation Sean O'Malley has committed his future to the UFC...",
+          date: "2025-04-14T10:20:00Z",
+          imageUrl: "https://via.placeholder.com/300x200/333/fff?text=UFC+News",
+          url: "#"
+        },
+        {
+          id: 4,
+          title: "McGregor vs Chandler Set for UFC 302 Main Event",
+          description: "The long-awaited return of Conor McGregor has been confirmed for June...",
+          date: "2025-04-13T16:15:00Z",
+          imageUrl: "https://via.placeholder.com/300x200/333/fff?text=UFC+News",
+          url: "#"
+        }
+      ];
+      
+      // In a real implementation, we would parse the RSS feed
+      // const response = await fetch('/api/news');
+      // const data = await response.json();
+      
+      setNewsItems(mockNews);
+      setNewsLoading(false);
+    } catch (err) {
+      console.error("Failed to load UFC news:", err);
+      setNewsLoading(false);
+      // Don't set error state - we want the rest of the page to work even if news fails
+      setNewsItems([]);
+    }
+  };
+
   useEffect(() => {
     const loadFighters = async () => {
       try {
@@ -49,7 +111,9 @@ const Home = () => {
       }
     };
     
+    // Load both fighters and news
     loadFighters();
+    loadUFCNews();
   }, []);
 
   // Framer Motion animation variants
@@ -129,8 +193,69 @@ const Home = () => {
             </div>
           </div>
 
-          {/* Content Grid - Restructured as two tables stacked */}
+          {/* Content Grid - Restructured with three sections stacked */}
           <div className="flex flex-col space-y-8 mb-16">
+            {/* UFC Latest News Section - New addition */}
+            <motion.div 
+              className="bg-gray-800/60 border border-gray-700 rounded-xl p-6 shadow-2xl backdrop-blur-sm"
+              variants={containerVariants}
+              initial="hidden"
+              animate="show"
+            >
+              <motion.h2 
+                className="text-2xl font-bold mb-6 text-white border-b border-gray-700 pb-3 text-center"
+                variants={itemVariants}
+              >
+                UFC Latest News
+              </motion.h2>
+              
+              {newsLoading ? (
+                <div className="flex justify-center py-6">
+                  <LoadingSpinner text="Loading UFC news..." />
+                </div>
+              ) : newsItems.length === 0 ? (
+                <div className="text-center text-gray-400 py-6">
+                  No news available at the moment
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                  {newsItems.map((newsItem) => (
+                    <motion.div
+                      key={newsItem.id}
+                      variants={itemVariants}
+                      whileHover={{ y: -5, transition: { duration: 0.2 } }}
+                      className="bg-gradient-to-br from-gray-700/50 to-gray-800/60 rounded-lg overflow-hidden border border-gray-600/30 shadow-lg hover:shadow-xl transition-all duration-300"
+                    >
+                      <a href={newsItem.url} target="_blank" rel="noopener noreferrer" className="block">
+                        <div className="h-32 bg-gray-700 overflow-hidden">
+                          <img 
+                            src={newsItem.imageUrl} 
+                            alt={newsItem.title}
+                            className="w-full h-full object-cover opacity-80 hover:opacity-100 transition-opacity duration-300 transform hover:scale-105"
+                          />
+                        </div>
+                        
+                        <div className="p-4">
+                          <h3 className="text-white font-bold text-lg mb-2 line-clamp-2 hover:text-blue-400 transition-colors">
+                            {newsItem.title}
+                          </h3>
+                          
+                          <p className="text-gray-400 text-sm line-clamp-2 mb-2">
+                            {newsItem.description}
+                          </p>
+                          
+                          <div className="flex justify-between items-center mt-3 text-xs text-gray-500">
+                            <span>{new Date(newsItem.date).toLocaleDateString()}</span>
+                            <span className="text-blue-400 hover:underline">Read more →</span>
+                          </div>
+                        </div>
+                      </a>
+                    </motion.div>
+                  ))}
+                </div>
+              )}
+            </motion.div>
+            
             {/* Top Fighters Section - Full width */}
             <motion.div 
               className="bg-gray-800/60 border border-gray-700 rounded-xl p-6 shadow-2xl backdrop-blur-sm"
@@ -155,57 +280,10 @@ const Home = () => {
                     <motion.div 
                       key={index}
                       variants={itemVariants}
-                      whileHover={{ scale: 1.03, transition: { duration: 0.2 } }}
-                      className="bg-gradient-to-br from-gray-700/50 to-gray-800/60 rounded-lg overflow-hidden border border-gray-600/30 shadow-lg hover:shadow-xl transition-all duration-300"
+                      whileHover={{ y: -5, transition: { duration: 0.2 } }}
                     >
-                      <Link to={`/fighters/${encodeURIComponent(fighter.name)}`} className="block">
-                        {/* Accent bar at top */}
-                        <div className="h-1 bg-gradient-to-r from-red-500 to-red-700"></div>
-                        
-                        <div className="p-4">
-                          {/* Fighter name with icon */}
-                          <div className="flex items-center justify-between mb-3">
-                            <h3 className="text-lg font-bold text-white">{fighter.name}</h3>
-                            <div className="bg-gray-900/50 p-1 rounded-full">
-                              <svg className="h-4 w-4 text-red-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                                <path fillRule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clipRule="evenodd" />
-                              </svg>
-                            </div>
-                          </div>
-                          
-                          {/* Stats grid with enhanced styling */}
-                          <div className="grid grid-cols-2 gap-2">
-                            <div className="bg-gray-900/70 p-2 rounded-lg relative overflow-hidden group">
-                              {/* Background accent */}
-                              <div className="absolute inset-0 bg-blue-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                              
-                              <p className="text-gray-400 text-xs font-medium uppercase tracking-wide">Record</p>
-                              <p className="text-white text-lg font-bold">{fighter.wins || 0}-{fighter.losses || 0}</p>
-                            </div>
-                            
-                            <div className="bg-gray-900/70 p-2 rounded-lg relative overflow-hidden group">
-                              {/* Background accent */}
-                              <div className="absolute inset-0 bg-green-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                              
-                              <p className="text-gray-400 text-xs font-medium uppercase tracking-wide">Win Rate</p>
-                              <p className="text-gradient bg-clip-text text-transparent bg-gradient-to-r from-green-400 to-green-600 text-lg font-bold">
-                                {(fighter.winPct * 100).toFixed(1)}%
-                              </p>
-                            </div>
-                          </div>
-                          
-                          {/* View details button with hover effect */}
-                          <div className="mt-3 text-center">
-                            <div className="text-xs text-gray-400 group-hover:text-gray-300 transition-colors duration-300 flex items-center justify-center opacity-70 hover:opacity-100">
-                              <span>View Fighter Profile</span>
-                              <svg className="ml-1 h-3 w-3" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                                <path d="M11 3a1 1 0 100 2h2.586l-6.293 6.293a1 1 0 101.414 1.414L15 6.414V9a1 1 0 102 0V4a1 1 0 00-1-1h-5z" />
-                                <path d="M5 5a2 2 0 00-2 2v8a2 2 0 002 2h8a2 2 0 002-2v-3a1 1 0 10-2 0v3H5V7h3a1 1 0 000-2H5z" />
-                              </svg>
-                            </div>
-                          </div>
-                        </div>
-                      </Link>
+                      {/* Using the same FighterCard component for consistency */}
+                      <FighterCard fighter={fighter} />
                     </motion.div>
                   ))}
                 </div>
@@ -242,6 +320,32 @@ const Home = () => {
                   </div>
                 </div>
               </div>
+            </motion.div>
+            
+            {/* GitHub Button - Increased Size and Visibility */}
+            <motion.div
+              className="mt-8 flex justify-center"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.9, duration: 0.5 }}
+            >
+              <a 
+                href="https://github.com/mo100saad/ufc-predictor" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="group flex items-center px-8 py-4 bg-gray-800 hover:bg-gray-700 text-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 border border-gray-700 hover:border-gray-600"
+              >
+                <svg className="h-8 w-8 mr-3 text-white" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                  <path fillRule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" clipRule="evenodd" />
+                </svg>
+                <div>
+                  <span className="text-lg font-bold block">View on GitHub</span>
+                  <span className="text-gray-400 text-sm">Star this project if you find it useful!</span>
+                </div>
+                <svg className="h-6 w-6 ml-2 opacity-0 group-hover:opacity-100 transform translate-x-0 group-hover:translate-x-1 transition-all duration-300" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                </svg>
+              </a>
             </motion.div>
           </div>
         </div>

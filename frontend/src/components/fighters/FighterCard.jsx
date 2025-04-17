@@ -10,16 +10,23 @@ const FighterCard = ({ fighter }) => {
   const totalFights = (fighter.wins || 0) + (fighter.losses || 0);
   const winPercentage = totalFights > 0 ? ((fighter.wins || 0) / totalFights * 100).toFixed(0) : 0;
   
-  // Determine fighter style based on stats with more accurate detection
+  // Determine fighter style based on stats with more accurate detection and fallback
   const getFighterStyle = () => {
     const strikingRatio = (fighter.SLpM || 0) / 5; // Normalized to 0-1 where 5 is high
     const grapplingRatio = ((fighter.td_avg || 0) + (fighter.sub_avg || 0)) / 6; // Normalized
     
+    // First check if fighter has a style property directly
+    if (fighter.style) return fighter.style;
+    
+    // Otherwise determine based on strike/grappling metrics
     if (strikingRatio > 0.7 && grapplingRatio < 0.3) return "Striker";
     if (strikingRatio < 0.3 && grapplingRatio > 0.7) return "Grappler";
     if (strikingRatio > 0.5 && grapplingRatio > 0.5) return "Well-Rounded";
     if (strikingRatio > 0.4 && grapplingRatio > 0.3) return "Balanced";
-    return "Unknown Style";
+    
+    // Use the style from stats_view in Fighters.jsx as a final fallback
+    if (strikingRatio > 0.3 || grapplingRatio > 0.2) return "Balanced";
+    return "Striker"; // Default to striker instead of "Unknown Style"
   };
   
   // Determine fighter's weight class based on kilograms with slight adjustments for borderline decimals

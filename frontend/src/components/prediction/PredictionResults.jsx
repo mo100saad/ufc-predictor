@@ -104,7 +104,7 @@ const PredictionResult = ({ result, fighter1, fighter2 }) => {
     ],
   };
 
-  // Enhanced chart options
+  // Enhanced chart options with larger size and optimized layout
   const chartOptions = {
     responsive: true,
     maintainAspectRatio: false,
@@ -140,7 +140,7 @@ const PredictionResult = ({ result, fighter1, fighter2 }) => {
         }
       },
     },
-    cutout: '75%',
+    cutout: '70%', // Slightly smaller cutout to make ring larger
     animation: {
       animateScale: true,
       animateRotate: true,
@@ -306,14 +306,16 @@ const PredictionResult = ({ result, fighter1, fighter2 }) => {
         >
           <Doughnut data={chartData} options={chartOptions} />
           
-          {/* Center winner label */}
+          {/* Center winner label - Repositioned to avoid overlap */}
           <div className="absolute inset-0 flex flex-col items-center justify-center text-center pointer-events-none">
-            <div className="text-xs uppercase text-gray-400 mb-1">Predicted Winner</div>
-            <div className={`text-xl font-bold ${finalWinner === 'fighter1' ? 'text-red-500' : 'text-blue-500'}`}>
-              {finalWinnerName}
-            </div>
-            <div className="mt-1 text-xs text-gray-400">
-              {Math.abs(fighter1Percent - fighter2Percent)}% margin
+            <div className="bg-gray-800/80 rounded-lg px-4 py-3 backdrop-blur-sm shadow-lg border border-gray-700/50 max-w-[80%]">
+              <div className="text-xs uppercase text-gray-400 mb-1">Predicted Winner</div>
+              <div className={`text-xl font-bold ${finalWinner === 'fighter1' ? 'text-red-500' : 'text-blue-500'}`}>
+                {finalWinnerName}
+              </div>
+              <div className="mt-1 text-xs text-gray-400">
+                {Math.abs(fighter1Percent - fighter2Percent)}% margin
+              </div>
             </div>
           </div>
         </motion.div>

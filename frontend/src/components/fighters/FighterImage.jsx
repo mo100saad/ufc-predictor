@@ -4,14 +4,14 @@ import { fighterService } from '../../services/api';
 
 /**
  * Reusable fighter image component with lazy loading, intersection observer,
- * and on-demand image fetching.
+ * and on-demand image fetching. Enhanced to display larger, properly scaled images.
  * 
  * @param {Object} props Component properties
  * @param {string} props.src The source URL of the fighter image
  * @param {string} props.alt The alt text for the image
  * @param {string} props.className Additional CSS classes for styling
- * @param {string} props.size Size variant: 'xs', 'sm', 'md', 'lg', 'xl' (default: 'md')
- * @param {boolean} props.rounded Whether to apply rounded styling (default: true)
+ * @param {string} props.size Size variant: 'xs', 'sm', 'md', 'lg', 'xl', '2xl' (default: 'md')
+ * @param {boolean} props.rounded Whether to apply rounded styling (default: false for valid images, true for placeholders)
  * @param {boolean} props.withBorder Whether to apply border styling (default: true)
  * @param {string} props.borderColor CSS color for the border (default: 'border-gray-600')
  */
@@ -20,7 +20,7 @@ const FighterImage = ({
   alt, 
   className = '', 
   size = 'md', 
-  rounded = true, 
+  rounded, 
   withBorder = true,
   borderColor = 'border-gray-600'
 }) => {
@@ -34,9 +34,10 @@ const FighterImage = ({
   // Placeholder image (fighter silhouette SVG)
   const placeholderImage = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjNkI3MjgwIiBzdHJva2Utd2lkdGg9IjEuNSIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIiBjbGFzcz0ibHVjaWRlIGx1Y2lkZS11c2VyIj48cGF0aCBkPSJNMTkgMjFhNyA3IDAgMCAwLTE0IDAiLz48Y2lyY2xlIGN4PSIxMiIgY3k9IjEwIiByPSI0Ii8+PC9zdmc+';
 
-  // Set placeholder immediately on first render
+  // Initialize image source to null (instead of placeholder) to show loading state
   useEffect(() => {
-    setImageSrc(placeholderImage);
+    // Don't show placeholder immediately, show loading state instead
+    setImageSrc(null);
   }, []);
 
   // Set up intersection observer for lazy loading
@@ -123,26 +124,33 @@ const FighterImage = ({
     setImageSrc(placeholderImage);
   };
 
-  // Size class mapping
+  // Enhanced size class mapping with larger size options
   const sizeClasses = {
-    'xs': 'w-8 h-8',
-    'sm': 'w-12 h-12', 
-    'md': 'w-16 h-16',
-    'lg': 'w-24 h-24',
-    'xl': 'w-32 h-32'
+    'xs': 'w-10 h-10',
+    'sm': 'w-16 h-16', 
+    'md': 'w-24 h-24',
+    'lg': 'w-32 h-32',
+    'xl': 'w-48 h-48',
+    '2xl': 'w-64 h-64'
   };
   
   // Display spinner if image is still loading or being fetched when visible
   const isLoading = isVisible && (loading || fetchingImage);
   
-  // Compose CSS classes
+  // Determine if we should use rounded styling
+  // If rounded prop is undefined, use circular only for placeholders
+  const shouldBeRounded = rounded !== undefined 
+    ? rounded 
+    : (!imageSrc || imageSrc === placeholderImage || error);
+  
+  // Compose CSS classes with conditional rounded styling and improved sizing
   const imageClasses = `
     ${sizeClasses[size] || sizeClasses.md}
-    ${rounded ? 'rounded-full' : ''}
+    ${shouldBeRounded ? 'rounded-full' : 'rounded-md'}
     ${withBorder ? `border-2 ${borderColor}` : ''}
     overflow-hidden
     object-cover
-    transition-opacity duration-300
+    transition-all duration-300
     ${isLoading ? 'opacity-50' : 'opacity-100'}
     ${className}
   `;
@@ -150,16 +158,17 @@ const FighterImage = ({
   return (
     <div 
       ref={imgRef} 
-      className={`relative ${sizeClasses[size] || sizeClasses.md} overflow-hidden ${rounded ? 'rounded-full' : ''}`}
+      className={`relative ${sizeClasses[size] || sizeClasses.md} overflow-hidden 
+        ${shouldBeRounded ? 'rounded-full' : 'rounded-md'}`}
     >
       {/* Loading indicator - only show when actually fetching and element is visible */}
       {isLoading && (
-        <div className="absolute inset-0 flex items-center justify-center bg-gray-800/50">
+        <div className="absolute inset-0 flex items-center justify-center bg-gray-800/50 z-10">
           <LoadingSpinner size="sm" />
         </div>
       )}
       
-      {/* Image placeholder immediately or actual image when loaded */}
+      {/* Image placeholder immediately or actual image when loaded - properly scaled */}
       <img
         src={imageSrc || placeholderImage}
         alt={alt || "Fighter"}

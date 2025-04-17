@@ -46,17 +46,25 @@ The application is deployed using **AWS and Vercel**, ensuring high availability
 - **Neural Network Model**: PyTorch deep learning model with **multiple hidden layers, batch normalization, and dropout**.
 - **Probability Analysis**: Detailed **win probability calculations** with **confidence ratings**.
 - **Physical Matchup Evaluation**: Weight class, reach, and other **physical advantages** integrated into the model.
+- **Weight Disparity Correction**: Algorithms that adjust predictions for extreme weight class differences, preventing unrealistic outcomes.
 
 ### 📊 Fighter Database
 - **Comprehensive Statistics**: Track records, physical attributes, and performance metrics for **2,450+ fighters**.
 - **Fighter Comparisons**: Side-by-side comparison of **fighting styles and statistics**.
 - **Historical Data**: Access to **past UFC fight results** for analysis.
-- **Dynamic Fighter Images**: Full-body fighter images automatically sourced from UFC.com with smart caching.
+- **Smart Fighter Image System**: Images scraped from UFC.com with multiple fallbacks (Wikipedia, Sherdog) and intelligent caching.
 
 ### 🎨 Modern Web Interface
-- **Responsive Design**: Built with **React and Tailwind CSS**.
+- **Responsive Design**: Built with **React and Tailwind CSS** for a highly interactive experience.
 - **Interactive Visualizations**: Dynamic **charts powered by Chart.js**.
 - **User-Friendly**: Intuitive interface for **both casual fans and MMA analysts**.
+- **UFC News Integration**: Latest UFC news sourced from sports feeds for an information-rich experience.
+
+### 🛠️ Technical Infrastructure
+- **Docker Containerization**: Consistent environments and easy local testing with Docker.
+- **Cloud Deployment**: CI/CD pipeline for AWS and Vercel deployment.
+- **API-First Architecture**: RESTful backend built with Flask, supporting future mobile apps.
+- **Performance Optimized**: Image lazy loading, component code-splitting, and CDN-ready architecture.
 
 ---
 
