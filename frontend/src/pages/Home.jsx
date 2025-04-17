@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { fighterService } from '../services/api';
+import { fighterService, newsService } from '../services/api';
 import LoadingSpinner from '../components/common/LoadingSpinner';
 import ErrorAlert from '../components/common/ErrorAlert';
 import FighterCard from '../components/fighters/FighterCard';
@@ -25,56 +25,28 @@ const Home = () => {
     return wins / totalFights;
   };
   
-  // Load UFC news from ESPN MMA RSS feed or similar source
+  // Load UFC news from NewsAPI through backend 
   const loadUFCNews = async () => {
     try {
       setNewsLoading(true);
       
-      // Fetch news from ESPN MMA via a CORS proxy or through backend
-      // In production, this would call a backend API that handles the RSS feed
-      // For now, we'll simulate with mock data
+      // Fetch news from our backend API
+      const news = await newsService.getUFCNews();
       
-      // Simulated news data (in real implementation, this would be fetched from an API)
-      const mockNews = [
-        {
-          id: 1,
-          title: "UFC 300 Aftermath: Jones Defends Title in Spectacular Fashion",
-          description: "Jon Jones proved why he's considered the GOAT with a dominant performance...",
-          date: "2025-04-16T08:30:00Z",
-          imageUrl: "https://via.placeholder.com/300x200/333/fff?text=UFC+News",
-          url: "#"
-        },
-        {
-          id: 2,
-          title: "Dana White Announces New UFC Performance Institute",
-          description: "The UFC president revealed plans for a state-of-the-art training facility...",
-          date: "2025-04-15T14:45:00Z",
-          imageUrl: "https://via.placeholder.com/300x200/333/fff?text=UFC+News",
-          url: "#"
-        },
-        {
-          id: 3,
-          title: "Rising Star O'Malley Signs New 6-Fight Contract",
-          description: "Bantamweight sensation Sean O'Malley has committed his future to the UFC...",
-          date: "2025-04-14T10:20:00Z",
-          imageUrl: "https://via.placeholder.com/300x200/333/fff?text=UFC+News",
-          url: "#"
-        },
-        {
-          id: 4,
-          title: "McGregor vs Chandler Set for UFC 302 Main Event",
-          description: "The long-awaited return of Conor McGregor has been confirmed for June...",
-          date: "2025-04-13T16:15:00Z",
-          imageUrl: "https://via.placeholder.com/300x200/333/fff?text=UFC+News",
-          url: "#"
-        }
-      ];
+      if (news && news.length > 0) {
+        // Format dates and process news items
+        const formattedNews = news.map(item => ({
+          ...item,
+          // Ensure date is properly formatted
+          date: item.publishedAt || new Date().toISOString()
+        }));
+        
+        setNewsItems(formattedNews);
+      } else {
+        // No news found
+        setNewsItems([]);
+      }
       
-      // In a real implementation, we would parse the RSS feed
-      // const response = await fetch('/api/news');
-      // const data = await response.json();
-      
-      setNewsItems(mockNews);
       setNewsLoading(false);
     } catch (err) {
       console.error("Failed to load UFC news:", err);
@@ -231,6 +203,10 @@ const Home = () => {
                           <img 
                             src={newsItem.imageUrl} 
                             alt={newsItem.title}
+                            onError={(e) => {
+                              e.target.onerror = null;
+                              e.target.src = '/static/placeholder.png';
+                            }}
                             className="w-full h-full object-cover opacity-80 hover:opacity-100 transition-opacity duration-300 transform hover:scale-105"
                           />
                         </div>
@@ -245,7 +221,14 @@ const Home = () => {
                           </p>
                           
                           <div className="flex justify-between items-center mt-3 text-xs text-gray-500">
-                            <span>{new Date(newsItem.date).toLocaleDateString()}</span>
+                            <span className="flex items-center">
+                              {new Date(newsItem.date).toLocaleDateString()}
+                              {newsItem.source && (
+                                <span className="ml-2 bg-gray-800 px-1.5 py-0.5 rounded text-[10px] text-gray-400">
+                                  {newsItem.source}
+                                </span>
+                              )}
+                            </span>
                             <span className="text-blue-400 hover:underline">Read more →</span>
                           </div>
                         </div>

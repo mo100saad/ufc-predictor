@@ -197,4 +197,16 @@ export const csvService = {
   },
 };
 
+export const newsService = {
+  getUFCNews: async () => {
+    try {
+      const response = await api.get('/news');
+      return response.data.news || [];
+    } catch (error) {
+      console.error("Error fetching UFC news:", error.response?.data || error.message);
+      return [];
+    }
+  }
+};
+
 export default api;
