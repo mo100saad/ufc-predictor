@@ -3,9 +3,146 @@ import pandas as pd
 import numpy as np
 from sklearn.preprocessing import StandardScaler
 import sqlite3
+import json
+import re
+import requests
+from bs4 import BeautifulSoup
+import logging
 from config import DATABASE_PATH
 
+# Configure logging for image scraping
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+image_logger = logging.getLogger('ufc_images')
+
+# File path for image URL cache
+IMAGE_CACHE_PATH = os.path.join(os.path.dirname(DATABASE_PATH), 'fighter_images_cache.json')
+
+def slugify_name(name):
+    """
+    Convert a fighter name to a slug for UFC.com URLs
     
+    Args:
+        name (str): Fighter name
+        
+    Returns:
+        str: Slugified name for URL
+    """
+    if not name:
+        return ""
+    
+    # Convert to lowercase
+    slug = name.lower()
+    
+    # Remove apostrophes and other punctuation (except hyphens)
+    slug = re.sub(r"['\"\(\)\.,:;]", "", slug)
+    
+    # Replace spaces with hyphens
+    slug = re.sub(r"\s+", "-", slug)
+    
+    # Remove any remaining non-alphanumeric characters except hyphens
+    slug = re.sub(r"[^a-z0-9\-]", "", slug)
+    
+    return slug
+
+def load_image_cache():
+    """
+    Load the fighter image URL cache from disk
+    
+    Returns:
+        dict: Mapping of fighter slugs to image URLs
+    """
+    if os.path.exists(IMAGE_CACHE_PATH):
+        try:
+            with open(IMAGE_CACHE_PATH, 'r') as f:
+                return json.load(f)
+        except Exception as e:
+            image_logger.error(f"Error loading image cache: {e}")
+    
+    # Create a new cache if it doesn't exist or couldn't be loaded
+    return {}
+
+def save_image_cache(cache):
+    """
+    Save the fighter image URL cache to disk
+    
+    Args:
+        cache (dict): Mapping of fighter slugs to image URLs
+    """
+    try:
+        # Create directory if it doesn't exist
+        os.makedirs(os.path.dirname(IMAGE_CACHE_PATH), exist_ok=True)
+        
+        with open(IMAGE_CACHE_PATH, 'w') as f:
+            json.dump(cache, f)
+    except Exception as e:
+        image_logger.error(f"Error saving image cache: {e}")
+
+def get_fighter_image_url(name):
+    """
+    Get the image URL for a fighter
+    
+    Args:
+        name (str): Fighter name
+        
+    Returns:
+        str: URL to the fighter's image, or fallback image URL if not found
+    """
+    if not name:
+        return "/static/placeholder.png"
+    
+    # Create slug for URL
+    slug = slugify_name(name)
+    
+    # Check cache first
+    cache = load_image_cache()
+    if slug in cache:
+        # Return cached URL (or fallback if "not_found" is stored)
+        if cache[slug] == "not_found":
+            return "/static/placeholder.png"
+        return cache[slug]
+    
+    # Not in cache, need to scrape from UFC website
+    try:
+        ufc_url = f"https://ufc.com/athlete/{slug}"
+        image_logger.info(f"Fetching image for {name} from {ufc_url}")
+        
+        headers = {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
+        }
+        
+        response = requests.get(ufc_url, headers=headers, timeout=10)
+        
+        if response.status_code == 200:
+            soup = BeautifulSoup(response.content, 'html.parser')
+            
+            # Find the image with class "hero-profile__image"
+            img_tag = soup.find('img', class_='hero-profile__image')
+            
+            if img_tag and 'src' in img_tag.attrs:
+                image_url = img_tag['src']
+                
+                # Save to cache
+                cache[slug] = image_url
+                save_image_cache(cache)
+                
+                return image_url
+        
+        # If we couldn't find the image, cache the failure
+        image_logger.warning(f"Could not find image for {name}")
+        cache[slug] = "not_found"
+        save_image_cache(cache)
+        
+        return "/static/placeholder.png"
+        
+    except Exception as e:
+        image_logger.error(f"Error fetching image for {name}: {e}")
+        
+        # Cache the error so we don't try again
+        cache[slug] = "not_found"
+        save_image_cache(cache)
+        
+        return "/static/placeholder.png"
+
 def validate_dataset(df):
     essential_columns = ['R_fighter', 'B_fighter', 'Winner']
     missing_columns = [col for col in essential_columns if col not in df.columns]

@@ -280,6 +280,11 @@ def get_fighter_by_name_endpoint(fighter_name):
                 else:
                     fighter_dict[column_name] = value
             
+            # Add fighter image URL
+            from utils import get_fighter_image_url
+            if 'name' in fighter_dict and fighter_dict['name']:
+                fighter_dict['image_url'] = get_fighter_image_url(fighter_dict['name'])
+            
             print(f"=== FIGHTER FOUND ===")
             conn.close()
             return jsonify({"fighter": fighter_dict})
@@ -335,14 +340,31 @@ def predict_fight_endpoint():
         # Load model - IMPORTANT: Try ensemble model first since we retrained it
         from model import predict_fight, load_model
         try:
-            # Try both models - prioritizing the ensemble model
+            # Try both models - prioritizing the ensemble model (more robust against position bias)
             if os.path.exists(ENSEMBLE_MODEL_PATH):
                 logger.info(f"Loading ensemble model from {ENSEMBLE_MODEL_PATH}")
-                model, scaler, feature_columns, is_pytorch = load_model(ENSEMBLE_MODEL_PATH)
-            elif os.path.exists(PYTORCH_MODEL_PATH):
-                logger.info(f"Loading PyTorch model from {PYTORCH_MODEL_PATH}")
-                model, scaler, feature_columns, is_pytorch = load_model(PYTORCH_MODEL_PATH)
+                try:
+                    model, scaler, feature_columns, model_info = load_model(ENSEMBLE_MODEL_PATH)
+                    is_pytorch = model_info.get('is_pytorch', False)
+                    logger.info(f"Successfully loaded ensemble model with {len(feature_columns)} features")
+                except Exception as e:
+                    logger.error(f"Error loading ensemble model: {e}, falling back to PyTorch model")
+                    model = None
             else:
+                logger.info(f"Ensemble model not found at {ENSEMBLE_MODEL_PATH}")
+                model = None
+                
+            # Fall back to PyTorch model if ensemble loading failed
+            if model is None and os.path.exists(PYTORCH_MODEL_PATH):
+                logger.info(f"Loading PyTorch model from {PYTORCH_MODEL_PATH}")
+                try:
+                    model, scaler, feature_columns, model_info = load_model(PYTORCH_MODEL_PATH)
+                    is_pytorch = model_info.get('is_pytorch', True)
+                    logger.info(f"Successfully loaded PyTorch model with {len(feature_columns)} features")
+                except Exception as e:
+                    logger.error(f"Error loading PyTorch model: {e}")
+                    return jsonify({"error": "Failed to load any model"}), 500
+            elif model is None:
                 return jsonify({"error": "No trained models found"}), 500
                 
             if model is None:
@@ -354,89 +376,12 @@ def predict_fight_endpoint():
         # Make prediction
         prediction = predict_fight(model, fighter1, fighter2, scaler, feature_columns, is_pytorch)
         
-        # Format prediction results (support both camelCase and snake_case)
-        result = {
-            "fighter1Name": fighter1.get('name', 'Fighter 1'),
-            "fighter2Name": fighter2.get('name', 'Fighter 2'),
-            "fighter1WinProbability": float(prediction['probability_fighter1_wins']),
-            "fighter2WinProbability": float(prediction['probability_fighter2_wins']),
-            "predictedWinner": fighter1.get('name', 'Fighter 1') if prediction['predicted_winner'] == 'fighter1' else fighter2.get('name', 'Fighter 2'),
-            "confidenceLevel": prediction['confidence_level'],
-            # Add snake_case versions for compatibility
-            "fighter1_name": fighter1.get('name', 'Fighter 1'),
-            "fighter2_name": fighter2.get('name', 'Fighter 2'),
-            "fighter1_win_probability": float(prediction['probability_fighter1_wins']),
-            "fighter2_win_probability": float(prediction['probability_fighter2_wins']),
-            "predicted_winner": fighter1.get('name', 'Fighter 1') if prediction['predicted_winner'] == 'fighter1' else fighter2.get('name', 'Fighter 2'),
-            "confidence_level": prediction['confidence_level']
-        }
+        # Import image URL utility
+        from utils import get_fighter_image_url
         
-        return jsonify({"prediction": result})
-    
-    except Exception as e:
-        logger.error(f"Error predicting fight: {e}")
-        return jsonify({"error": str(e)}), 500
-
-
-'''
-@api_bp.route('/predict', methods=['POST'])
-def predict_fight_endpoint():
-    """Predict fight outcome endpoint"""
-    try:
-        data = request.json
-        logger.info(f"Received prediction request: {data}")
-        
-        # Check if we have fighter IDs or data (support both camelCase and snake_case)
-        if ('fighter1Id' in data and 'fighter2Id' in data) or ('fighter1_id' in data and 'fighter2_id' in data):
-            # Get fighter IDs (support both formats)
-            fighter1_id = data.get('fighter1Id') or data.get('fighter1_id')
-            fighter2_id = data.get('fighter2Id') or data.get('fighter2_id')
-            
-            # Get fighter data using our helper function that includes fight history
-            fighter1_data = get_fighter_stats(fighter1_id)
-            fighter2_data = get_fighter_stats(fighter2_id)
-            
-            if not fighter1_data or not fighter2_data:
-                return jsonify({"error": "One or both fighters not found"}), 404
-            
-            # Convert to prediction format
-            fighter1 = format_fighter_for_prediction(fighter1_data)
-            fighter2 = format_fighter_for_prediction(fighter2_data)
-            
-        elif 'fighter1' in data and 'fighter2' in data:
-            # Direct fighter objects passed from frontend
-            fighter1_data = data['fighter1']
-            fighter2_data = data['fighter2']
-            
-            # Convert to prediction format
-            fighter1 = format_fighter_for_prediction(fighter1_data)
-            fighter2 = format_fighter_for_prediction(fighter2_data)
-            
-            # Log what we're using for prediction
-            logger.info(f"Using fighter1 data: {fighter1}")
-            logger.info(f"Using fighter2 data: {fighter2}")
-        else:
-            return jsonify({"error": "Must provide fighter1Id and fighter2Id, or fighter1 and fighter2 data"}), 400
-        
-        # Load model
-        from model import predict_fight, load_model
-        try:
-            # Try both models - pytorch_model.pth or ensemble_model.joblib
-            if os.path.exists(PYTORCH_MODEL_PATH):
-                model, scaler, feature_columns, is_pytorch = load_model(PYTORCH_MODEL_PATH)
-            elif os.path.exists(ENSEMBLE_MODEL_PATH):
-                model, scaler, feature_columns, is_pytorch = load_model(ENSEMBLE_MODEL_PATH)
-            else:
-                return jsonify({"error": "No trained models found"}), 500
-                
-            if model is None:
-                return jsonify({"error": "Failed to load model"}), 500
-        except Exception as e:
-            logger.error(f"Error loading model: {e}")
-            return jsonify({"error": f"Error loading model: {str(e)}"}), 500
-        
-        # Make prediction
-        prediction = predict_fight(model, fighter1, fighter2, scaler, feature_columns)
+        # Get fighter image URLs
+        fighter1_image = fighter1.get('image_url') or get_fighter_image_url(fighter1.get('name', ''))
+        fighter2_image = fighter2.get('image_url') or get_fighter_image_url(fighter2.get('name', ''))
         
         # Format prediction results (support both camelCase and snake_case)
         result = {
@@ -446,13 +391,17 @@ def predict_fight_endpoint():
             "fighter2WinProbability": float(prediction['probability_fighter2_wins']),
             "predictedWinner": fighter1.get('name', 'Fighter 1') if prediction['predicted_winner'] == 'fighter1' else fighter2.get('name', 'Fighter 2'),
             "confidenceLevel": prediction['confidence_level'],
+            "fighter1ImageUrl": fighter1_image,
+            "fighter2ImageUrl": fighter2_image,
             # Add snake_case versions for compatibility
             "fighter1_name": fighter1.get('name', 'Fighter 1'),
             "fighter2_name": fighter2.get('name', 'Fighter 2'),
             "fighter1_win_probability": float(prediction['probability_fighter1_wins']),
             "fighter2_win_probability": float(prediction['probability_fighter2_wins']),
             "predicted_winner": fighter1.get('name', 'Fighter 1') if prediction['predicted_winner'] == 'fighter1' else fighter2.get('name', 'Fighter 2'),
-            "confidence_level": prediction['confidence_level']
+            "confidence_level": prediction['confidence_level'],
+            "fighter1_image_url": fighter1_image,
+            "fighter2_image_url": fighter2_image
         }
         
         return jsonify({"prediction": result})
@@ -460,7 +409,9 @@ def predict_fight_endpoint():
     except Exception as e:
         logger.error(f"Error predicting fight: {e}")
         return jsonify({"error": str(e)}), 500
-'''
+
+
+# Removed redundant code block - original prediction endpoint is now improved and handles the functionality
 @api_bp.route('/compare', methods=['GET'])
 def compare_fighters_endpoint():
     """Compare two fighters endpoint"""
@@ -536,16 +487,27 @@ def compare_fighters_endpoint():
                     # Make prediction
                     pred_result = predict_fight(model, fighter1_pred, fighter2_pred, scaler, feature_columns)
                     
+                    # Import image URL utility
+                    from utils import get_fighter_image_url
+                    
+                    # Get fighter image URLs
+                    fighter1_image = fighter1.get('image_url') or get_fighter_image_url(fighter1.get('name', ''))
+                    fighter2_image = fighter2.get('image_url') or get_fighter_image_url(fighter2.get('name', ''))
+                    
                     prediction = {
                         "fighter1WinProbability": float(pred_result['probability_fighter1_wins']),
                         "fighter2WinProbability": float(pred_result['probability_fighter2_wins']),
                         "predictedWinner": fighter1["name"] if pred_result['predicted_winner'] == 'fighter1' else fighter2["name"],
                         "confidenceLevel": pred_result['confidence_level'],
+                        "fighter1ImageUrl": fighter1_image,
+                        "fighter2ImageUrl": fighter2_image,
                         # Add snake_case versions for compatibility
                         "fighter1_win_probability": float(pred_result['probability_fighter1_wins']),
                         "fighter2_win_probability": float(pred_result['probability_fighter2_wins']),
                         "predicted_winner": fighter1["name"] if pred_result['predicted_winner'] == 'fighter1' else fighter2["name"],
-                        "confidence_level": pred_result['confidence_level']
+                        "confidence_level": pred_result['confidence_level'],
+                        "fighter1_image_url": fighter1_image,
+                        "fighter2_image_url": fighter2_image
                     }
             except Exception as e:
                 logger.error(f"Error loading model for comparison: {e}")

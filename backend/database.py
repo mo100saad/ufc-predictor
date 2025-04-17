@@ -3,6 +3,8 @@ import pandas as pd
 import os
 from config import FIGHTER_STATS_PATH, DATA_DIR
 import logging
+from utils import get_fighter_image_url
+
 # Configure logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 logger = logging.getLogger('ufc_database')
@@ -191,7 +193,7 @@ def get_all_fighters():
     Get a list of all fighters in the database
     
     Returns:
-        list: List of fighter dictionaries
+        list: List of fighter dictionaries with image URLs
     """
     conn = get_db_connection()
     cursor = conn.cursor()
@@ -215,6 +217,11 @@ def get_all_fighters():
                     fighter[col[0]] = None
             else:
                 fighter[col[0]] = value
+        
+        # Add image URL for the fighter
+        if 'name' in fighter and fighter['name']:
+            fighter['image_url'] = get_fighter_image_url(fighter['name'])
+        
         fighters.append(fighter)
     
     conn.close()
@@ -228,7 +235,7 @@ def search_fighters(query):
         query (str): Search query
         
     Returns:
-        list: List of matching fighters
+        list: List of matching fighters with image URLs
     """
     conn = get_db_connection()
     cursor = conn.cursor()
@@ -255,6 +262,11 @@ def search_fighters(query):
                     fighter[col[0]] = None
             else:
                 fighter[col[0]] = value
+        
+        # Add image URL for the fighter
+        if 'name' in fighter and fighter['name']:
+            fighter['image_url'] = get_fighter_image_url(fighter['name'])
+            
         fighters.append(fighter)
     
     conn.close()
@@ -268,7 +280,7 @@ def get_fighter_details(fighter_id):
         fighter_id (int): ID of the fighter
         
     Returns:
-        dict: Fighter details
+        dict: Fighter details with image URL
     """
     conn = get_db_connection()
     cursor = conn.cursor()
@@ -296,6 +308,10 @@ def get_fighter_details(fighter_id):
                 fighter[col[0]] = None
         else:
             fighter[col[0]] = value
+    
+    # Add image URL for the fighter
+    if 'name' in fighter and fighter['name']:
+        fighter['image_url'] = get_fighter_image_url(fighter['name'])
     
     conn.close()
     return fighter
