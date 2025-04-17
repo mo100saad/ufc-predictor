@@ -280,10 +280,12 @@ def get_fighter_by_name_endpoint(fighter_name):
                 else:
                     fighter_dict[column_name] = value
             
-            # Add fighter image URL - For detailed view, actively fetch if missing
+            # For single fighter view, we'll still provide the image URL but we'll use fetch_if_missing=False 
+            # to avoid web scraping for images on every fighter detail page load
+            # The FighterImage component will handle fetching the image on demand via the dedicated image endpoint
             from utils import get_fighter_image_url
             if 'name' in fighter_dict and fighter_dict['name']:
-                fighter_dict['image_url'] = get_fighter_image_url(fighter_dict['name'], fetch_if_missing=True)
+                fighter_dict['image_url'] = get_fighter_image_url(fighter_dict['name'], fetch_if_missing=False)
             
             print(f"=== FIGHTER FOUND ===")
             conn.close()
@@ -529,11 +531,24 @@ def compare_fighters_endpoint():
 
 @api_bp.route('/fighters/<string:fighter_name>/image', methods=['GET'])
 def get_fighter_image_endpoint(fighter_name):
-    """Fetch a fighter's image on demand"""
+    """Fetch a fighter's image on demand - optimized to check cache first and avoid web scraping when possible"""
     try:
-        from utils import get_fighter_image_url
+        from utils import get_fighter_image_url, load_image_cache, slugify_name
         
-        # Force fetch from web if not in cache
+        # First check if it's in the image cache
+        cache = load_image_cache()
+        slug = slugify_name(fighter_name)
+        
+        if slug in cache and cache[slug] != "not_found":
+            # Return from cache immediately if available
+            logger.info(f"Returning cached image for {fighter_name}")
+            return jsonify({
+                "name": fighter_name,
+                "image_url": cache[slug],
+                "status": "from_cache"
+            })
+        
+        # If not in cache, fetch from web
         image_url = get_fighter_image_url(fighter_name, fetch_if_missing=True)
         
         return jsonify({

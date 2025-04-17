@@ -1,15 +1,16 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import LoadingSpinner from '../common/LoadingSpinner';
 import { fighterService } from '../../services/api';
 
 /**
- * Reusable fighter image component with loading state and fallback
+ * Reusable fighter image component with lazy loading, intersection observer,
+ * and on-demand image fetching.
  * 
  * @param {Object} props Component properties
  * @param {string} props.src The source URL of the fighter image
  * @param {string} props.alt The alt text for the image
  * @param {string} props.className Additional CSS classes for styling
- * @param {string} props.size Size variant: 'sm', 'md', 'lg' (default: 'md')
+ * @param {string} props.size Size variant: 'xs', 'sm', 'md', 'lg', 'xl' (default: 'md')
  * @param {boolean} props.rounded Whether to apply rounded styling (default: true)
  * @param {boolean} props.withBorder Whether to apply border styling (default: true)
  * @param {string} props.borderColor CSS color for the border (default: 'border-gray-600')
@@ -27,15 +28,45 @@ const FighterImage = ({
   const [error, setError] = useState(false);
   const [imageSrc, setImageSrc] = useState(null);
   const [fetchingImage, setFetchingImage] = useState(false);
+  const [isVisible, setIsVisible] = useState(false);
+  const imgRef = useRef(null);
   
   // Placeholder image (fighter silhouette SVG)
   const placeholderImage = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjNkI3MjgwIiBzdHJva2Utd2lkdGg9IjEuNSIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIiBjbGFzcz0ibHVjaWRlIGx1Y2lkZS11c2VyIj48cGF0aCBkPSJNMTkgMjFhNyA3IDAgMCAwLTE0IDAiLz48Y2lyY2xlIGN4PSIxMiIgY3k9IjEwIiByPSI0Ii8+PC9zdmc+';
 
+  // Set up intersection observer for lazy loading
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        // Mark as visible once the element enters viewport
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+          // Disconnect observer after it becomes visible
+          observer.disconnect();
+        }
+      },
+      {
+        rootMargin: '200px', // Start loading when within 200px of viewport
+        threshold: 0.1       // Trigger when at least 10% is visible
+      }
+    );
+    
+    if (imgRef.current) {
+      observer.observe(imgRef.current);
+    }
+    
+    return () => {
+      if (imgRef.current) {
+        observer.unobserve(imgRef.current);
+      }
+    };
+  }, []);
+
   // Function to fetch fighter image if needed
   const fetchFighterImage = async () => {
-    if (!alt || fetchingImage) return;
+    if (!alt || fetchingImage || !isVisible) return;
     
-    // Already have source from props
+    // Already have source from props and it's not a placeholder
     if (src && src !== "/static/placeholder.png") {
       setImageSrc(src);
       return;
@@ -60,21 +91,26 @@ const FighterImage = ({
     }
   };
   
-  // Determine image source when component mounts or props change
+  // Only fetch the image when the component becomes visible
   useEffect(() => {
-    // If src is provided and valid, use it directly
-    if (src && src !== "/static/placeholder.png") {
-      setImageSrc(src);
-    } 
-    // If no src is provided or it's a placeholder, try to fetch it
-    else if (alt) {
-      fetchFighterImage();
-    } 
-    // If neither src nor alt is provided, use placeholder
-    else {
+    if (isVisible) {
+      // If src is provided and valid, use it directly
+      if (src && src !== "/static/placeholder.png") {
+        setImageSrc(src);
+      } 
+      // If no src is provided or it's a placeholder, try to fetch it
+      else if (alt) {
+        fetchFighterImage();
+      } 
+      // If neither src nor alt is provided, use placeholder
+      else {
+        setImageSrc(placeholderImage);
+      }
+    } else {
+      // When not visible, show the placeholder immediately
       setImageSrc(placeholderImage);
     }
-  }, [src, alt]);
+  }, [src, alt, isVisible]);
   
   // Handle image loading success
   const handleLoad = () => {
@@ -98,8 +134,8 @@ const FighterImage = ({
     'xl': 'w-32 h-32'
   };
   
-  // Display spinner if image is still loading or being fetched
-  const isLoading = loading || fetchingImage || !imageSrc;
+  // Display spinner if image is still loading or being fetched when visible
+  const isLoading = isVisible && (loading || fetchingImage || !imageSrc);
   
   // Compose CSS classes
   const imageClasses = `
@@ -114,24 +150,25 @@ const FighterImage = ({
   `;
   
   return (
-    <div className={`relative ${sizeClasses[size] || sizeClasses.md} overflow-hidden ${rounded ? 'rounded-full' : ''}`}>
-      {/* Loading indicator */}
+    <div 
+      ref={imgRef} 
+      className={`relative ${sizeClasses[size] || sizeClasses.md} overflow-hidden ${rounded ? 'rounded-full' : ''}`}
+    >
+      {/* Loading indicator - only show when actually fetching and element is visible */}
       {isLoading && (
         <div className="absolute inset-0 flex items-center justify-center bg-gray-800/50">
           <LoadingSpinner size="sm" />
         </div>
       )}
       
-      {/* Actual image */}
-      {imageSrc && (
-        <img
-          src={error ? placeholderImage : imageSrc}
-          alt={alt || "Fighter"}
-          className={imageClasses}
-          onLoad={handleLoad}
-          onError={handleError}
-        />
-      )}
+      {/* Image placeholder immediately or actual image when loaded */}
+      <img
+        src={!isVisible || error ? placeholderImage : (imageSrc || placeholderImage)}
+        alt={alt || "Fighter"}
+        className={imageClasses}
+        onLoad={handleLoad}
+        onError={handleError}
+      />
     </div>
   );
 };

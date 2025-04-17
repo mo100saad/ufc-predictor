@@ -3,6 +3,7 @@ import { useParams, Link } from 'react-router-dom';
 import { fighterService } from '../services/api';
 import LoadingSpinner from '../components/common/LoadingSpinner';
 import ErrorAlert from '../components/common/ErrorAlert';
+import FighterImage from '../components/fighters/FighterImage';
 import { motion } from 'framer-motion';
 import { Chart as ChartJS, RadialLinearScale, PointElement, LineElement, Filler, Tooltip, Legend } from 'chart.js';
 import { Radar } from 'react-chartjs-2';
@@ -236,10 +237,24 @@ const FighterDetail = () => {
         {/* Fighter Profile - 1 column */}
         <motion.div variants={item} className="md:col-span-1">
           <div className="card backdrop-blur-sm bg-gray-900/60 border border-gray-800 shadow-xl rounded-lg overflow-hidden">
-            {/* Fighter Name Header */}
-            <div className="bg-gradient-to-r from-gray-800 to-gray-900 p-6 border-b border-gray-700">
+            {/* Fighter Image Header */}
+            <div className="bg-gradient-to-r from-gray-800 to-gray-900 p-6 border-b border-gray-700 flex justify-center">
+              <div className="mb-4">
+                <FighterImage 
+                  src={fighter.image_url} 
+                  alt={fighter.name}
+                  size="xl" 
+                  withBorder={true}
+                  borderColor="border-gray-600"
+                  className="mx-auto hover:scale-105 transition-transform duration-300"
+                />
+              </div>
+            </div>
+
+            {/* Fighter Name */}
+            <div className="px-6 pt-4 pb-2 text-center">
               <h1 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-red-400 to-blue-400">{fighter.name}</h1>
-              <div className="text-lg text-gray-300 mt-2 flex items-center">
+              <div className="text-lg text-gray-300 mt-2 flex items-center justify-center">
                 <span className="bg-gray-800 px-2 py-1 rounded text-sm font-medium mr-2">
                   {fighter.wins || 0}-{fighter.losses || 0}{fighter.draws ? `-${fighter.draws}` : ''}
                 </span>

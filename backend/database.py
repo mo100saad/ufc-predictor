@@ -218,9 +218,9 @@ def get_all_fighters():
             else:
                 fighter[col[0]] = value
         
-        # Add image URL for the fighter from cache, don't fetch if missing
-        if 'name' in fighter and fighter['name']:
-            fighter['image_url'] = get_fighter_image_url(fighter['name'], fetch_if_missing=False)
+        # Don't include image URLs in bulk listing - they will be fetched on demand by the frontend
+        # The frontend will call the API endpoint for each fighter's image as needed
+        fighter['image_url'] = None
         
         fighters.append(fighter)
     
@@ -263,9 +263,9 @@ def search_fighters(query):
             else:
                 fighter[col[0]] = value
         
-        # Add image URL for the fighter from cache, don't fetch if missing
-        if 'name' in fighter and fighter['name']:
-            fighter['image_url'] = get_fighter_image_url(fighter['name'], fetch_if_missing=False)
+        # Don't include image URLs in search results - they will be fetched on demand by the frontend
+        # The frontend will call the API endpoint for each fighter's image as needed
+        fighter['image_url'] = None
             
         fighters.append(fighter)
     
@@ -309,10 +309,10 @@ def get_fighter_details(fighter_id):
         else:
             fighter[col[0]] = value
     
-    # Add image URL for the fighter - For detailed view, we can try to fetch if missing
-    # since this is a focused request for a single fighter
+    # For detailed view, just return cached image URL but don't fetch if missing
+    # Let the frontend component handle fetching the image on demand via the dedicated endpoint
     if 'name' in fighter and fighter['name']:
-        fighter['image_url'] = get_fighter_image_url(fighter['name'], fetch_if_missing=True)
+        fighter['image_url'] = get_fighter_image_url(fighter['name'], fetch_if_missing=False)
     
     conn.close()
     return fighter
