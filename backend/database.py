@@ -218,7 +218,7 @@ def get_all_fighters():
             else:
                 fighter[col[0]] = value
         
-        # Add image URL for the fighter
+        # Add image URL for the fighter from cache
         if 'name' in fighter and fighter['name']:
             fighter['image_url'] = get_fighter_image_url(fighter['name'])
         
