@@ -86,8 +86,10 @@ const FighterCard = ({ fighter }) => {
             <div className="flex items-start justify-between">
               {/* Left column - Fighter details */}
               <div className="flex-1">
-                {/* Fighter Name */}
-                <h3 className="text-xl font-bold text-white mb-1 group-hover:text-blue-400 transition-colors duration-300">{fighter.name}</h3>
+                {/* Fighter Name - With truncation for long names */}
+                <h3 className="text-xl font-bold text-white mb-1 group-hover:text-blue-400 transition-colors duration-300 truncate max-w-[160px]" title={fighter.name}>
+                  {fighter.name}
+                </h3>
                 
                 {/* Record and Division */}
                 <div className="flex flex-wrap items-center gap-2 mb-3">
@@ -109,35 +111,40 @@ const FighterCard = ({ fighter }) => {
                 </div>
               </div>
               
-              {/* Right column - Fighter image */}
-              <div className="flex-shrink-0">
+              {/* Right column - Fighter image with proper container */}
+              <div className="flex-shrink-0 ml-auto">
                 <FighterImage 
                   src={fighter.image_url} 
                   alt={fighter.name}
                   size="sm" 
-                  className="opacity-90 group-hover:opacity-100 transition-opacity duration-300"
+                  rounded={false}
+                  className="opacity-90 group-hover:opacity-100 transition-opacity duration-300 object-contain"
                 />
               </div>
             </div>
             
-            {/* Fighter Stats - vertical stack on left side */}
-            <div className="flex mt-4 mb-4">
-              {/* Left side - Stat metrics in vertical stack */}
-              <div className="flex flex-col gap-2 w-1/3">
-                <div className="text-center p-2 bg-gray-800/70 backdrop-blur-sm rounded-lg transition-all duration-300 hover:bg-gray-800/90">
-                  <div className="text-lg font-bold text-red-500">{fighter.SLpM?.toFixed(1) || 'N/A'}</div>
-                  <div className="text-xs text-gray-400">Strikes/Min</div>
-                </div>
-                
-                <div className="text-center p-2 bg-gray-800/70 backdrop-blur-sm rounded-lg transition-all duration-300 hover:bg-gray-800/90">
-                  <div className="text-lg font-bold text-blue-500">{fighter.td_avg?.toFixed(1) || 'N/A'}</div>
-                  <div className="text-xs text-gray-400">Takedowns/Fight</div>
-                </div>
+            {/* Improved fighter image display area */}
+            <div className="w-full h-60 my-4 flex justify-center items-start bg-gradient-to-b from-gray-800/10 to-gray-900/40 rounded-lg">
+              <FighterImage 
+                src={fighter.image_url} 
+                alt={fighter.name}
+                size="md" 
+                rounded={false}
+                className="object-contain object-top h-full"
+                withBorder={false}
+              />
+            </div>
+            
+            {/* Fighter Stats - horizontal layout for better space usage */}
+            <div className="flex gap-2 mb-4">
+              <div className="flex-1 text-center p-2 bg-gray-800/70 backdrop-blur-sm rounded-lg transition-all duration-300 hover:bg-gray-800/90">
+                <div className="text-lg font-bold text-red-500">{fighter.SLpM?.toFixed(1) || 'N/A'}</div>
+                <div className="text-xs text-gray-400">Strikes/Min</div>
               </div>
               
-              {/* Right side - Extra space for larger image */}
-              <div className="flex justify-center items-center w-2/3 pl-2">
-                {/* This area intentionally left empty for larger fighter image display in the card */}
+              <div className="flex-1 text-center p-2 bg-gray-800/70 backdrop-blur-sm rounded-lg transition-all duration-300 hover:bg-gray-800/90">
+                <div className="text-lg font-bold text-blue-500">{fighter.td_avg?.toFixed(1) || 'N/A'}</div>
+                <div className="text-xs text-gray-400">Takedowns/Fight</div>
               </div>
             </div>
             

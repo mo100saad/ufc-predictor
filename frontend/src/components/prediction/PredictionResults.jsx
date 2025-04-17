@@ -182,18 +182,21 @@ const PredictionResult = ({ result, fighter1, fighter2 }) => {
         animate="show"
       >
         <motion.div variants={item} className="flex flex-col items-center">
-          <div className={`overflow-hidden ${finalWinner === 'fighter1' ? 'shadow-xl shadow-red-500/50' : ''}`}>
-            {/* MUCH larger fighter image on prediction page */}
+          {/* Fighter 1 with improved vertical space and no overflow hidden */}
+          <div className={`${finalWinner === 'fighter1' ? 'shadow-xl shadow-red-500/50' : ''} mb-2`}>
             <FighterImage 
               src={fighter1_image_url} 
               alt={fighter1_name}
-              size="xl" 
+              size="lg" 
               rounded={false}
+              withBorder={true}
               borderColor={finalWinner === 'fighter1' ? 'border-red-500' : 'border-gray-600'}
-              className="transform scale-110 hover:scale-115 transition-transform duration-300"
+              className="object-contain object-top"
             />
           </div>
-          <div className={`text-xl font-bold mt-3 ${finalWinner === 'fighter1' ? 'text-red-500' : 'text-gray-300'}`}>
+          {/* Name with truncation for long names */}
+          <div className={`text-xl font-bold mt-2 px-2 text-center max-w-[200px] truncate ${finalWinner === 'fighter1' ? 'text-red-500' : 'text-gray-300'}`} 
+               title={fighter1_name}>
             {fighter1_name}
           </div>
           <div className="text-sm text-gray-400 mt-1">
@@ -201,23 +204,26 @@ const PredictionResult = ({ result, fighter1, fighter2 }) => {
           </div>
         </motion.div>
 
-        <motion.div variants={item} className="text-2xl px-8 py-3 bg-gray-800/70 backdrop-blur-sm rounded-full text-gray-200 font-medium mx-6 border border-gray-700/50 shadow-lg">
+        <motion.div variants={item} className="text-2xl px-8 py-3 bg-gray-800/70 backdrop-blur-sm rounded-full text-gray-200 font-medium mx-4 border border-gray-700/50 shadow-lg">
           VS
         </motion.div>
 
         <motion.div variants={item} className="flex flex-col items-center">
-          <div className={`overflow-hidden ${finalWinner === 'fighter2' ? 'shadow-xl shadow-blue-500/50' : ''}`}>
-            {/* MUCH larger fighter image on prediction page */}
+          {/* Fighter 2 with improved vertical space and no overflow hidden */}
+          <div className={`${finalWinner === 'fighter2' ? 'shadow-xl shadow-blue-500/50' : ''} mb-2`}>
             <FighterImage 
               src={fighter2_image_url} 
               alt={fighter2_name}
-              size="xl"
+              size="lg"
               rounded={false}
+              withBorder={true}
               borderColor={finalWinner === 'fighter2' ? 'border-blue-500' : 'border-gray-600'}
-              className="transform scale-110 hover:scale-115 transition-transform duration-300"
+              className="object-contain object-top"
             />
           </div>
-          <div className={`text-xl font-bold mt-3 ${finalWinner === 'fighter2' ? 'text-blue-500' : 'text-gray-300'}`}>
+          {/* Name with truncation for long names */}
+          <div className={`text-xl font-bold mt-2 px-2 text-center max-w-[200px] truncate ${finalWinner === 'fighter2' ? 'text-blue-500' : 'text-gray-300'}`} 
+               title={fighter2_name}>
             {fighter2_name}
           </div>
           <div className="text-sm text-gray-400 mt-1">

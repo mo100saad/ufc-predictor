@@ -124,14 +124,15 @@ const FighterImage = ({
     setImageSrc(placeholderImage);
   };
 
-  // Enhanced size class mapping with MUCH larger size options
+  // Enhanced size class mapping with MUCH larger size options and fixed height-to-width ratio for fighter images
+  // Using a taller aspect ratio (460x700 ~= 2:3) to ensure heads are not cut off
   const sizeClasses = {
-    'xs': 'w-16 h-16',     // 25% larger
-    'sm': 'w-32 h-32',     // 33% larger
-    'md': 'w-48 h-48',     // 33% larger
-    'lg': 'w-64 h-64',     // 33% larger
-    'xl': 'w-80 h-80',     // 25% larger
-    '2xl': 'w-96 h-96'     // 20% larger
+    'xs': 'w-16 h-24',     // 1:1.5 ratio - better for profile pictures
+    'sm': 'w-32 h-48',     // 1:1.5 ratio - for fighter cards
+    'md': 'w-48 h-72',     // 1:1.5 ratio - good general size
+    'lg': 'w-64 h-96',     // 1:1.5 ratio - for prediction display
+    'xl': 'w-80 h-120',    // 1:1.5 ratio - extra large display
+    '2xl': 'w-96 h-144'    // 1:1.5 ratio - max size for headers
   };
   
   // Display spinner if image is still loading or being fetched when visible
@@ -148,8 +149,10 @@ const FighterImage = ({
     ${sizeClasses[size] || sizeClasses.md}
     ${shouldBeRounded ? 'rounded-full' : 'rounded-md'}
     ${withBorder ? `border-2 ${borderColor}` : ''}
-    overflow-hidden
-    object-contain md:object-cover
+    object-contain
+    !object-top
+    max-h-full
+    max-w-full
     transition-all duration-300
     ${isLoading ? 'opacity-50' : 'opacity-100'}
     ${className}
@@ -158,7 +161,7 @@ const FighterImage = ({
   return (
     <div 
       ref={imgRef} 
-      className={`relative ${sizeClasses[size] || sizeClasses.md} overflow-hidden 
+      className={`relative ${sizeClasses[size] || sizeClasses.md} 
         ${shouldBeRounded ? 'rounded-full' : 'rounded-md'}`}
     >
       {/* Enhanced loading indicator - show whenever loading or fetching, with better visibility */}
