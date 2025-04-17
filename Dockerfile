@@ -93,7 +93,7 @@ RUN echo 'server { \
 RUN echo '#!/bin/bash \n\
 # Start Flask backend \n\
 cd /app/backend \n\
-gunicorn -w 4 -b 127.0.0.1:5000 main:app & \n\
+gunicorn -w 4 -b 127.0.0.1:5000 "main:create_app()" & \n\
 \n\
 # Start NGINX \n\
 nginx -g "daemon off;"' > /app/start.sh

@@ -486,6 +486,9 @@ def create_app():
     
     return app
 
+# Create the Flask application instance for gunicorn
+app = create_app()
+
 def run_cli():
     """Run the command-line interface"""
     parser = argparse.ArgumentParser(description='UFC Fight Predictor')
