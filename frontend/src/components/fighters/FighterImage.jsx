@@ -124,14 +124,14 @@ const FighterImage = ({
     setImageSrc(placeholderImage);
   };
 
-  // Enhanced size class mapping with larger size options
+  // Enhanced size class mapping with MUCH larger size options
   const sizeClasses = {
-    'xs': 'w-12 h-12',
-    'sm': 'w-24 h-24', 
-    'md': 'w-36 h-36',
-    'lg': 'w-48 h-48',
-    'xl': 'w-64 h-64',
-    '2xl': 'w-80 h-80'
+    'xs': 'w-16 h-16',     // 25% larger
+    'sm': 'w-32 h-32',     // 33% larger
+    'md': 'w-48 h-48',     // 33% larger
+    'lg': 'w-64 h-64',     // 33% larger
+    'xl': 'w-80 h-80',     // 25% larger
+    '2xl': 'w-96 h-96'     // 20% larger
   };
   
   // Display spinner if image is still loading or being fetched when visible
@@ -143,13 +143,13 @@ const FighterImage = ({
     ? rounded 
     : (!imageSrc || imageSrc === placeholderImage || error);
   
-  // Compose CSS classes with conditional rounded styling and improved sizing
+  // Compose CSS classes with conditional rounded styling and improved sizing for large images
   const imageClasses = `
     ${sizeClasses[size] || sizeClasses.md}
     ${shouldBeRounded ? 'rounded-full' : 'rounded-md'}
     ${withBorder ? `border-2 ${borderColor}` : ''}
     overflow-hidden
-    object-cover
+    object-contain md:object-cover
     transition-all duration-300
     ${isLoading ? 'opacity-50' : 'opacity-100'}
     ${className}
@@ -161,10 +161,13 @@ const FighterImage = ({
       className={`relative ${sizeClasses[size] || sizeClasses.md} overflow-hidden 
         ${shouldBeRounded ? 'rounded-full' : 'rounded-md'}`}
     >
-      {/* Loading indicator - only show when actually fetching and element is visible */}
+      {/* Enhanced loading indicator - show whenever loading or fetching, with better visibility */}
       {isLoading && (
-        <div className="absolute inset-0 flex items-center justify-center bg-gray-800/50 z-10">
-          <LoadingSpinner size="sm" />
+        <div className="absolute inset-0 flex items-center justify-center bg-gray-800/70 z-10 backdrop-blur-sm">
+          <div className="flex flex-col items-center">
+            <LoadingSpinner size="md" />
+            <span className="text-xs text-gray-300 mt-2">Loading fighter image...</span>
+          </div>
         </div>
       )}
       

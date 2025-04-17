@@ -182,40 +182,46 @@ const PredictionResult = ({ result, fighter1, fighter2 }) => {
         animate="show"
       >
         <motion.div variants={item} className="flex flex-col items-center">
-          <div className={`overflow-hidden ${finalWinner === 'fighter1' ? 'shadow-lg shadow-red-500/30' : ''}`}>
+          <div className={`overflow-hidden ${finalWinner === 'fighter1' ? 'shadow-xl shadow-red-500/50' : ''}`}>
+            {/* MUCH larger fighter image on prediction page */}
             <FighterImage 
               src={fighter1_image_url} 
               alt={fighter1_name}
-              size="lg"
+              size="xl" 
+              rounded={false}
               borderColor={finalWinner === 'fighter1' ? 'border-red-500' : 'border-gray-600'}
+              className="transform scale-110 hover:scale-115 transition-transform duration-300"
             />
           </div>
-          <div className={`text-lg font-bold mt-2 ${finalWinner === 'fighter1' ? 'text-red-500' : 'text-gray-300'}`}>
+          <div className={`text-xl font-bold mt-3 ${finalWinner === 'fighter1' ? 'text-red-500' : 'text-gray-300'}`}>
             {fighter1_name}
           </div>
-          <div className="text-xs text-gray-400 mt-1">
-            {fighter1.wins}-{fighter1.losses}
+          <div className="text-sm text-gray-400 mt-1">
+            Record: {fighter1.wins}-{fighter1.losses}
           </div>
         </motion.div>
 
-        <motion.div variants={item} className="text-xl px-8 py-2 bg-gray-800/60 rounded-full text-gray-300 font-medium mx-4">
+        <motion.div variants={item} className="text-2xl px-8 py-3 bg-gray-800/70 backdrop-blur-sm rounded-full text-gray-200 font-medium mx-6 border border-gray-700/50 shadow-lg">
           VS
         </motion.div>
 
         <motion.div variants={item} className="flex flex-col items-center">
-          <div className={`overflow-hidden ${finalWinner === 'fighter2' ? 'shadow-lg shadow-blue-500/30' : ''}`}>
+          <div className={`overflow-hidden ${finalWinner === 'fighter2' ? 'shadow-xl shadow-blue-500/50' : ''}`}>
+            {/* MUCH larger fighter image on prediction page */}
             <FighterImage 
               src={fighter2_image_url} 
               alt={fighter2_name}
-              size="lg"
+              size="xl"
+              rounded={false}
               borderColor={finalWinner === 'fighter2' ? 'border-blue-500' : 'border-gray-600'}
+              className="transform scale-110 hover:scale-115 transition-transform duration-300"
             />
           </div>
-          <div className={`text-lg font-bold mt-2 ${finalWinner === 'fighter2' ? 'text-blue-500' : 'text-gray-300'}`}>
+          <div className={`text-xl font-bold mt-3 ${finalWinner === 'fighter2' ? 'text-blue-500' : 'text-gray-300'}`}>
             {fighter2_name}
           </div>
-          <div className="text-xs text-gray-400 mt-1">
-            {fighter2.wins}-{fighter2.losses}
+          <div className="text-sm text-gray-400 mt-1">
+            Record: {fighter2.wins}-{fighter2.losses}
           </div>
         </motion.div>
       </motion.div>

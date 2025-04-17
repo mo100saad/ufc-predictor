@@ -38,7 +38,9 @@ const Home = () => {
         const formattedNews = news.map(item => ({
           ...item,
           // Ensure date is properly formatted
-          date: item.publishedAt || new Date().toISOString()
+          date: item.publishedAt || new Date().toISOString(),
+          // Add initial image loading state
+          imageLoaded: false
         }));
         
         setNewsItems(formattedNews);
@@ -174,12 +176,23 @@ const Home = () => {
               initial="hidden"
               animate="show"
             >
-              <motion.h2 
-                className="text-2xl font-bold mb-6 text-white border-b border-gray-700 pb-3 text-center"
-                variants={itemVariants}
-              >
-                UFC Latest News
-              </motion.h2>
+              <div className="flex justify-between items-center mb-6 border-b border-gray-700 pb-3">
+                <motion.h2 
+                  className="text-2xl font-bold text-white"
+                  variants={itemVariants}
+                >
+                  UFC Latest News
+                </motion.h2>
+                <motion.a
+                  href="https://www.ufc.com/news"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-sm text-blue-400 hover:text-blue-300"
+                  variants={itemVariants}
+                >
+                  View more news →
+                </motion.a>
+              </div>
               
               {newsLoading ? (
                 <div className="flex justify-center py-6">
@@ -190,51 +203,80 @@ const Home = () => {
                   No news available at the moment
                 </div>
               ) : (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                  {newsItems.map((newsItem) => (
-                    <motion.div
-                      key={newsItem.id}
-                      variants={itemVariants}
-                      whileHover={{ y: -5, transition: { duration: 0.2 } }}
-                      className="bg-gradient-to-br from-gray-700/50 to-gray-800/60 rounded-lg overflow-hidden border border-gray-600/30 shadow-lg hover:shadow-xl transition-all duration-300"
-                    >
-                      <a href={newsItem.url} target="_blank" rel="noopener noreferrer" className="block">
-                        <div className="h-32 bg-gray-700 overflow-hidden">
-                          <img 
-                            src={newsItem.imageUrl} 
-                            alt={newsItem.title}
-                            onError={(e) => {
-                              e.target.onerror = null;
-                              e.target.src = '/static/placeholder.png';
-                            }}
-                            className="w-full h-full object-cover opacity-80 hover:opacity-100 transition-opacity duration-300 transform hover:scale-105"
-                          />
-                        </div>
-                        
-                        <div className="p-4">
-                          <h3 className="text-white font-bold text-lg mb-2 line-clamp-2 hover:text-blue-400 transition-colors">
-                            {newsItem.title}
-                          </h3>
-                          
-                          <p className="text-gray-400 text-sm line-clamp-2 mb-2">
-                            {newsItem.description}
-                          </p>
-                          
-                          <div className="flex justify-between items-center mt-3 text-xs text-gray-500">
-                            <span className="flex items-center">
-                              {new Date(newsItem.date).toLocaleDateString()}
-                              {newsItem.source && (
-                                <span className="ml-2 bg-gray-800 px-1.5 py-0.5 rounded text-[10px] text-gray-400">
-                                  {newsItem.source}
-                                </span>
-                              )}
-                            </span>
-                            <span className="text-blue-400 hover:underline">Read more →</span>
+                {/* Enhanced news display with larger images and horizontal scrolling */}
+                <div className="relative">
+                  {/* Horizontal scrolling container */}
+                  <div className="flex overflow-x-auto pb-4 -mx-2 px-2 scrollbar-hide">
+                    {newsItems.map((newsItem) => (
+                      <motion.div
+                        key={newsItem.id}
+                        variants={itemVariants}
+                        whileHover={{ y: -5, scale: 1.02, transition: { duration: 0.2 } }}
+                        className="flex-shrink-0 w-full sm:w-[350px] md:w-[400px] mx-2 bg-gradient-to-br from-gray-700/50 to-gray-800/60 rounded-lg overflow-hidden border border-gray-600/30 shadow-lg hover:shadow-xl transition-all duration-300"
+                      >
+                        <a href={newsItem.url} target="_blank" rel="noopener noreferrer" className="block h-full">
+                          {/* Much larger image container */}
+                          <div className="h-48 sm:h-56 bg-gray-700 overflow-hidden relative">
+                            {/* Loading state for image */}
+                            <div className="absolute inset-0 flex items-center justify-center bg-gray-800/70 z-10 transition-opacity duration-300" 
+                                 style={{ opacity: newsItem.imageLoaded ? 0 : 1 }}>
+                              <LoadingSpinner size="sm" />
+                            </div>
+                            <img 
+                              src={newsItem.imageUrl} 
+                              alt={newsItem.title}
+                              onLoad={() => newsItem.imageLoaded = true}
+                              onError={(e) => {
+                                e.target.onerror = null;
+                                e.target.src = '/static/placeholder.png';
+                                newsItem.imageLoaded = true;
+                              }}
+                              className="w-full h-full object-cover transition-all duration-500 transform hover:scale-105"
+                              style={{ opacity: newsItem.imageLoaded ? 1 : 0.3 }}
+                            />
                           </div>
-                        </div>
-                      </a>
-                    </motion.div>
-                  ))}
+                          
+                          <div className="p-4">
+                            <h3 className="text-white font-bold text-lg mb-2 line-clamp-2 hover:text-blue-400 transition-colors">
+                              {newsItem.title}
+                            </h3>
+                            
+                            <p className="text-gray-400 text-sm line-clamp-2 mb-2">
+                              {newsItem.description}
+                            </p>
+                            
+                            <div className="flex justify-between items-center mt-3 text-xs text-gray-500">
+                              <span className="flex items-center flex-wrap">
+                                <span className="mr-2">{new Date(newsItem.date || newsItem.publishedAt).toLocaleDateString()}</span>
+                                {newsItem.source && (
+                                  <span className="bg-gray-800 px-1.5 py-0.5 rounded text-[10px] text-gray-400">
+                                    {newsItem.source}
+                                  </span>
+                                )}
+                              </span>
+                              <span className="text-blue-400 hover:underline">Read more →</span>
+                            </div>
+                          </div>
+                        </a>
+                      </motion.div>
+                    ))}
+                  </div>
+
+                  {/* Left/Right scroll indicators */}
+                  <div className="absolute left-0 top-1/2 transform -translate-y-1/2 hidden md:block">
+                    <button className="bg-gray-800/80 hover:bg-gray-700 text-white p-2 rounded-full shadow-lg">
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                      </svg>
+                    </button>
+                  </div>
+                  <div className="absolute right-0 top-1/2 transform -translate-y-1/2 hidden md:block">
+                    <button className="bg-gray-800/80 hover:bg-gray-700 text-white p-2 rounded-full shadow-lg">
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                      </svg>
+                    </button>
+                  </div>
                 </div>
               )}
             </motion.div>
