@@ -1,1 +1,29 @@
-# Ignore virtual environmentbackend/venv/# Ignore compiled Python filesbackend/__pycache__/# Ignore log filesbackend/ufc_predictor.log# Ignore model artifacts (if you don't want them in Git)backend/models/*.joblib# Ignore frontend build files & dependenciesfrontend/node_modules/frontend/build/# Ignore environment files*.env.envclaude.md
+# Ignore virtual environment
+backend/venv/
+
+# Ignore compiled Python files
+backend/__pycache__/
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Ignore log files
+backend/ufc_predictor.log
+backend/logs/
+*.log
+
+# Ignore model artifacts (if you don't want them in Git)
+backend/models/*.joblib
+backend/models/*.pth
+
+# Ignore fighter images cache
+backend/data/fighter_images_cache.json
+
+# Ignore frontend build files & dependencies
+frontend/node_modules/
+frontend/build/
+
+# Ignore environment files
+*.env
+.env
+CLAUDE.md

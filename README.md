@@ -51,6 +51,7 @@ The application is deployed using **AWS and Vercel**, ensuring high availability
 - **Comprehensive Statistics**: Track records, physical attributes, and performance metrics for **2,450+ fighters**.
 - **Fighter Comparisons**: Side-by-side comparison of **fighting styles and statistics**.
 - **Historical Data**: Access to **past UFC fight results** for analysis.
+- **Dynamic Fighter Images**: Full-body fighter images automatically sourced from UFC.com with smart caching.
 
 ### 🎨 Modern Web Interface
 - **Responsive Design**: Built with **React and Tailwind CSS**.
@@ -69,6 +70,8 @@ The application is deployed using **AWS and Vercel**, ensuring high availability
 - **XGBoost/Scikit-learn**: Machine learning model implementation.
 - **SQLite**: Fighter and fight data storage.
 - **Pandas/NumPy**: Data processing and analysis.
+- **BeautifulSoup**: Web scraping fighter images from UFC.com.
+- **Docker**: Containerization for consistent deployment environments.
 
 ### Frontend
 - **Vercel**: Fast and **globally distributed** deployment of React-based UI.
@@ -81,16 +84,35 @@ The application is deployed using **AWS and Vercel**, ensuring high availability
 
 ## ☁️ Deployment and Hosting
 
+### Docker Deployment
+The application can be deployed using Docker for a consistent environment:
+
+```bash
+# Build the Docker image
+docker build -t ufc-predictor .
+
+# Run the container
+docker run -p 80:80 ufc-predictor
+```
+
 ### AWS EC2 Ubuntu Instance
 The backend is deployed on an **AWS EC2 Ubuntu instance**, optimized for **low-latency ML inference**:
 
 1. **Instance Setup**:
    ```bash
    sudo apt update && sudo apt upgrade -y
-   sudo apt install python3-pip nginx
+   sudo apt install python3-pip nginx docker.io
    ```
 
-2. **Flask API Deployment**:
+2. **Docker Deployment**:
+   ```bash
+   git clone https://github.com/mo100saad/ufc-predictor.git
+   cd ufc-predictor
+   sudo docker build -t ufc-predictor .
+   sudo docker run -d -p 80:80 ufc-predictor
+   ```
+
+3. **Alternative: Flask API Manual Deployment**:
    ```bash
    git clone https://github.com/mo100saad/ufc-predictor.git
    cd ufc-predictor/backend
@@ -100,7 +122,7 @@ The backend is deployed on an **AWS EC2 Ubuntu instance**, optimized for **low-l
    gunicorn -w 4 -b 0.0.0.0:5000 main:app
    ```
 
-3. **NGINX Configuration for Load Balancing**:
+4. **NGINX Configuration for Load Balancing (Manual Deployment)**:
    ```nginx
    server {
        listen 80;

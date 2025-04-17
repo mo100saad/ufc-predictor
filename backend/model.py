@@ -696,7 +696,7 @@ def train_pytorch_model(X_train, y_train, X_val, y_val, params=None):
     
     return model, history
 
-def predict_fight(model, fighter1_data, fighter2_data, scaler, feature_columns, is_pytorch=None):
+def predict_fight(model, fighter1_data, fighter2_data, scaler, feature_columns, is_pytorch=None, position_swap_mitigation=True):
     """
     Predict the outcome of a UFC fight using either PyTorch or scikit-learn model
     
@@ -707,6 +707,7 @@ def predict_fight(model, fighter1_data, fighter2_data, scaler, feature_columns, 
         scaler (StandardScaler): Fitted scaler
         feature_columns (list): List of feature column names
         is_pytorch (bool): Whether the model is a PyTorch model (optional)
+        position_swap_mitigation (bool): Whether to mitigate position bias by averaging swapped predictions
         
     Returns:
         dict: Prediction results
@@ -737,163 +738,238 @@ def predict_fight(model, fighter1_data, fighter2_data, scaler, feature_columns, 
                 logger.warning(f"Error setting PyTorch model to eval mode: {e}")
                 is_pytorch = False  # Fall back to non-PyTorch handling
         
-        # Prepare features in the correct format
-        features = {}
-        
-        # Add fighter1 features
-        for key, value in fighter1_data.items():
-            if value is None:
-                continue
-                
-            if not key.startswith('fighter1_'):
-                features[f'fighter1_{key}'] = value
-            else:
-                features[key] = value
-        
-        # Add fighter2 features
-        for key, value in fighter2_data.items():
-            if value is None:
-                continue
-                
-            if not key.startswith('fighter2_'):
-                features[f'fighter2_{key}'] = value
-            else:
-                features[key] = value
-        
-        # Calculate advantage features
-        if 'fighter1_height' in features and 'fighter2_height' in features:
-            try:
-                features['height_diff'] = float(features['fighter1_height']) - float(features['fighter2_height'])
-            except (ValueError, TypeError):
-                features['height_diff'] = 0
-        else:
-            features['height_diff'] = 0
-        
-        if 'fighter1_reach' in features and 'fighter2_reach' in features:
-            try:
-                features['reach_diff'] = float(features['fighter1_reach']) - float(features['fighter2_reach'])
-            except (ValueError, TypeError):
-                features['reach_diff'] = 0
-        else:
-            features['reach_diff'] = 0
-        
-        if 'fighter1_weight' in features and 'fighter2_weight' in features:
-            try:
-                features['weight_diff'] = float(features['fighter1_weight']) - float(features['fighter2_weight'])
-            except (ValueError, TypeError):
-                features['weight_diff'] = 0
-        else:
-            features['weight_diff'] = 0
-        
-        # Win percentage advantage
-        try:
-            f1_wins = float(features.get('fighter1_wins', 0))
-            f1_losses = float(features.get('fighter1_losses', 0))
-            f2_wins = float(features.get('fighter2_wins', 0))
-            f2_losses = float(features.get('fighter2_losses', 0))
+        # Define a function to prepare a single prediction
+        def prepare_prediction(f1_data, f2_data):
+            # Prepare features in the correct format
+            features = {}
             
-            fighter1_total = f1_wins + f1_losses
-            fighter2_total = f2_wins + f2_losses
+            # Add fighter1 features
+            for key, value in f1_data.items():
+                if value is None:
+                    continue
+                    
+                if not key.startswith('fighter1_'):
+                    features[f'fighter1_{key}'] = value
+                else:
+                    features[key] = value
             
-            fighter1_win_rate = f1_wins / fighter1_total if fighter1_total > 0 else 0
-            fighter2_win_rate = f2_wins / fighter2_total if fighter2_total > 0 else 0
+            # Add fighter2 features
+            for key, value in f2_data.items():
+                if value is None:
+                    continue
+                    
+                if not key.startswith('fighter2_'):
+                    features[f'fighter2_{key}'] = value
+                else:
+                    features[key] = value
             
-            features['win_rate_diff'] = fighter1_win_rate - fighter2_win_rate
-        except:
-            features['win_rate_diff'] = 0
-        
-        # More differences
-        try:
-            features['td_avg_diff'] = float(features.get('fighter1_td_avg', 0)) - float(features.get('fighter2_td_avg', 0))
-        except:
-            features['td_avg_diff'] = 0
-            
-        try:
-            features['SLpM_diff'] = float(features.get('fighter1_SLpM', 0)) - float(features.get('fighter2_SLpM', 0))
-        except:
-            features['SLpM_diff'] = 0
-            
-        try:
-            features['sub_avg_diff'] = float(features.get('fighter1_sub_avg', 0)) - float(features.get('fighter2_sub_avg', 0))
-        except:
-            features['sub_avg_diff'] = 0
-        
-        # Get stances for one-hot encoding if needed
-        fighter1_stance = fighter1_data.get('stance', 'Unknown')
-        fighter2_stance = fighter2_data.get('stance', 'Unknown')
-        
-        # Try to load the stance encoder if available
-        try:
-            import joblib
-            stance_encoder = joblib.load('models/stance_encoder.joblib')
-            
-            # Encode stances
-            stance_df = pd.DataFrame({
-                'fighter1_stance': [fighter1_stance if fighter1_stance else 'Unknown'],
-                'fighter2_stance': [fighter2_stance if fighter2_stance else 'Unknown']
-            })
-            
-            stance_encoded = stance_encoder.transform(stance_df)
-            
-            # Get stance feature names
-            stance_feature_names = []
-            for i, category in enumerate(stance_encoder.categories_):
-                prefix = f"fighter{i+1}_stance"
-                stance_feature_names.extend([f"{prefix}_{stance}" for stance in category])
-            
-            # Add encoded stances to features
-            for i, col in enumerate(stance_feature_names):
-                if i < stance_encoded.shape[1]:  # Safety check
-                    features[col] = stance_encoded[0, i]
-            
-        except Exception as e:
-            logger.warning(f"Could not load stance encoder: {e}")
-            # Continue without stance encoding
-        
-        # Create a dataframe with exactly the columns the model expects
-        input_df = pd.DataFrame(0, index=[0], columns=feature_columns)
-        
-        # Fill in the features we have
-        for col in feature_columns:
-            if col in features:
+            # Calculate advantage features
+            if 'fighter1_height' in features and 'fighter2_height' in features:
                 try:
-                    input_df[col] = float(features[col])
+                    features['height_diff'] = float(features['fighter1_height']) - float(features['fighter2_height'])
                 except (ValueError, TypeError):
-                    # Keep default of 0 for non-numeric values
-                    logger.warning(f"Non-numeric value for {col}: {features[col]}")
-        
-        # Scale the features
-        scaled_features = scaler.transform(input_df)
-        
-        # Get prediction based on model type
-        if is_pytorch:
-            # PyTorch prediction
-            import torch
-            features_tensor = torch.FloatTensor(scaled_features).to(device)
-            with torch.no_grad():
-                win_probability = model(features_tensor).item()
-        else:
-            # scikit-learn prediction
-            if hasattr(model, 'predict_proba'):
-                win_probability = model.predict_proba(scaled_features)[0, 1]
+                    features['height_diff'] = 0
             else:
-                # If model doesn't have predict_proba, use predict and assume binary output
-                prediction = model.predict(scaled_features)[0]
-                win_probability = float(prediction)
+                features['height_diff'] = 0
+            
+            if 'fighter1_reach' in features and 'fighter2_reach' in features:
+                try:
+                    features['reach_diff'] = float(features['fighter1_reach']) - float(features['fighter2_reach'])
+                except (ValueError, TypeError):
+                    features['reach_diff'] = 0
+            else:
+                features['reach_diff'] = 0
+            
+            if 'fighter1_weight' in features and 'fighter2_weight' in features:
+                try:
+                    features['weight_diff'] = float(features['fighter1_weight']) - float(features['fighter2_weight'])
+                except (ValueError, TypeError):
+                    features['weight_diff'] = 0
+            else:
+                features['weight_diff'] = 0
+            
+            # Win percentage advantage
+            try:
+                f1_wins = float(features.get('fighter1_wins', 0))
+                f1_losses = float(features.get('fighter1_losses', 0))
+                f2_wins = float(features.get('fighter2_wins', 0))
+                f2_losses = float(features.get('fighter2_losses', 0))
+                
+                fighter1_total = f1_wins + f1_losses
+                fighter2_total = f2_wins + f2_losses
+                
+                fighter1_win_rate = f1_wins / fighter1_total if fighter1_total > 0 else 0
+                fighter2_win_rate = f2_wins / fighter2_total if fighter2_total > 0 else 0
+                
+                features['win_rate_diff'] = fighter1_win_rate - fighter2_win_rate
+            except:
+                features['win_rate_diff'] = 0
+            
+            # More differences
+            try:
+                features['td_avg_diff'] = float(features.get('fighter1_td_avg', 0)) - float(features.get('fighter2_td_avg', 0))
+            except:
+                features['td_avg_diff'] = 0
+                
+            try:
+                features['SLpM_diff'] = float(features.get('fighter1_SLpM', 0)) - float(features.get('fighter2_SLpM', 0))
+            except:
+                features['SLpM_diff'] = 0
+                
+            try:
+                features['sub_avg_diff'] = float(features.get('fighter1_sub_avg', 0)) - float(features.get('fighter2_sub_avg', 0))
+            except:
+                features['sub_avg_diff'] = 0
+                
+            try:
+                f1_sApM = float(features.get('fighter1_SApM', 0))
+                f2_sApM = float(features.get('fighter2_SApM', 0))
+                features['SApM_diff'] = f1_sApM - f2_sApM
+            except:
+                features['SApM_diff'] = 0
+                
+            try:
+                # Defense effectiveness comparison
+                f1_def = float(features.get('fighter1_str_def', 0))
+                f2_def = float(features.get('fighter2_str_def', 0))
+                features['str_def_diff'] = f1_def - f2_def
+            except:
+                features['str_def_diff'] = 0
+                
+            try:
+                # Takedown defense comparison
+                f1_td_def = float(features.get('fighter1_td_def', 0))
+                f2_td_def = float(features.get('fighter2_td_def', 0))
+                features['td_def_diff'] = f1_td_def - f2_td_def
+            except:
+                features['td_def_diff'] = 0
+                
+            try:
+                # Experience difference (total fights)
+                f1_wins = float(features.get('fighter1_wins', 0))
+                f1_losses = float(features.get('fighter1_losses', 0))
+                f2_wins = float(features.get('fighter2_wins', 0))
+                f2_losses = float(features.get('fighter2_losses', 0))
+                
+                f1_fights = f1_wins + f1_losses
+                f2_fights = f2_wins + f2_losses
+                
+                features['experience_diff'] = f1_fights - f2_fights
+            except:
+                features['experience_diff'] = 0
+            
+            # Get stances for one-hot encoding if needed
+            fighter1_stance = f1_data.get('stance', 'Unknown')
+            fighter2_stance = f2_data.get('stance', 'Unknown')
+            
+            # Try to load the stance encoder if available
+            try:
+                import joblib
+                stance_encoder = joblib.load('models/stance_encoder.joblib')
+                
+                # Encode stances
+                stance_df = pd.DataFrame({
+                    'fighter1_stance': [fighter1_stance if fighter1_stance else 'Unknown'],
+                    'fighter2_stance': [fighter2_stance if fighter2_stance else 'Unknown']
+                })
+                
+                stance_encoded = stance_encoder.transform(stance_df)
+                
+                # Get stance feature names
+                stance_feature_names = []
+                for i, category in enumerate(stance_encoder.categories_):
+                    prefix = f"fighter{i+1}_stance"
+                    stance_feature_names.extend([f"{prefix}_{stance}" for stance in category])
+                
+                # Add encoded stances to features
+                for i, col in enumerate(stance_feature_names):
+                    if i < stance_encoded.shape[1]:  # Safety check
+                        features[col] = stance_encoded[0, i]
+                
+            except Exception as e:
+                logger.warning(f"Could not load stance encoder: {e}")
+                # Continue without stance encoding
+            
+            # Create a dataframe with exactly the columns the model expects
+            input_df = pd.DataFrame(0, index=[0], columns=feature_columns)
+            
+            # Fill in the features we have
+            for col in feature_columns:
+                if col in features:
+                    try:
+                        input_df[col] = float(features[col])
+                    except (ValueError, TypeError):
+                        # Keep default of 0 for non-numeric values
+                        logger.warning(f"Non-numeric value for {col}: {features[col]}")
+            
+            # Scale the features
+            scaled_features = scaler.transform(input_df)
+            
+            return scaled_features
+        
+        # Function to get a single prediction
+        def get_win_probability(scaled_features):
+            if is_pytorch:
+                # PyTorch prediction
+                import torch
+                features_tensor = torch.FloatTensor(scaled_features).to(device)
+                with torch.no_grad():
+                    win_probability = model(features_tensor).item()
+            else:
+                # scikit-learn prediction
+                if hasattr(model, 'predict_proba'):
+                    win_probability = model.predict_proba(scaled_features)[0, 1]
+                else:
+                    # If model doesn't have predict_proba, use predict and assume binary output
+                    prediction = model.predict(scaled_features)[0]
+                    win_probability = float(prediction)
+            
+            return float(win_probability)
+        
+        # Prepare normal prediction (fighter1 in red corner)
+        normal_features = prepare_prediction(fighter1_data, fighter2_data)
+        normal_prob = get_win_probability(normal_features)
+        
+        # If position_swap_mitigation is True, also predict with positions swapped
+        # and use a weighted average to reduce position bias
+        final_prob = normal_prob
+        
+        if position_swap_mitigation:
+            try:
+                # Prepare swapped prediction (fighter2 in red corner)
+                swapped_features = prepare_prediction(fighter2_data, fighter1_data)
+                swapped_prob = get_win_probability(swapped_features)
+                
+                # The probability of fighter1 winning when in the blue corner
+                # is 1 minus the probability of fighter2 winning when in the red corner
+                adjusted_prob = 1.0 - swapped_prob
+                
+                # Weight for position-swapped prediction (from constants)
+                swap_weight = POSITION_SWAP_WEIGHT
+                
+                # Calculate weighted average of the two probabilities
+                # This helps mitigate position bias in the model
+                final_prob = (normal_prob * (1.0 - swap_weight)) + (adjusted_prob * swap_weight)
+                
+                logger.info(f"Position bias mitigation: normal_prob={normal_prob:.4f}, " +
+                            f"adjusted_prob={adjusted_prob:.4f}, final_prob={final_prob:.4f}")
+            except Exception as e:
+                logger.warning(f"Error in position swap mitigation: {e}, using normal prediction")
+                final_prob = normal_prob
         
         # Determine confidence level
-        if abs(win_probability - 0.5) > 0.3:
+        if abs(final_prob - 0.5) > 0.3:
             confidence = "High"
-        elif abs(win_probability - 0.5) > 0.15:
+        elif abs(final_prob - 0.5) > 0.15:
             confidence = "Medium"
         else:
             confidence = "Low"
         
         # Create result dictionary
         result = {
-            'probability_fighter1_wins': float(win_probability),
-            'probability_fighter2_wins': float(1 - win_probability),
-            'predicted_winner': 'fighter1' if win_probability > 0.5 else 'fighter2',
+            'probability_fighter1_wins': float(final_prob),
+            'probability_fighter2_wins': float(1 - final_prob),
+            'predicted_winner': 'fighter1' if final_prob > 0.5 else 'fighter2',
             'confidence_level': confidence
         }
         

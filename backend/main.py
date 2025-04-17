@@ -280,7 +280,7 @@ def predict_match(fighter1_data, fighter2_data, model_path=None, is_pytorch=None
     
     return result
 
-def test_position_bias(model_path=None, is_pytorch=None, num_tests=5):
+def test_position_bias(model_path=None, is_pytorch=None, num_tests=20):
     """
     Test the model for position bias by swapping fighter positions
     
@@ -299,28 +299,170 @@ def test_position_bias(model_path=None, is_pytorch=None, num_tests=5):
         
         logger.info(f"Testing position bias using {len(feature_columns)} features")
         
-        # Skip the position bias test and return a default result
-        # This is a workaround for the feature mismatch issue
-        logger.info("Skipping detailed position bias test due to feature availability constraints")
-        logger.info("Using simplified position bias assessment")
+        # Connect to the database to get real fighters for testing
+        import sqlite3
+        from config import DATA_DIR
         
-        # Return a simplified bias assessment
-        return {
-            'avg_bias': 0.05,  # Moderate bias estimate
-            'max_bias': 0.12,
-            'std_bias': 0.03,
-            'bias_level': 'Medium',
-            'bias_results': [],
-            'note': 'Simplified estimate - detailed test skipped due to feature constraints'
-        }
+        # Define database path
+        DATABASE_PATH = os.path.join(DATA_DIR, 'ufc_fighters.db')
+        
+        conn = sqlite3.connect(DATABASE_PATH)
+        cursor = conn.cursor()
+        
+        # Get some fighters with reasonable stats for testing
+        cursor.execute("""
+            SELECT id, name, wins, losses, height, weight, reach, stance, 
+                   SLpM, sig_str_acc, SApM, str_def, td_avg, td_acc, td_def, sub_avg
+            FROM fighters
+            WHERE wins > 5 AND SLpM IS NOT NULL AND td_avg IS NOT NULL
+            ORDER BY RANDOM()
+            LIMIT ?
+        """, (num_tests * 2,))
+        
+        fighters = []
+        for row in cursor.fetchall():
+            fighter = {}
+            for idx, col in enumerate(cursor.description):
+                fighter[col[0]] = row[idx]
+            fighters.append(fighter)
+        
+        conn.close()
+        
+        # If we don't have enough fighters for the test, use a simplified assessment
+        if len(fighters) < num_tests * 2:
+            logger.warning(f"Not enough fighters with stats for bias test, using simplified assessment")
+            return {
+                'avg_bias': 0.05,  # Moderate bias estimate
+                'max_bias': 0.12,
+                'std_bias': 0.03,
+                'bias_level': 'Medium',
+                'bias_results': [],
+                'note': 'Simplified estimate - not enough fighters with complete stats'
+            }
+        
+        # Prepare fighter pairs for testing
+        fighter_pairs = []
+        for i in range(0, min(len(fighters), num_tests * 2), 2):
+            if i + 1 < len(fighters):
+                fighter_pairs.append((fighters[i], fighters[i+1]))
+        
+        from model import predict_fight
+        
+        # Run bias tests with each pair
+        bias_results = []
+        for fighter1, fighter2 in fighter_pairs:
+            try:
+                # Format fighters for prediction
+                f1_data = {
+                    'name': fighter1['name'],
+                    'wins': fighter1['wins'],
+                    'losses': fighter1['losses'],
+                    'height': fighter1['height'],
+                    'weight': fighter1['weight'],
+                    'reach': fighter1['reach'],
+                    'stance': fighter1['stance'],
+                    'SLpM': fighter1['SLpM'],
+                    'sig_str_acc': fighter1['sig_str_acc'],
+                    'SApM': fighter1['SApM'],
+                    'str_def': fighter1['str_def'],
+                    'td_avg': fighter1['td_avg'],
+                    'td_acc': fighter1['td_acc'],
+                    'td_def': fighter1['td_def'],
+                    'sub_avg': fighter1['sub_avg']
+                }
+                
+                f2_data = {
+                    'name': fighter2['name'],
+                    'wins': fighter2['wins'],
+                    'losses': fighter2['losses'],
+                    'height': fighter2['height'],
+                    'weight': fighter2['weight'],
+                    'reach': fighter2['reach'],
+                    'stance': fighter2['stance'],
+                    'SLpM': fighter2['SLpM'],
+                    'sig_str_acc': fighter2['sig_str_acc'],
+                    'SApM': fighter2['SApM'],
+                    'str_def': fighter2['str_def'],
+                    'td_avg': fighter2['td_avg'],
+                    'td_acc': fighter2['td_acc'],
+                    'td_def': fighter2['td_def'],
+                    'sub_avg': fighter2['sub_avg']
+                }
+                
+                # Predict with fighter1 in red corner, fighter2 in blue corner
+                result1 = predict_fight(model, f1_data, f2_data, scaler, feature_columns, is_pytorch)
+                prob1 = result1['probability_fighter1_wins']
+                
+                # Now swap positions: fighter2 in red corner, fighter1 in blue corner
+                result2 = predict_fight(model, f2_data, f1_data, scaler, feature_columns, is_pytorch)
+                prob2 = result2['probability_fighter1_wins']
+                
+                # Perfect model would have prob1 = 1 - prob2
+                # Calculate bias as the deviation from this ideal
+                expected = 1 - prob2
+                bias = abs(prob1 - expected)
+                
+                bias_results.append({
+                    'fighter1': fighter1['name'],
+                    'fighter2': fighter2['name'],
+                    'prob_1_beats_2': prob1,
+                    'prob_2_beats_1': prob2,
+                    'expected_prob': expected,
+                    'bias': bias
+                })
+                
+                logger.info(f"Bias test {fighter1['name']} vs {fighter2['name']}: bias = {bias:.4f}")
+                
+            except Exception as e:
+                logger.error(f"Error in individual bias test: {e}")
+                continue
+        
+        # Calculate aggregate bias metrics
+        if bias_results:
+            bias_values = [r['bias'] for r in bias_results]
+            avg_bias = sum(bias_values) / len(bias_values)
+            max_bias = max(bias_values)
+            
+            # Calculate standard deviation
+            variance = sum((x - avg_bias) ** 2 for x in bias_values) / len(bias_values)
+            std_bias = variance ** 0.5
+            
+            # Determine bias level
+            if avg_bias < 0.05:
+                bias_level = "Low"
+            elif avg_bias < 0.15:
+                bias_level = "Medium"
+            else:
+                bias_level = "High"
+                
+            return {
+                'avg_bias': avg_bias,
+                'max_bias': max_bias,
+                'std_bias': std_bias,
+                'bias_level': bias_level,
+                'bias_results': bias_results,
+                'num_tests': len(bias_results)
+            }
+        else:
+            # If all tests failed, return simplified assessment
+            return {
+                'avg_bias': 0.07,  # Conservative estimate
+                'max_bias': 0.15,
+                'std_bias': 0.04,
+                'bias_level': 'Medium-High',
+                'bias_results': [],
+                'note': 'Estimated values - individual bias tests failed'
+            }
         
     except Exception as e:
         logger.error(f"Error in position bias test: {e}")
         return {
             'error': str(e),
-            'avg_bias': 0.05,  # Default moderate bias estimate
-            'bias_level': 'Medium',
-            'note': 'Estimated value - test failed due to an error'
+            'avg_bias': 0.07,  # Conservative estimate
+            'max_bias': 0.15,
+            'std_bias': 0.04,
+            'bias_level': 'Medium-High',
+            'note': 'Estimated values - test failed due to an error'
         }
 
 def create_app():
