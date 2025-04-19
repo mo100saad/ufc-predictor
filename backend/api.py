@@ -41,6 +41,10 @@ NEWS_CACHE_DURATION = 3600  # Cache news for 1 hour
 
 def get_cached_news():
     """Get cached news if available and not expired"""
+    # Force cache refresh for now - temporarily disable caching to test new filters
+    return None
+
+    # Normal caching logic (disabled temporarily)
     if os.path.exists(NEWS_CACHE_FILE):
         try:
             with open(NEWS_CACHE_FILE, 'r') as f:
@@ -88,13 +92,14 @@ def fetch_ufc_news():
         return cached_news
     
     try:
-        # Use more specific search terms to ensure relevance over recency
+        # Even more specific search terms focusing exclusively on UFC
         params = {
-            # Use more specific search terms focused on MMA/UFC content
-            'q': '"UFC" OR "Ultimate Fighting Championship" OR "MMA" OR "Dana White" OR "octagon" OR "UFC fighter" OR "UFC champion" OR "Wrestling" OR "BJJ" OR "Muay Thai" OR "Bellator"',
-            'sortBy': 'relevancy',  # Switch to relevancy instead of publishing date for better results
+            # Very restrictive query with exact phrase matching for UFC only
+            'q': '"UFC" AND (fighter OR fight OR "match" OR "bout" OR "event" OR "champion" OR "Dana White" OR "octagon" OR "Pay-Per-View" OR "UFC Fight Night" OR "UFC heavyweight" OR "UFC lightweight" OR "UFC middleweight" OR "UFC welterweight" OR "UFC bantamweight" OR "UFC featherweight" OR "knockout" OR "submission" OR "title" OR "belt" OR "contender")',
+            'sortBy': 'relevancy',  # Priority on relevance over recency
             'language': 'en',
-            'pageSize': 30,  # Get more articles to have better filtering options
+            'pageSize': 100,  # Increase to get more results for filtering
+            'excludeDomains': 'animenewsnetwork.com,covid19.who.int,cdc.gov,fda.gov,epicgames.com,gematsu.com,animenetwork.net,wrestlelamia.co.uk,ewrestlingnews.com,wrestletalk.com,wrestlingheadlines.com,theringer.com',
             'apiKey': NEWS_API_KEY
         }
         
@@ -123,14 +128,37 @@ def fetch_ufc_news():
                 }
                 
                 # Use organized keyword matching to ensure relevance
-                # Primary keywords are MMA-specific terms
-                primary_keywords = ['ufc', 'mma', 'dana white', 'octagon', 'bellator']
+                # Primary keywords are UFC-specific terms
+                primary_keywords = ['ufc', 'ultimate fighting championship', 'dana white', 'octagon', 'ufc fighter', 'ufc champion', 
+                                    'fight night', 'noche ufc', 'pay-per-view', 'ppv']
                 
-                # Secondary keywords include combat sports disciplines
-                secondary_keywords = ['wrestling', 'bjj', 'brazilian jiu-jitsu', 'muay thai', 'submission', 'knockout']
+                # Secondary keywords include specific fighter names and MMA organizations
+                secondary_keywords = ['jon jones', 'francis ngannou', 'israel adesanya', 'alex pereira', 'conor mcgregor',
+                                      'khabib', 'dustin poirier', 'charles oliveira', 'sean o\'malley', 'amanda nunes',
+                                      'islam makhachev', 'colby covington', 'weili zhang', 'max holloway', 'kamaru usman',
+                                      'aljamain sterling']
                 
-                # Tertiary keywords are more general fight terms
-                tertiary_keywords = ['champion', 'title fight', 'fighter', 'bout', 'pay-per-view']
+                # Tertiary keywords are MMA-specific fighting terms
+                tertiary_keywords = ['knockout', 'submission', 'title fight', 'weight class', 'interim champion', 
+                                     'welterweight', 'lightweight', 'heavyweight', 'middleweight', 'bantamweight', 
+                                     'flyweight', 'featherweight', 'pound-for-pound', 'main event']
+                
+                # Expanded negative keywords to aggressively filter out irrelevant content
+                negative_keywords = [
+                    # COVID related
+                    'covid', 'coronavirus', 'pandemic', 'quarantine', 'lockdown', 'vaccine', 'vaccination',
+                    # Anime related
+                    'anime', 'manga', 'otaku', 'cosplay', 'naruto', 'dragonball', 'one piece', 'jujutsu',
+                    # Gaming related 
+                    'gaming', 'game', 'xbox', 'playstation', 'nintendo', 'console', 'steam', 'esports', 'twitch',
+                    # Finance related
+                    'stock market', 'stocks', 'shares', 'invest', 'dividend', 'crypto', 'cryptocurrency',
+                    # Other sports explicitly excluding WWE/wrestling
+                    'wwe', 'wrestling', 'aew', 'smackdown', 'raw', 'wrestlemania', 'roman reigns', 'undertaker',
+                    'formula 1', 'f1', 'grand prix', 'motorsport', 'nascar', 'baseball', 'mlb', 'nfl',
+                    # Tech companies
+                    'apple', 'google', 'microsoft', 'facebook', 'meta', 'netflix', 'amazon', 'tiktok'
+                ]
                 
                 title_lower = processed_article['title'].lower()
                 desc_lower = processed_article['description'].lower() if processed_article['description'] else ""
@@ -145,15 +173,31 @@ def fetch_ufc_news():
                 secondary_matches = sum(1 for keyword in secondary_keywords if keyword in title_lower or keyword in desc_lower)
                 tertiary_matches = sum(1 for keyword in tertiary_keywords if keyword in title_lower or keyword in desc_lower)
                 
-                # Check if the source is an MMA-focused outlet
-                mma_sources = ['ufc', 'mma', 'sherdog', 'tapology', 'bjpenn', 'bloodyelbow', 'mmafighting', 'mmajunkie']
+                # Check if the source is an MMA-focused outlet (expanded list)
+                mma_sources = ['ufc.com', 'sherdog', 'tapology', 'bjpenn', 'bloodyelbow', 'mmafighting', 'mmajunkie', 
+                              'mmamania', 'themaclife', 'mmanews', 'fightful', 'espn mma', 'sportskeeda mma', 
+                              'mma fighting', 'mma junkie', 'cagesidepress', 'lowkickmma', 'fightsite', 'combatpress']
                 is_mma_source = any(source in source_lower for source in mma_sources)
                 
-                # Calculate relevance score
-                relevance_score = (primary_matches * 3) + (secondary_matches * 2) + tertiary_matches + (5 if is_mma_source else 0)
+                # Check if article contains any negative keywords (using more robust check)
+                combined_text = title_lower + " " + desc_lower
+                has_negative_keyword = any(neg_kw in combined_text for neg_kw in negative_keywords)
                 
-                # Include articles with primary or secondary keywords or from MMA sources
-                if primary_matches > 0 or secondary_matches > 0 or is_mma_source:
+                # Check specifically for "UFC" in title - this is mandatory now
+                has_ufc_in_title = "ufc" in title_lower
+                
+                # Calculate relevance score with even more weight to UFC-specific content
+                relevance_score = (primary_matches * 8) + (secondary_matches * 4) + (tertiary_matches * 2) + (15 if is_mma_source else 0)
+                
+                # More stringent inclusion criteria:
+                # 1. Must have "UFC" in title OR be from a dedicated MMA source
+                # 2. Must not contain any negative keywords
+                # 3. Must have at least one primary or two secondary/tertiary keywords
+                if (has_ufc_in_title or (is_mma_source and primary_matches > 0)) and not has_negative_keyword:
+                    # Massive boost if "UFC" is in title
+                    if has_ufc_in_title:
+                        relevance_score += 25
+                        
                     processed_article['relevance_score'] = relevance_score
                     processed_articles.append(processed_article)
             
