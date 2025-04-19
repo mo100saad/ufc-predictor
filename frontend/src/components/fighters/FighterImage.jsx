@@ -66,6 +66,7 @@ const FighterImage = ({
     if (src && src !== "/static/placeholder.png") {
       console.log(`Using provided image source for ${alt}`);
       setImageSrc(src);
+      setLoading(false);
       return;
     }
     
@@ -73,13 +74,31 @@ const FighterImage = ({
     try {
       setFetchingImage(true);
       
-      // First try to get image without specifying a source
-      // This will first check cache and then try all sources if needed
+      // First check localStorage cache directly to avoid race conditions
+      const cacheKey = `fighter_image_${alt.toLowerCase().replace(/\s+/g, '_')}`;
+      const cachedImage = localStorage.getItem(cacheKey);
+      
+      if (cachedImage && cachedImage !== "/static/placeholder.png") {
+        console.log(`Using cached image for ${alt}`);
+        setImageSrc(cachedImage);
+        setLoading(false);
+        setFetchingImage(false);
+        return;
+      }
+      
+      // If not in cache, try to get image without specifying a source
       console.log(`Fetching image for ${alt} with automatic source selection`);
       let imageUrl = await fighterService.getFighterImage(alt);
       
       if (imageUrl && imageUrl !== "/static/placeholder.png") {
         console.log(`Found image for ${alt} from automatic source selection`);
+        // Store in localStorage to avoid future API calls
+        try {
+          localStorage.setItem(cacheKey, imageUrl);
+        } catch (e) {
+          // Ignore errors setting cache
+        }
+        
         setImageSrc(imageUrl);
         setLoading(false);
         setFetchingImage(false);
@@ -97,8 +116,7 @@ const FighterImage = ({
           if (imageUrl && imageUrl !== "/static/placeholder.png") {
             console.log(`Successfully fetched ${alt} image from ${source}`);
             
-            // Force clear any localStorage cache since we found an image after a failure
-            const cacheKey = `fighter_image_${alt.toLowerCase().replace(/\s+/g, '_')}`;
+            // Update localStorage cache with this successful image
             try {
               localStorage.setItem(cacheKey, imageUrl);
             } catch (e) {
@@ -132,28 +150,56 @@ const FighterImage = ({
   // Only fetch the image when the component becomes visible
   useEffect(() => {
     if (isVisible) {
-      // If src is provided and valid, use it directly
-      if (src && src !== "/static/placeholder.png") {
-        setImageSrc(src);
-      } 
-      // If no src is provided or it's a placeholder, try to fetch it
-      else if (alt) {
-        fetchFighterImage();
-      }
+      // Always check caching and do proper image loading
+      // regardless of src to ensure consistent behavior
+      fetchFighterImage();
     }
-  }, [src, alt, isVisible]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isVisible, src, alt]);
   
   // Handle image loading success
   const handleLoad = () => {
-    setLoading(false);
-    setError(false);
+    // Only update if imageSrc is not the placeholder
+    if (imageSrc && imageSrc !== placeholderImage) {
+      setLoading(false);
+      setError(false);
+      
+      // Store successful image in cache to prevent future issues
+      if (alt) {
+        const cacheKey = `fighter_image_${alt.toLowerCase().replace(/\s+/g, '_')}`;
+        try {
+          localStorage.setItem(cacheKey, imageSrc);
+        } catch (e) {
+          // Ignore errors setting cache
+        }
+      }
+    } else if (imageSrc === placeholderImage) {
+      // If displaying placeholder, mark as error
+      setLoading(false);
+      setError(true);
+    }
   };
   
   // Handle image loading error
   const handleError = () => {
+    console.error(`Image load error for ${alt}`);
     setLoading(false);
     setError(true);
     setImageSrc(placeholderImage);
+    
+    // Clear invalid image URL from cache
+    if (alt) {
+      const cacheKey = `fighter_image_${alt.toLowerCase().replace(/\s+/g, '_')}`;
+      try {
+        // Only remove if it's not already the placeholder
+        const current = localStorage.getItem(cacheKey);
+        if (current && current !== "/static/placeholder.png") {
+          localStorage.removeItem(cacheKey);
+        }
+      } catch (e) {
+        // Ignore cache errors
+      }
+    }
   };
 
   // Enhanced size class mapping with MUCH larger size options 
