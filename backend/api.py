@@ -81,19 +81,20 @@ def save_news_cache(articles):
         logger.error(f"Error saving news cache: {e}")
 
 def fetch_ufc_news():
-    """Fetch UFC news from NewsAPI with expanded UFC/MMA-related keywords"""
+    """Fetch UFC news from NewsAPI with focused UFC/MMA-related keywords"""
     # First check if we have valid cached news
     cached_news = get_cached_news()
     if cached_news:
         return cached_news
     
     try:
-        # Fetch fresh news with broader search terms to get more relevant results
+        # Use more specific search terms to ensure relevance over recency
         params = {
-            'q': 'UFC OR "Ultimate Fighting Championship" OR MMA OR Fighter OR Fight OR Wrestling OR "Muay Thai" OR BJJ OR Grappling OR Knockout OR "Mixed Martial Arts"',
-            'sortBy': 'publishedAt',
+            # Use more specific search terms focused on MMA/UFC content
+            'q': '"UFC" OR "Ultimate Fighting Championship" OR "MMA" OR "Dana White" OR "octagon" OR "UFC fighter" OR "UFC champion" OR "Wrestling" OR "BJJ" OR "Muay Thai" OR "Bellator"',
+            'sortBy': 'relevancy',  # Switch to relevancy instead of publishing date for better results
             'language': 'en',
-            'pageSize': 20,  # Get more articles to filter for quality
+            'pageSize': 30,  # Get more articles to have better filtering options
             'apiKey': NEWS_API_KEY
         }
         
@@ -103,7 +104,7 @@ def fetch_ufc_news():
         if response.status_code == 200 and data.get('status') == 'ok':
             articles = data.get('articles', [])
             
-            # Process and filter articles to ensure they're UFC-related
+            # Process and filter articles to ensure they're UFC/MMA-related
             processed_articles = []
             for article in articles:
                 # Skip articles without an image
@@ -121,30 +122,46 @@ def fetch_ufc_news():
                     'publishedAt': article.get('publishedAt', '')
                 }
                 
-                # Use expanded keyword matching to include more relevant articles
-                keywords = ['ufc', 'mma', 'fight', 'fighter', 'wrestling', 'muay thai', 
-                            'bjj', 'grappling', 'knockout', 'martial arts', 'bout']
+                # Use organized keyword matching to ensure relevance
+                # Primary keywords are MMA-specific terms
+                primary_keywords = ['ufc', 'mma', 'dana white', 'octagon', 'bellator']
+                
+                # Secondary keywords include combat sports disciplines
+                secondary_keywords = ['wrestling', 'bjj', 'brazilian jiu-jitsu', 'muay thai', 'submission', 'knockout']
+                
+                # Tertiary keywords are more general fight terms
+                tertiary_keywords = ['champion', 'title fight', 'fighter', 'bout', 'pay-per-view']
                 
                 title_lower = processed_article['title'].lower()
                 desc_lower = processed_article['description'].lower() if processed_article['description'] else ""
+                source_lower = processed_article['source'].lower()
                 
-                # Check if any of our keywords are in the title or description
-                if any(keyword in title_lower or keyword in desc_lower for keyword in keywords):
+                # Scoring system for article relevance:
+                # 1. Primary keywords score highest
+                # 2. Secondary keywords (combat sports) are next most valuable
+                # 3. Tertiary keywords provide additional matching
+                
+                primary_matches = sum(1 for keyword in primary_keywords if keyword in title_lower or keyword in desc_lower)
+                secondary_matches = sum(1 for keyword in secondary_keywords if keyword in title_lower or keyword in desc_lower)
+                tertiary_matches = sum(1 for keyword in tertiary_keywords if keyword in title_lower or keyword in desc_lower)
+                
+                # Check if the source is an MMA-focused outlet
+                mma_sources = ['ufc', 'mma', 'sherdog', 'tapology', 'bjpenn', 'bloodyelbow', 'mmafighting', 'mmajunkie']
+                is_mma_source = any(source in source_lower for source in mma_sources)
+                
+                # Calculate relevance score
+                relevance_score = (primary_matches * 3) + (secondary_matches * 2) + tertiary_matches + (5 if is_mma_source else 0)
+                
+                # Include articles with primary or secondary keywords or from MMA sources
+                if primary_matches > 0 or secondary_matches > 0 or is_mma_source:
+                    processed_article['relevance_score'] = relevance_score
                     processed_articles.append(processed_article)
             
-            # Make sure we have at least 5 articles for the carousel
-            # If we don't have enough, duplicate some existing ones with modified IDs
-            if 0 < len(processed_articles) < 5:
-                original_count = len(processed_articles)
-                for i in range(5 - original_count):
-                    # Clone an article from the existing ones (cycling through them)
-                    clone_idx = i % original_count
-                    cloned_article = dict(processed_articles[clone_idx])
-                    # Modify the ID to ensure uniqueness
-                    cloned_article['id'] = cloned_article['id'] + (i + 1) * 1000
-                    processed_articles.append(cloned_article)
+            # Sort by relevance score, then by date
+            processed_articles.sort(key=lambda x: (-(x.get('relevance_score', 0)), 
+                                                 -datetime.fromisoformat(x['publishedAt'].replace('Z', '+00:00')).timestamp()))
             
-            # Take up to 10 articles - this ensures we have enough for the carousel
+            # Take up to 10 most relevant articles
             processed_articles = processed_articles[:10]
             
             # Save to cache
