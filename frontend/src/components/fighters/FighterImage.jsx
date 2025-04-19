@@ -80,69 +80,99 @@ const FighterImage = ({
       
       if (cachedImage && cachedImage !== "/static/placeholder.png") {
         console.log(`Using cached image for ${alt}`);
-        setImageSrc(cachedImage);
-        setLoading(false);
-        setFetchingImage(false);
-        return;
-      }
-      
-      // If not in cache, try to get image without specifying a source
-      console.log(`Fetching image for ${alt} with automatic source selection`);
-      let imageUrl = await fighterService.getFighterImage(alt);
-      
-      if (imageUrl && imageUrl !== "/static/placeholder.png") {
-        console.log(`Found image for ${alt} from automatic source selection`);
-        // Store in localStorage to avoid future API calls
-        try {
-          localStorage.setItem(cacheKey, imageUrl);
-        } catch (e) {
-          // Ignore errors setting cache
-        }
         
-        setImageSrc(imageUrl);
-        setLoading(false);
-        setFetchingImage(false);
-        return;
-      }
-      
-      // If the automatic selection didn't work, try each source specifically
-      // This will bypass any cached "not found" results
-      const sources = ['wikipedia', 'sherdog', 'ufc', 'google'];
-      for (const source of sources) {
+        // Validate the cached image URL - some might be invalid/expired
         try {
-          console.log(`Explicitly trying ${source} for ${alt} image...`);
-          imageUrl = await fighterService.getFighterImage(alt, source);
+          const testImg = new Image();
+          testImg.onerror = () => {
+            // If the cached image fails to load, remove it from cache and continue fetching
+            console.warn(`Cached image for ${alt} failed to load, fetching fresh image`);
+            localStorage.removeItem(cacheKey);
+            // Continue with fetching logic below
+            fetchFreshImage();
+          };
           
-          if (imageUrl && imageUrl !== "/static/placeholder.png") {
-            console.log(`Successfully fetched ${alt} image from ${source}`);
-            
-            // Update localStorage cache with this successful image
-            try {
-              localStorage.setItem(cacheKey, imageUrl);
-            } catch (e) {
-              // Ignore errors setting cache
-            }
-            
-            setImageSrc(imageUrl);
+          // If cached image loads successfully, use it
+          testImg.onload = () => {
+            setImageSrc(cachedImage);
             setLoading(false);
             setFetchingImage(false);
-            return;
-          }
-        } catch (sourceErr) {
-          console.warn(`Failed to fetch from ${source}:`, sourceErr);
-          // Continue to next source
+          };
+          
+          // Start testing the cached image
+          testImg.src = cachedImage;
+          return;
+        } catch (e) {
+          console.warn(`Error validating cached image for ${alt}:`, e);
+          // Continue with fetching logic below if validation fails
         }
       }
       
-      // If we get here, all sources truly failed
-      console.warn(`All image sources failed for ${alt}, using placeholder`);
-      setImageSrc(placeholderImage);
-      setError(true);
+      // Function to fetch a fresh image from backend
+      const fetchFreshImage = async () => {
+        // If not in cache, try to get image without specifying a source
+        console.log(`Fetching image for ${alt} with automatic source selection`);
+        let imageUrl = await fighterService.getFighterImage(alt);
+        
+        if (imageUrl && imageUrl !== "/static/placeholder.png") {
+          console.log(`Found image for ${alt} from automatic source selection`);
+          // Store in localStorage to avoid future API calls
+          try {
+            localStorage.setItem(cacheKey, imageUrl);
+          } catch (e) {
+            // Ignore errors setting cache
+          }
+          
+          setImageSrc(imageUrl);
+          setLoading(false);
+          setFetchingImage(false);
+          return;
+        }
+        
+        // If the automatic selection didn't work, try each source specifically
+        // This will bypass any cached "not found" results
+        const sources = ['wikipedia', 'sherdog', 'ufc', 'google'];
+        for (const source of sources) {
+          try {
+            console.log(`Explicitly trying ${source} for ${alt} image...`);
+            imageUrl = await fighterService.getFighterImage(alt, source);
+            
+            if (imageUrl && imageUrl !== "/static/placeholder.png") {
+              console.log(`Successfully fetched ${alt} image from ${source}`);
+              
+              // Update localStorage cache with this successful image
+              try {
+                localStorage.setItem(cacheKey, imageUrl);
+              } catch (e) {
+                // Ignore errors setting cache
+              }
+              
+              setImageSrc(imageUrl);
+              setLoading(false);
+              setFetchingImage(false);
+              return;
+            }
+          } catch (sourceErr) {
+            console.warn(`Failed to fetch from ${source}:`, sourceErr);
+            // Continue to next source
+          }
+        }
+        
+        // If we get here, all sources truly failed
+        console.warn(`All image sources failed for ${alt}, using placeholder`);
+        setImageSrc(placeholderImage);
+        setError(true);
+        setFetchingImage(false);
+      };
+      
+      // Start fetching process if not using cache
+      if (!cachedImage || cachedImage === "/static/placeholder.png") {
+        await fetchFreshImage();
+      }
     } catch (err) {
       console.error("Error fetching fighter image:", err);
       setImageSrc(placeholderImage);
       setError(true);
-    } finally {
       setFetchingImage(false);
     }
   };
@@ -191,11 +221,9 @@ const FighterImage = ({
     if (alt) {
       const cacheKey = `fighter_image_${alt.toLowerCase().replace(/\s+/g, '_')}`;
       try {
-        // Only remove if it's not already the placeholder
-        const current = localStorage.getItem(cacheKey);
-        if (current && current !== "/static/placeholder.png") {
-          localStorage.removeItem(cacheKey);
-        }
+        // Remove regardless of what it is to force a refresh next time
+        localStorage.removeItem(cacheKey);
+        console.log(`Cleared cache for ${alt} due to image load error`);
       } catch (e) {
         // Ignore cache errors
       }

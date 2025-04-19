@@ -47,7 +47,7 @@ export const fighterService = {
         // Check for cached image if no specific source is requested
         const cachedImage = localStorage.getItem(cacheKey);
         if (cachedImage && cachedImage !== "/static/placeholder.png") {
-          console.log(`Using cached image for ${name}`);
+          console.log(`Using cached image for ${name} from service`);
           return cachedImage;
         }
       }
@@ -59,25 +59,39 @@ export const fighterService = {
       }
       
       console.log(`Requesting image for ${name} from endpoint: ${endpoint}`);
-      const response = await api.get(endpoint);
+      const response = await api.get(endpoint, { timeout: 8000 }); // Add timeout to prevent long requests
       const imageUrl = response.data.image_url;
       const actualSource = response.data.source || "unknown";
       
+      // Validate the URL to make sure it's properly formed
+      if (!imageUrl || typeof imageUrl !== 'string') {
+        console.warn(`Invalid image URL for ${name}: ${imageUrl}`);
+        return "/static/placeholder.png";
+      }
+      
       // If we got a valid image, save to cache and return it
-      if (imageUrl && imageUrl !== "/static/placeholder.png") {
+      if (imageUrl !== "/static/placeholder.png") {
         console.log(`Found image for ${name} from ${actualSource}`);
         
-        // Store in localStorage cache (unless it's a source-specific request)
-        if (!source) {
-          try {
-            localStorage.setItem(cacheKey, imageUrl);
-            console.log(`Saved image for ${name} to local cache`);
-          } catch (cacheErr) {
-            console.warn('Failed to cache fighter image:', cacheErr);
+        // Ensure the URL is well-formed
+        try {
+          new URL(imageUrl); // This will throw if the URL is invalid
+          
+          // Store in localStorage cache (unless it's a source-specific request)
+          if (!source) {
+            try {
+              localStorage.setItem(cacheKey, imageUrl);
+              console.log(`Saved image for ${name} to local cache`);
+            } catch (cacheErr) {
+              console.warn('Failed to cache fighter image:', cacheErr);
+            }
           }
+          
+          return imageUrl;
+        } catch (urlError) {
+          console.warn(`Invalid URL format for ${name}: ${imageUrl}`);
+          return "/static/placeholder.png";
         }
-        
-        return imageUrl;
       }
       
       // If no image found and no specific source requested, we already tried all sources
@@ -91,6 +105,16 @@ export const fighterService = {
       return "/static/placeholder.png";
     } catch (error) {
       console.error('Error fetching fighter image:', error.response?.data || error.message);
+      // Clear any cached entry for this fighter if there was an error
+      if (name) {
+        try {
+          const cacheKey = `fighter_image_${name.toLowerCase().replace(/\s+/g, '_')}`;
+          localStorage.removeItem(cacheKey);
+          console.log(`Cleared cache for ${name} due to API error`);
+        } catch (e) {
+          // Ignore errors
+        }
+      }
       return "/static/placeholder.png";
     }
   }
